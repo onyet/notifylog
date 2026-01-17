@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import id.onyet.app.notifylog.R
 import id.onyet.app.notifylog.ui.navigation.NotifyLogNavGraph
 import id.onyet.app.notifylog.ui.navigation.Screen
 import id.onyet.app.notifylog.ui.theme.NotifyLogTheme
@@ -157,7 +158,5 @@ fun ProvideLocalizedContext(
     CompositionLocalProvider(
         LocalContext provides context,
         content = content
-    )
-}
     )
 }

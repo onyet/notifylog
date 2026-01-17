@@ -30,10 +30,6 @@ object LocaleHelper {
 
         val config = Configuration(context.resources.configuration)
 
-        // Set layout direction for RTL languages
-        val language = Language.fromCode(languageCode)
-        config.setLayoutDirection(locale)
-
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             config.setLocales(LocaleList(locale))
             context.createConfigurationContext(config)
