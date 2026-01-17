@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import id.onyet.app.notifylog.R
 import id.onyet.app.notifylog.ui.theme.Primary
 import id.onyet.app.notifylog.util.NotificationPermissionHelper
 
@@ -90,7 +92,7 @@ fun OnboardingScreen(
         
         // Header
         Text(
-            text = "Setup",
+            text = stringResource(R.string.setup),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground
         )
@@ -221,7 +223,7 @@ fun OnboardingScreen(
                         .background(Color.Red, CircleShape)
                 )
                 Text(
-                    text = "PERMISSION NOT GRANTED",
+                    text = stringResource(R.string.permission_not_granted),
                     fontSize = 11.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.Red,
@@ -234,7 +236,7 @@ fun OnboardingScreen(
         
         // Title
         Text(
-            text = "Enable Notification Access",
+            text = stringResource(R.string.enable_notification_access),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onBackground,
             textAlign = TextAlign.Center
@@ -245,16 +247,11 @@ fun OnboardingScreen(
         // Description
         Text(
             text = buildAnnotatedString {
-                append("To log and search your history, ")
+                append(stringResource(R.string.to_log_and_search_your_history))
                 withStyle(style = SpanStyle(color = Primary, fontWeight = FontWeight.SemiBold)) {
-                    append("NotifyLog")
+                    append(" NotifyLog")
                 }
-                append(" needs permission to read incoming alerts.\n\n")
-                append("Your data never leaves your device—our offline-first architecture ensures your history is ")
-                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground, fontWeight = FontWeight.Medium)) {
-                    append("100% private")
-                }
-                append(".")
+                append(stringResource(R.string.needs_permission_to_read_incoming_alerts))
             },
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -284,7 +281,7 @@ fun OnboardingScreen(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "Enable Notification Access",
+                text = stringResource(R.string.enable_notification_access),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -296,7 +293,7 @@ fun OnboardingScreen(
             onClick = { /* Show info dialog */ }
         ) {
             Text(
-                text = "Why is this needed?",
+                text = stringResource(R.string.why_is_this_needed),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.width(4.dp))

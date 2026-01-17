@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NotifyLog</string>
+    <string name="notification_listener_service_description">NotifyLog требуется доступ для чтения ваших уведомлений и их локального хранения.</string>
+
+    <!-- Common -->
+    <string name="back">Назад</string>
+    <string name="cancel">Отмена</string>
+    <string name="clear">Очистить</string>
+    <string name="apply">Применить</string>
+    <string name="settings">Настройки</string>
+    <string name="search">Поиск</string>
+    <string name="all">Все</string>
+
+    <!-- Home Screen -->
+    <string name="notification_history">История\nуведомлений</string>
+    <string name="notification">Уведомление</string>
+    <string name="history">История</string>
+    <string name="privacy_focused_logging">Защищённое ведение журнала активно</string>
+    <string name="all_logs">Все записи</string>
+    <string name="local_encryption_active">Локальное шифрование активно</string>
+    <string name="no_notifications_yet">Пока нет уведомлений</string>
+    <string name="notifications_will_appear">Новые уведомления появятся здесь</string>
+    <string name="search_and_filter">Поиск и фильтр</string>
+
+    <!-- Filter Bottom Sheet -->
+    <string name="filter_and_search">Фильтр и поиск</string>
+    <string name="clear_filter">Сбросить фильтр</string>
+    <string name="search_notifications">Поиск уведомлений</string>
+    <string name="filter_by_app">Фильтр по приложению</string>
+    <string name="date_range">Диапазон дат</string>
+    <string name="start_date">Дата начала</string>
+    <string name="end_date">Дата окончания</string>
+    <string name="apply_filter">Применить фильтр</string>
+
+    <!-- Notification Detail Screen -->
+    <string name="notification_details">Детали уведомления</string>
+    <string name="no_title">Без заголовка</string>
+    <string name="no_content">Без содержимого</string>
+    <string name="received">ПОЛУЧЕНО</string>
+    <string name="app_info">ИНФОРМАЦИЯ О ПРИЛОЖЕНИИ</string>
+    <string name="package_name">Имя пакета</string>
+    <string name="delete_notification">Удалить уведомление</string>
+    <string name="delete">Удалить</string>
+    <string name="delete_confirmation">Вы уверены, что хотите удалить это уведомление?</string>
+
+    <!-- Settings Screen -->
+    <string name="general">Общие</string>
+    <string name="enable_notification_logging">Включить журналирование уведомлений</string>
+    <string name="logs_stored_securely">Журналы надёжно хранятся на этом устройстве</string>
+    <string name="ignore_system_apps">Игнорировать системные приложения</string>
+    <string name="storage_and_data">Хранилище и данные</string>
+    <string name="auto_delete_logs">Автоудаление журналов</string>
+    <string name="after_days">Через %d дней</string>
+    <string name="one_day">1 ДЕНЬ</string>
+    <string name="ninety_days">90 ДНЕЙ</string>
+    <string name="clear_notification_history">Очистить историю уведомлений</string>
+    <string name="about">О приложении</string>
+    <string name="privacy_policy_terms">Политика конфиденциальности и условия использования</string>
+    <string name="developer">Разработчик</string>
+    <string name="app_version">Версия приложения</string>
+    <string name="notifylog_privacy_core">NOTIFYLOG ЯДРО КОНФИДЕНЦИАЛЬНОСТИ</string>
+    <string name="clear_all_history">Очистить всю историю?</string>
+    <string name="clear_all_history_message">Это навсегда удалит все %d сохранённых уведомлений. Это действие нельзя отменить.</string>
+    <string name="clear_all">Очистить всё</string>
+    <string name="notifications_stored">%d уведомлений сохранено</string>
+    <string name="privacy_first_history">История уведомлений с приоритетом конфиденциальности</string>
+
+    <!-- Language Settings -->
+    <string name="language">Язык</string>
+    <string name="select_language">Выберите язык</string>
+    <string name="language_english">English</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="language_chinese">中文</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_german">Deutsch</string>
+
+    <!-- Splash Screen -->
+    <string name="tagline">Ваша история уведомлений,\nхранится локально.</string>
+    <string name="privacy_secure">КОНФИДЕНЦИАЛЬНОСТЬ • БЕЗОПАСНОСТЬ</string>
+    <string name="version_stored">Версия 1.0.0 • Хранится на устройстве</string>
+
+    <!-- Onboarding Screen -->
+    <string name="setup">Настройка</string>
+    <string name="permission_not_granted">РАЗРЕШЕНИЕ НЕ ПРЕДОСТАВЛЕНО</string>
+    <string name="enable_notification_access">Включить доступ к уведомлениям</string>
+    <string name="onboarding_description">Для записи и поиска в вашей истории NotifyLog требуется разрешение на чтение входящих оповещений.\n\nВаши данные никогда не покидают ваше устройство — наша офлайн-архитектура гарантирует, что ваша история на 100% конфиденциальна.</string>
+    <string name="why_needed">Зачем это нужно?</string>
+    <string name="why_is_this_needed">Зачем это нужно?</string>
+    <string name="hundred_percent_private">100% конфиденциально</string>
+    <string name="to_log_and_search_your_history">Для записи и поиска в вашей истории</string>
+    <string name="needs_permission_to_read_incoming_alerts"> требуется разрешение на чтение входящих оповещений.\n\nВаши данные никогда не покидают ваше устройство — наша офлайн-архитектура гарантирует, что ваша история на 100% конфиденциальна.</string>
+</resources>

@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,6 +21,7 @@ class UserPreferences(private val context: Context) {
         private val AUTO_DELETE_DAYS = intPreferencesKey("auto_delete_days")
         private val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
         private val DARK_MODE = booleanPreferencesKey("dark_mode")
+        private val LANGUAGE_CODE = stringPreferencesKey("language_code")
     }
     
     val isLoggingEnabled: Flow<Boolean> = context.dataStore.data.map { preferences ->
@@ -42,6 +44,10 @@ class UserPreferences(private val context: Context) {
         preferences[DARK_MODE] ?: true
     }
     
+    val languageCode: Flow<String> = context.dataStore.data.map { preferences ->
+        preferences[LANGUAGE_CODE] ?: "en"
+    }
+
     suspend fun setLoggingEnabled(enabled: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[LOGGING_ENABLED] = enabled
@@ -69,6 +75,12 @@ class UserPreferences(private val context: Context) {
     suspend fun setDarkMode(darkMode: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[DARK_MODE] = darkMode
+        }
+    }
+
+    suspend fun setLanguageCode(code: String) {
+        context.dataStore.edit { preferences ->
+            preferences[LANGUAGE_CODE] = code
         }
     }
 }

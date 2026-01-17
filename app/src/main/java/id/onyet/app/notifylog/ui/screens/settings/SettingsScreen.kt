@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Policy
@@ -35,6 +36,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -44,11 +46,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,12 +61,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.onyet.app.notifylog.NotifyLogApp
+import id.onyet.app.notifylog.R
+import id.onyet.app.notifylog.ui.components.LanguageBottomSheet
 import id.onyet.app.notifylog.ui.theme.Primary
+import id.onyet.app.notifylog.util.LocaleHelper
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,23 +84,28 @@ fun SettingsScreen(
     val viewModel: SettingsViewModel = viewModel(
         factory = SettingsViewModelFactory(app.userPreferences, app.repository)
     )
-    
+    val scope = rememberCoroutineScope()
+
     val isLoggingEnabled by viewModel.isLoggingEnabled.collectAsState()
     val ignoreSystemApps by viewModel.ignoreSystemApps.collectAsState()
     val autoDeleteDays by viewModel.autoDeleteDays.collectAsState()
     val notificationCount by viewModel.notificationCount.collectAsState()
-    
+    val languageCode by app.userPreferences.languageCode.collectAsState(initial = "en")
+
     var showClearDialog by remember { mutableStateOf(false) }
-    
+    var isLanguageSheetVisible by remember { mutableStateOf(false) }
+
+    val languageSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Settings", fontWeight = FontWeight.Bold) },
+                title = { Text(stringResource(R.string.settings), fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.Default.ArrowBackIosNew,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.back)
                         )
                     }
                 },
@@ -132,13 +146,13 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 
                 Text(
-                    text = "NotifyLog",
+                    text = stringResource(R.string.app_name),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold
                 )
                 
                 Text(
-                    text = "Privacy-first notification history",
+                    text = stringResource(R.string.privacy_first_history),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -146,7 +160,7 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 
                 Text(
-                    text = "$notificationCount notifications stored",
+                    text = stringResource(R.string.notifications_stored, notificationCount),
                     style = MaterialTheme.typography.bodySmall,
                     color = Primary,
                     fontWeight = FontWeight.SemiBold
@@ -154,8 +168,8 @@ fun SettingsScreen(
             }
             
             // General Section
-            SectionHeader("General")
-            
+            SectionHeader(stringResource(R.string.general))
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -167,8 +181,8 @@ fun SettingsScreen(
             ) {
                 // Enable logging
                 SettingsToggleItem(
-                    title = "Enable Notification Logging",
-                    subtitle = "Logs are stored securely on this device",
+                    title = stringResource(R.string.enable_notification_logging),
+                    subtitle = stringResource(R.string.logs_stored_securely),
                     checked = isLoggingEnabled,
                     onCheckedChange = viewModel::setLoggingEnabled,
                     showDivider = true
@@ -177,17 +191,26 @@ fun SettingsScreen(
                 // Ignore system apps
                 SettingsToggleItem(
                     icon = Icons.Default.Block,
-                    title = "Ignore System Apps",
+                    title = stringResource(R.string.ignore_system_apps),
                     checked = ignoreSystemApps,
-                    onCheckedChange = viewModel::setIgnoreSystemApps
+                    onCheckedChange = viewModel::setIgnoreSystemApps,
+                    showDivider = true
+                )
+
+                // Language selection
+                SettingsClickableItem(
+                    icon = Icons.Default.Language,
+                    title = stringResource(R.string.language),
+                    subtitle = LocaleHelper.Language.fromCode(languageCode).displayName,
+                    onClick = { isLanguageSheetVisible = true }
                 )
             }
             
             Spacer(modifier = Modifier.height(24.dp))
             
             // Storage Section
-            SectionHeader("Storage & Data")
-            
+            SectionHeader(stringResource(R.string.storage_and_data))
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -207,11 +230,11 @@ fun SettingsScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Auto-delete logs",
+                            text = stringResource(R.string.auto_delete_logs),
                             fontWeight = FontWeight.Medium
                         )
                         Text(
-                            text = "After $autoDeleteDays days",
+                            text = stringResource(R.string.after_days, autoDeleteDays),
                             color = Primary,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 14.sp
@@ -235,13 +258,13 @@ fun SettingsScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "1 DAY",
+                            text = stringResource(R.string.one_day),
                             fontSize = 10.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             letterSpacing = 0.5.sp
                         )
                         Text(
-                            text = "90 DAYS",
+                            text = stringResource(R.string.ninety_days),
                             fontSize = 10.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             letterSpacing = 0.5.sp
@@ -268,7 +291,7 @@ fun SettingsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Clear Notification History",
+                        text = stringResource(R.string.clear_notification_history),
                         color = MaterialTheme.colorScheme.error,
                         fontWeight = FontWeight.Medium
                     )
@@ -281,7 +304,7 @@ fun SettingsScreen(
                         ),
                         shape = RoundedCornerShape(8.dp)
                     ) {
-                        Text("Clear", fontWeight = FontWeight.Bold)
+                        Text(stringResource(R.string.clear), fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -289,8 +312,8 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(24.dp))
             
             // About Section
-            SectionHeader("About")
-            
+            SectionHeader(stringResource(R.string.about))
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -303,7 +326,7 @@ fun SettingsScreen(
                 // Privacy Policy & Terms of Service
                 SettingsClickableItem(
                     icon = Icons.Default.Policy,
-                    title = "Privacy Policy & Terms of Service",
+                    title = stringResource(R.string.privacy_policy_terms),
                     onClick = {
                         uriHandler.openUri("https://onyet.github.io/privacy-police.html")
                     },
@@ -327,7 +350,7 @@ fun SettingsScreen(
                             modifier = Modifier.size(20.dp)
                         )
                         Text(
-                            text = "Developer",
+                            text = stringResource(R.string.developer),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -408,7 +431,7 @@ fun SettingsScreen(
                             modifier = Modifier.size(20.dp)
                         )
                         Text(
-                            text = "App Version",
+                            text = stringResource(R.string.app_version),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -445,7 +468,7 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 
                 Text(
-                    text = "NOTIFYLOG PRIVACY CORE",
+                    text = stringResource(R.string.notifylog_privacy_core),
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
@@ -461,9 +484,9 @@ fun SettingsScreen(
     if (showClearDialog) {
         AlertDialog(
             onDismissRequest = { showClearDialog = false },
-            title = { Text("Clear All History?") },
-            text = { 
-                Text("This will permanently delete all $notificationCount stored notifications. This action cannot be undone.") 
+            title = { Text(stringResource(R.string.clear_all_history)) },
+            text = {
+                Text(stringResource(R.string.clear_all_history_message, notificationCount))
             },
             confirmButton = {
                 TextButton(
@@ -475,15 +498,34 @@ fun SettingsScreen(
                         contentColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text("Clear All")
+                    Text(stringResource(R.string.clear_all))
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showClearDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )
+    }
+
+    // Language Bottom Sheet
+    if (isLanguageSheetVisible) {
+        ModalBottomSheet(
+            onDismissRequest = { isLanguageSheetVisible = false },
+            sheetState = languageSheetState,
+            containerColor = MaterialTheme.colorScheme.surface
+        ) {
+            LanguageBottomSheet(
+                currentLanguage = LocaleHelper.Language.fromCode(languageCode),
+                onLanguageSelected = { language ->
+                    scope.launch {
+                        app.userPreferences.setLanguageCode(language.code)
+                    }
+                    isLanguageSheetVisible = false
+                }
+            )
+        }
     }
 }
 
@@ -572,6 +614,7 @@ private fun SettingsToggleItem(
 private fun SettingsClickableItem(
     icon: ImageVector,
     title: String,
+    subtitle: String? = null,
     onClick: () -> Unit,
     showDivider: Boolean = false
 ) {
@@ -586,7 +629,8 @@ private fun SettingsClickableItem(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.weight(1f)
             ) {
                 Icon(
                     imageVector = icon,
@@ -594,10 +638,19 @@ private fun SettingsClickableItem(
                     tint = Primary,
                     modifier = Modifier.size(20.dp)
                 )
-                Text(
-                    text = title,
-                    fontWeight = FontWeight.Medium
-                )
+                Column {
+                    Text(
+                        text = title,
+                        fontWeight = FontWeight.Medium
+                    )
+                    if (subtitle != null) {
+                        Text(
+                            text = subtitle,
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             }
             
             Icon(

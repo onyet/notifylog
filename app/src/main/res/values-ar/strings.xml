@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NotifyLog</string>
+    <string name="notification_listener_service_description">يحتاج NotifyLog إلى الوصول لقراءة إشعاراتك وتخزينها محليًا للرجوع إليها.</string>
+
+    <!-- Common -->
+    <string name="back">رجوع</string>
+    <string name="cancel">إلغاء</string>
+    <string name="clear">مسح</string>
+    <string name="apply">تطبيق</string>
+    <string name="settings">الإعدادات</string>
+    <string name="search">بحث</string>
+    <string name="all">الكل</string>
+
+    <!-- Home Screen -->
+    <string name="notification_history">سجل\nالإشعارات</string>
+    <string name="notification">إشعار</string>
+    <string name="history">السجل</string>
+    <string name="privacy_focused_logging">التسجيل المركز على الخصوصية نشط</string>
+    <string name="all_logs">جميع السجلات</string>
+    <string name="local_encryption_active">التشفير المحلي نشط</string>
+    <string name="no_notifications_yet">لا توجد إشعارات بعد</string>
+    <string name="notifications_will_appear">ستظهر الإشعارات الجديدة هنا</string>
+    <string name="search_and_filter">البحث والتصفية</string>
+
+    <!-- Filter Bottom Sheet -->
+    <string name="filter_and_search">التصفية والبحث</string>
+    <string name="clear_filter">مسح التصفية</string>
+    <string name="search_notifications">البحث في الإشعارات</string>
+    <string name="filter_by_app">تصفية حسب التطبيق</string>
+    <string name="date_range">نطاق التاريخ</string>
+    <string name="start_date">تاريخ البدء</string>
+    <string name="end_date">تاريخ الانتهاء</string>
+    <string name="apply_filter">تطبيق التصفية</string>
+
+    <!-- Notification Detail Screen -->
+    <string name="notification_details">تفاصيل الإشعار</string>
+    <string name="no_title">بدون عنوان</string>
+    <string name="no_content">بدون محتوى</string>
+    <string name="received">تم الاستلام</string>
+    <string name="app_info">معلومات التطبيق</string>
+    <string name="package_name">اسم الحزمة</string>
+    <string name="delete_notification">حذف الإشعار</string>
+    <string name="delete">حذف</string>
+    <string name="delete_confirmation">هل أنت متأكد أنك تريد حذف هذا الإشعار؟</string>
+
+    <!-- Settings Screen -->
+    <string name="general">عام</string>
+    <string name="enable_notification_logging">تفعيل تسجيل الإشعارات</string>
+    <string name="logs_stored_securely">يتم تخزين السجلات بشكل آمن على هذا الجهاز</string>
+    <string name="ignore_system_apps">تجاهل تطبيقات النظام</string>
+    <string name="storage_and_data">التخزين والبيانات</string>
+    <string name="auto_delete_logs">حذف السجلات تلقائيًا</string>
+    <string name="after_days">بعد %d أيام</string>
+    <string name="one_day">يوم واحد</string>
+    <string name="ninety_days">90 يومًا</string>
+    <string name="clear_notification_history">مسح سجل الإشعارات</string>
+    <string name="about">حول</string>
+    <string name="privacy_policy_terms">سياسة الخصوصية وشروط الخدمة</string>
+    <string name="developer">المطور</string>
+    <string name="app_version">إصدار التطبيق</string>
+    <string name="notifylog_privacy_core">نواة خصوصية NOTIFYLOG</string>
+    <string name="clear_all_history">مسح كل السجل؟</string>
+    <string name="clear_all_history_message">سيؤدي هذا إلى حذف جميع الإشعارات المخزنة البالغ عددها %d بشكل دائم. لا يمكن التراجع عن هذا الإجراء.</string>
+    <string name="clear_all">مسح الكل</string>
+    <string name="notifications_stored">%d إشعارات مخزنة</string>
+    <string name="privacy_first_history">سجل الإشعارات مع الخصوصية أولاً</string>
+
+    <!-- Language Settings -->
+    <string name="language">اللغة</string>
+    <string name="select_language">اختر اللغة</string>
+    <string name="language_english">English</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="language_chinese">中文</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_german">Deutsch</string>
+
+    <!-- Splash Screen -->
+    <string name="tagline">سجل إشعاراتك،\nمخزن محليًا.</string>
+    <string name="privacy_secure">يركز على الخصوصية • آمن</string>
+    <string name="version_stored">الإصدار 1.0.0 • مخزن على الجهاز</string>
+
+    <!-- Onboarding Screen -->
+    <string name="setup">الإعداد</string>
+    <string name="permission_not_granted">لم يتم منح الإذن</string>
+    <string name="enable_notification_access">تفعيل الوصول للإشعارات</string>
+    <string name="onboarding_description">لتسجيل والبحث في سجلك، يحتاج NotifyLog إلى إذن لقراءة التنبيهات الواردة.\n\nبياناتك لا تغادر جهازك أبدًا—بنيتنا التي تعمل بدون اتصال تضمن أن سجلك خاص 100%.</string>
+    <string name="why_needed">لماذا هذا مطلوب؟</string>
+    <string name="why_is_this_needed">لماذا هذا مطلوب؟</string>
+    <string name="hundred_percent_private">خاص 100%</string>
+    <string name="to_log_and_search_your_history">لتسجيل والبحث في سجلك،</string>
+    <string name="needs_permission_to_read_incoming_alerts"> يحتاج إلى إذن لقراءة التنبيهات الواردة.\n\nبياناتك لا تغادر جهازك أبدًا—بنيتنا التي تعمل بدون اتصال تضمن أن سجلك خاص 100%.</string>
+</resources>

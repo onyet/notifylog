@@ -31,15 +31,15 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import id.onyet.app.notifylog.NotifyLogApp
+import id.onyet.app.notifylog.R
 import id.onyet.app.notifylog.ui.theme.Primary
 import id.onyet.app.notifylog.util.NotificationPermissionHelper
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 
 @Composable
 fun SplashScreen(
@@ -47,8 +47,7 @@ fun SplashScreen(
     onNavigateToOnboarding: () -> Unit
 ) {
     val context = LocalContext.current
-    val app = context.applicationContext as NotifyLogApp
-    
+
     var startAnimation by remember { mutableStateOf(false) }
     val alphaAnim by animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
@@ -116,7 +115,7 @@ fun SplashScreen(
             
             // App Name
             Text(
-                text = "NotifyLog",
+                text = stringResource(R.string.app_name),
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
@@ -126,7 +125,7 @@ fun SplashScreen(
             
             // Tagline
             Text(
-                text = "Your notification history,\nstored locally.",
+                text = stringResource(R.string.tagline),
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -162,7 +161,7 @@ fun SplashScreen(
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        text = "PRIVACY FOCUSED • SECURE",
+                        text = stringResource(R.string.privacy_secure),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -174,7 +173,7 @@ fun SplashScreen(
             Spacer(modifier = Modifier.height(16.dp))
             
             Text(
-                text = "Version 1.0.0 • Stored on device",
+                text = stringResource(R.string.version_stored),
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )

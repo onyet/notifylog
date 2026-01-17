@@ -38,9 +38,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import id.onyet.app.notifylog.R
 import id.onyet.app.notifylog.data.local.AppInfo
 import id.onyet.app.notifylog.ui.theme.Primary
 import java.text.SimpleDateFormat
@@ -73,13 +75,13 @@ fun FilterBottomSheet(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Filter & Search",
+                text = stringResource(R.string.filter_and_search),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
             TextButton(onClick = onClearFilters) {
                 Text(
-                    text = "Clear Filter",
+                    text = stringResource(R.string.clear_filter),
                     color = Primary,
                     fontWeight = FontWeight.SemiBold
                 )
@@ -124,7 +126,7 @@ fun FilterBottomSheet(
                     decorationBox = { innerTextField ->
                         if (searchText.isEmpty()) {
                             Text(
-                                text = "Search notifications",
+                                text = stringResource(R.string.search_notifications),
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
@@ -136,7 +138,7 @@ fun FilterBottomSheet(
         
         // Filter by App section
         Text(
-            text = "Filter by App",
+            text = stringResource(R.string.filter_by_app),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -148,7 +150,7 @@ fun FilterBottomSheet(
         ) {
             item {
                 AppFilterItem(
-                    label = "All",
+                    label = stringResource(R.string.all),
                     isSelected = filterState.selectedPackage == null,
                     onClick = { onPackageSelect(null) }
                 )
@@ -166,7 +168,7 @@ fun FilterBottomSheet(
         
         // Date Range section
         Text(
-            text = "Date Range",
+            text = stringResource(R.string.date_range),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -248,7 +250,7 @@ fun FilterBottomSheet(
             )
         ) {
             Text(
-                text = "Apply Filter",
+                text = stringResource(R.string.apply_filter),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp
             )

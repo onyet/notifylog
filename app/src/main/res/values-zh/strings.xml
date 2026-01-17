@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NotifyLog</string>
+    <string name="notification_listener_service_description">NotifyLog 需要访问您的通知，以便在本地存储供您参考。</string>
+
+    <!-- Common -->
+    <string name="back">返回</string>
+    <string name="cancel">取消</string>
+    <string name="clear">清除</string>
+    <string name="apply">应用</string>
+    <string name="settings">设置</string>
+    <string name="search">搜索</string>
+    <string name="all">全部</string>
+
+    <!-- Home Screen -->
+    <string name="notification_history">通知\n历史</string>
+    <string name="notification">通知</string>
+    <string name="history">历史</string>
+    <string name="privacy_focused_logging">隐私保护记录已启用</string>
+    <string name="all_logs">所有日志</string>
+    <string name="local_encryption_active">本地加密已启用</string>
+    <string name="no_notifications_yet">暂无通知</string>
+    <string name="notifications_will_appear">新通知将显示在这里</string>
+    <string name="search_and_filter">搜索和筛选</string>
+
+    <!-- Filter Bottom Sheet -->
+    <string name="filter_and_search">筛选和搜索</string>
+    <string name="clear_filter">清除筛选</string>
+    <string name="search_notifications">搜索通知</string>
+    <string name="filter_by_app">按应用筛选</string>
+    <string name="date_range">日期范围</string>
+    <string name="start_date">开始日期</string>
+    <string name="end_date">结束日期</string>
+    <string name="apply_filter">应用筛选</string>
+
+    <!-- Notification Detail Screen -->
+    <string name="notification_details">通知详情</string>
+    <string name="no_title">无标题</string>
+    <string name="no_content">无内容</string>
+    <string name="received">接收时间</string>
+    <string name="app_info">应用信息</string>
+    <string name="package_name">包名</string>
+    <string name="delete_notification">删除通知</string>
+    <string name="delete">删除</string>
+    <string name="delete_confirmation">您确定要删除此通知吗？</string>
+
+    <!-- Settings Screen -->
+    <string name="general">通用</string>
+    <string name="enable_notification_logging">启用通知记录</string>
+    <string name="logs_stored_securely">日志安全存储在此设备上</string>
+    <string name="ignore_system_apps">忽略系统应用</string>
+    <string name="storage_and_data">存储和数据</string>
+    <string name="auto_delete_logs">自动删除日志</string>
+    <string name="after_days">%d 天后</string>
+    <string name="one_day">1 天</string>
+    <string name="ninety_days">90 天</string>
+    <string name="clear_notification_history">清除通知历史</string>
+    <string name="about">关于</string>
+    <string name="privacy_policy_terms">隐私政策和服务条款</string>
+    <string name="developer">开发者</string>
+    <string name="app_version">应用版本</string>
+    <string name="notifylog_privacy_core">NOTIFYLOG 隐私核心</string>
+    <string name="clear_all_history">清除所有历史？</string>
+    <string name="clear_all_history_message">这将永久删除所有 %d 条存储的通知。此操作无法撤消。</string>
+    <string name="clear_all">全部清除</string>
+    <string name="notifications_stored">已存储 %d 条通知</string>
+    <string name="privacy_first_history">隐私优先的通知历史</string>
+
+    <!-- Language Settings -->
+    <string name="language">语言</string>
+    <string name="select_language">选择语言</string>
+    <string name="language_english">English</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="language_chinese">中文</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_german">Deutsch</string>
+
+    <!-- Splash Screen -->
+    <string name="tagline">您的通知历史，\n本地存储。</string>
+    <string name="privacy_secure">注重隐私 • 安全</string>
+    <string name="version_stored">版本 1.0.0 • 存储在设备上</string>
+
+    <!-- Onboarding Screen -->
+    <string name="setup">设置</string>
+    <string name="permission_not_granted">未授予权限</string>
+    <string name="enable_notification_access">启用通知访问</string>
+    <string name="onboarding_description">要记录和搜索您的历史，NotifyLog 需要读取通知的权限。\n\n您的数据永远不会离开您的设备——我们的离线优先架构确保您的历史 100% 私密。</string>
+    <string name="why_needed">为什么需要这个？</string>
+    <string name="why_is_this_needed">为什么需要这个？</string>
+    <string name="hundred_percent_private">100% 私密</string>
+    <string name="to_log_and_search_your_history">要记录和搜索您的历史，</string>
+    <string name="needs_permission_to_read_incoming_alerts"> 需要读取通知的权限。\n\n您的数据永远不会离开您的设备——我们的离线优先架构确保您的历史 100% 私密。</string>
+</resources>

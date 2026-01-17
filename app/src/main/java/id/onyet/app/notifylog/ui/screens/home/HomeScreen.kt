@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShieldMoon
 import androidx.compose.material.icons.filled.VerifiedUser
@@ -43,13 +44,17 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -57,8 +62,12 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
 import id.onyet.app.notifylog.NotifyLogApp
+import id.onyet.app.notifylog.R
 import id.onyet.app.notifylog.data.local.NotificationLog
+import id.onyet.app.notifylog.ui.components.LanguageBottomSheet
 import id.onyet.app.notifylog.ui.theme.Primary
+import id.onyet.app.notifylog.util.LocaleHelper
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -75,14 +84,19 @@ fun HomeScreen(
     val viewModel: HomeViewModel = viewModel(
         factory = HomeViewModelFactory(app.repository)
     )
-    
+    val scope = rememberCoroutineScope()
+
     val notifications by viewModel.notifications.collectAsState()
     val apps by viewModel.apps.collectAsState()
     val filterState by viewModel.filterState.collectAsState()
     val isFilterSheetVisible by viewModel.isFilterSheetVisible.collectAsState()
-    
+    val languageCode by app.userPreferences.languageCode.collectAsState(initial = "en")
+
+    var isLanguageSheetVisible by remember { mutableStateOf(false) }
+
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    
+    val languageSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -98,16 +112,22 @@ fun HomeScreen(
                             modifier = Modifier.size(24.dp)
                         )
                         Text(
-                            text = "NotifyLog",
+                            text = stringResource(R.string.app_name),
                             fontWeight = FontWeight.Bold
                         )
                     }
                 },
                 actions = {
+                    IconButton(onClick = { isLanguageSheetVisible = true }) {
+                        Icon(
+                            imageVector = Icons.Default.Language,
+                            contentDescription = stringResource(R.string.language)
+                        )
+                    }
                     IconButton(onClick = { viewModel.showFilterSheet() }) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Search & Filter"
+                            contentDescription = stringResource(R.string.search_and_filter)
                         )
                     }
                 },
@@ -130,18 +150,18 @@ fun HomeScreen(
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp)
             ) {
                 Text(
-                    text = "Notification",
+                    text = stringResource(R.string.notification),
                     style = MaterialTheme.typography.displaySmall,
                     fontWeight = FontWeight.ExtraBold
                 )
                 Text(
-                    text = "History",
+                    text = stringResource(R.string.history),
                     style = MaterialTheme.typography.displaySmall,
                     fontWeight = FontWeight.ExtraBold
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Privacy-focused logging active",
+                    text = stringResource(R.string.privacy_focused_logging),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -154,7 +174,7 @@ fun HomeScreen(
             ) {
                 item {
                     FilterChip(
-                        label = "All Logs",
+                        label = stringResource(R.string.all_logs),
                         isSelected = filterState.selectedPackage == null,
                         onClick = { viewModel.updateSelectedPackage(null) }
                     )
@@ -197,6 +217,25 @@ fun HomeScreen(
                 onDateRangeChange = viewModel::updateDateRange,
                 onClearFilters = viewModel::clearFilters,
                 onApply = { viewModel.hideFilterSheet() }
+            )
+        }
+    }
+
+    // Language Bottom Sheet
+    if (isLanguageSheetVisible) {
+        ModalBottomSheet(
+            onDismissRequest = { isLanguageSheetVisible = false },
+            sheetState = languageSheetState,
+            containerColor = MaterialTheme.colorScheme.surface
+        ) {
+            LanguageBottomSheet(
+                currentLanguage = LocaleHelper.Language.fromCode(languageCode),
+                onLanguageSelected = { language ->
+                    scope.launch {
+                        app.userPreferences.setLanguageCode(language.code)
+                    }
+                    isLanguageSheetVisible = false
+                }
             )
         }
     }
@@ -422,12 +461,12 @@ private fun EmptyState() {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "No notifications yet",
+                text = stringResource(R.string.no_notifications_yet),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                text = "New notifications will appear here",
+                text = stringResource(R.string.notifications_will_appear),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
@@ -470,7 +509,7 @@ private fun BottomBar(
                         modifier = Modifier.size(20.dp)
                     )
                     Text(
-                        text = "Local encryption active",
+                        text = stringResource(R.string.local_encryption_active),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface
@@ -481,7 +520,7 @@ private fun BottomBar(
                     onClick = onNavigateToSettings
                 ) {
                     Text(
-                        text = "SETTINGS",
+                        text = stringResource(R.string.settings).uppercase(),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         color = Primary

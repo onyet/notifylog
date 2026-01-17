@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NotifyLog</string>
+    <string name="notification_listener_service_description">NotifyLog benötigt Zugriff, um Ihre Benachrichtigungen zu lesen und lokal zu speichern.</string>
+
+    <!-- Common -->
+    <string name="back">Zurück</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="clear">Löschen</string>
+    <string name="apply">Anwenden</string>
+    <string name="settings">Einstellungen</string>
+    <string name="search">Suchen</string>
+    <string name="all">Alle</string>
+
+    <!-- Home Screen -->
+    <string name="notification_history">Benachrichtigungs\nverlauf</string>
+    <string name="notification">Benachrichtigung</string>
+    <string name="history">Verlauf</string>
+    <string name="privacy_focused_logging">Datenschutzorientierte Protokollierung aktiv</string>
+    <string name="all_logs">Alle Protokolle</string>
+    <string name="local_encryption_active">Lokale Verschlüsselung aktiv</string>
+    <string name="no_notifications_yet">Noch keine Benachrichtigungen</string>
+    <string name="notifications_will_appear">Neue Benachrichtigungen erscheinen hier</string>
+    <string name="search_and_filter">Suchen &amp; Filtern</string>
+
+    <!-- Filter Bottom Sheet -->
+    <string name="filter_and_search">Filtern &amp; Suchen</string>
+    <string name="clear_filter">Filter löschen</string>
+    <string name="search_notifications">Benachrichtigungen suchen</string>
+    <string name="filter_by_app">Nach App filtern</string>
+    <string name="date_range">Datumsbereich</string>
+    <string name="start_date">Startdatum</string>
+    <string name="end_date">Enddatum</string>
+    <string name="apply_filter">Filter anwenden</string>
+
+    <!-- Notification Detail Screen -->
+    <string name="notification_details">Benachrichtigungsdetails</string>
+    <string name="no_title">Kein Titel</string>
+    <string name="no_content">Kein Inhalt</string>
+    <string name="received">EMPFANGEN</string>
+    <string name="app_info">APP-INFO</string>
+    <string name="package_name">Paketname</string>
+    <string name="delete_notification">Benachrichtigung löschen</string>
+    <string name="delete">Löschen</string>
+    <string name="delete_confirmation">Sind Sie sicher, dass Sie diese Benachrichtigung löschen möchten?</string>
+
+    <!-- Settings Screen -->
+    <string name="general">Allgemein</string>
+    <string name="enable_notification_logging">Benachrichtigungsprotokollierung aktivieren</string>
+    <string name="logs_stored_securely">Protokolle werden sicher auf diesem Gerät gespeichert</string>
+    <string name="ignore_system_apps">System-Apps ignorieren</string>
+    <string name="storage_and_data">Speicher &amp; Daten</string>
+    <string name="auto_delete_logs">Protokolle automatisch löschen</string>
+    <string name="after_days">Nach %d Tagen</string>
+    <string name="one_day">1 TAG</string>
+    <string name="ninety_days">90 TAGE</string>
+    <string name="clear_notification_history">Benachrichtigungsverlauf löschen</string>
+    <string name="about">Über</string>
+    <string name="privacy_policy_terms">Datenschutzrichtlinie &amp; Nutzungsbedingungen</string>
+    <string name="developer">Entwickler</string>
+    <string name="app_version">App-Version</string>
+    <string name="notifylog_privacy_core">NOTIFYLOG DATENSCHUTZKERN</string>
+    <string name="clear_all_history">Gesamten Verlauf löschen?</string>
+    <string name="clear_all_history_message">Dadurch werden alle %d gespeicherten Benachrichtigungen dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="clear_all">Alles löschen</string>
+    <string name="notifications_stored">%d Benachrichtigungen gespeichert</string>
+    <string name="privacy_first_history">Datenschutzorientierter Benachrichtigungsverlauf</string>
+
+    <!-- Language Settings -->
+    <string name="language">Sprache</string>
+    <string name="select_language">Sprache auswählen</string>
+    <string name="language_english">English</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="language_chinese">中文</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_german">Deutsch</string>
+
+    <!-- Splash Screen -->
+    <string name="tagline">Ihr Benachrichtigungsverlauf,\nlokal gespeichert.</string>
+    <string name="privacy_secure">DATENSCHUTZ • SICHER</string>
+    <string name="version_stored">Version 1.0.0 • Auf Gerät gespeichert</string>
+
+    <!-- Onboarding Screen -->
+    <string name="setup">Einrichtung</string>
+    <string name="permission_not_granted">BERECHTIGUNG NICHT ERTEILT</string>
+    <string name="enable_notification_access">Benachrichtigungszugriff aktivieren</string>
+    <string name="onboarding_description">Um Ihren Verlauf zu protokollieren und zu durchsuchen, benötigt NotifyLog die Berechtigung, eingehende Benachrichtigungen zu lesen.\n\nIhre Daten verlassen niemals Ihr Gerät – unsere Offline-First-Architektur stellt sicher, dass Ihr Verlauf zu 100% privat ist.</string>
+    <string name="why_needed">Warum wird das benötigt?</string>
+    <string name="why_is_this_needed">Warum wird das benötigt?</string>
+    <string name="hundred_percent_private">100% privat</string>
+    <string name="to_log_and_search_your_history">Um Ihren Verlauf zu protokollieren und zu durchsuchen,</string>
+    <string name="needs_permission_to_read_incoming_alerts"> benötigt NotifyLog die Berechtigung, eingehende Benachrichtigungen zu lesen.\n\nIhre Daten verlassen niemals Ihr Gerät – unsere Offline-First-Architektur stellt sicher, dass Ihr Verlauf zu 100% privat ist.</string>
+</resources>
