@@ -1,5 +1,6 @@
 package id.onyet.app.notifylog.ui.screens.home
 
+import android.app.DatePickerDialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,14 +22,17 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,6 +51,7 @@ import id.onyet.app.notifylog.R
 import id.onyet.app.notifylog.data.local.AppInfo
 import id.onyet.app.notifylog.ui.theme.Primary
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -60,7 +66,17 @@ fun FilterBottomSheet(
     onApply: () -> Unit
 ) {
     var searchText by remember { mutableStateOf(filterState.searchQuery) }
-    
+    var startDate by remember { mutableStateOf(filterState.startDate) }
+    var endDate by remember { mutableStateOf(filterState.endDate) }
+    val context = LocalContext.current
+
+    // Update local state when filterState changes (e.g., after clear)
+    LaunchedEffect(filterState) {
+        searchText = filterState.searchQuery
+        startDate = filterState.startDate
+        endDate = filterState.endDate
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -79,7 +95,12 @@ fun FilterBottomSheet(
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
-            TextButton(onClick = onClearFilters) {
+            TextButton(onClick = {
+                searchText = ""
+                startDate = null
+                endDate = null
+                onClearFilters()
+            }) {
                 Text(
                     text = stringResource(R.string.clear_filter),
                     color = Primary,
@@ -123,6 +144,7 @@ fun FilterBottomSheet(
                         color = MaterialTheme.colorScheme.onSurface
                     ),
                     cursorBrush = SolidColor(Primary),
+                    singleLine = true,
                     decorationBox = { innerTextField ->
                         if (searchText.isEmpty()) {
                             Text(
@@ -133,6 +155,22 @@ fun FilterBottomSheet(
                         innerTextField()
                     }
                 )
+                if (searchText.isNotEmpty()) {
+                    IconButton(
+                        onClick = {
+                            searchText = ""
+                            onSearchQueryChange("")
+                        },
+                        modifier = Modifier.size(24.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
+                }
             }
         }
         
@@ -174,63 +212,125 @@ fun FilterBottomSheet(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )
         
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .background(
-                    MaterialTheme.colorScheme.surfaceVariant,
-                    RoundedCornerShape(12.dp)
-                )
-                .clickable { /* Open date picker */ }
-                .padding(16.dp)
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
+            // Start Date
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant,
+                        RoundedCornerShape(12.dp)
+                    )
+                    .clickable {
+                        val calendar = Calendar.getInstance()
+                        startDate?.let { calendar.timeInMillis = it }
+                        DatePickerDialog(
+                            context,
+                            { _, year, month, dayOfMonth ->
+                                val selectedCal = Calendar.getInstance()
+                                selectedCal.set(year, month, dayOfMonth, 0, 0, 0)
+                                selectedCal.set(Calendar.MILLISECOND, 0)
+                                startDate = selectedCal.timeInMillis
+                                onDateRangeChange(startDate, endDate)
+                            },
+                            calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH)
+                        ).show()
+                    }
+                    .padding(16.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.CalendarMonth,
-                    contentDescription = null,
-                    tint = Primary,
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                
-                val startDateText = filterState.startDate?.let {
-                    SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date(it))
-                } ?: "Start date"
-                
-                val endDateText = filterState.endDate?.let {
-                    SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date(it))
-                } ?: "End date"
-                
                 Row(
-                    modifier = Modifier.weight(1f),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = startDateText,
-                        color = if (filterState.startDate != null) 
-                            MaterialTheme.colorScheme.onSurface 
-                        else MaterialTheme.colorScheme.onSurfaceVariant
+                    Icon(
+                        imageVector = Icons.Default.CalendarMonth,
+                        contentDescription = null,
+                        tint = Primary,
+                        modifier = Modifier.size(20.dp)
                     )
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = " — ",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Text(
-                        text = endDateText,
-                        color = if (filterState.endDate != null) 
-                            MaterialTheme.colorScheme.onSurface 
-                        else MaterialTheme.colorScheme.onSurfaceVariant
+                        text = startDate?.let {
+                            SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date(it))
+                        } ?: stringResource(R.string.start_date),
+                        color = if (startDate != null)
+                            MaterialTheme.colorScheme.onSurface
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 14.sp
                     )
                 }
-                
-                Icon(
-                    imageVector = Icons.Default.ChevronRight,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+            }
+
+            // End Date
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .background(
+                        MaterialTheme.colorScheme.surfaceVariant,
+                        RoundedCornerShape(12.dp)
+                    )
+                    .clickable {
+                        val calendar = Calendar.getInstance()
+                        endDate?.let { calendar.timeInMillis = it }
+                        DatePickerDialog(
+                            context,
+                            { _, year, month, dayOfMonth ->
+                                val selectedCal = Calendar.getInstance()
+                                selectedCal.set(year, month, dayOfMonth, 23, 59, 59)
+                                selectedCal.set(Calendar.MILLISECOND, 999)
+                                endDate = selectedCal.timeInMillis
+                                onDateRangeChange(startDate, endDate)
+                            },
+                            calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH)
+                        ).show()
+                    }
+                    .padding(16.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CalendarMonth,
+                        contentDescription = null,
+                        tint = Primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = endDate?.let {
+                            SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(Date(it))
+                        } ?: stringResource(R.string.end_date),
+                        color = if (endDate != null)
+                            MaterialTheme.colorScheme.onSurface
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 14.sp
+                    )
+                }
+            }
+        }
+
+        // Clear date range button
+        if (startDate != null || endDate != null) {
+            TextButton(
+                onClick = {
+                    startDate = null
+                    endDate = null
+                    onDateRangeChange(null, null)
+                },
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.clear_filter),
+                    color = Primary,
+                    fontSize = 14.sp
                 )
             }
         }

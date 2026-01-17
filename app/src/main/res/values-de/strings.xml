@@ -11,6 +11,10 @@
     <string name="settings">Einstellungen</string>
     <string name="search">Suchen</string>
     <string name="all">Alle</string>
+    <string name="exit">Beenden</string>
+    <string name="exit_app">App beenden?</string>
+    <string name="exit_app_message">Sind Sie sicher, dass Sie beenden möchten? NotifyLog wird im Hintergrund weiterlaufen, um Benachrichtigungen zu erfassen.</string>
+    <string name="stay">Bleiben</string>
 
     <!-- Home Screen -->
     <string name="notification_history">Benachrichtigungs\nverlauf</string>
@@ -22,6 +26,8 @@
     <string name="no_notifications_yet">Noch keine Benachrichtigungen</string>
     <string name="notifications_will_appear">Neue Benachrichtigungen erscheinen hier</string>
     <string name="search_and_filter">Suchen &amp; Filtern</string>
+    <string name="filter_active">Filter aktiv</string>
+    <string name="clear_filter_hint">Tippen zum Löschen des Filters</string>
 
     <!-- Filter Bottom Sheet -->
     <string name="filter_and_search">Filtern &amp; Suchen</string>

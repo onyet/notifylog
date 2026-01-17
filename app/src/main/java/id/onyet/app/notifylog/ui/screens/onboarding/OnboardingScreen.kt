@@ -35,16 +35,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -246,13 +242,7 @@ fun OnboardingScreen(
         
         // Description
         Text(
-            text = buildAnnotatedString {
-                append(stringResource(R.string.to_log_and_search_your_history))
-                withStyle(style = SpanStyle(color = Primary, fontWeight = FontWeight.SemiBold)) {
-                    append(" NotifyLog")
-                }
-                append(stringResource(R.string.needs_permission_to_read_incoming_alerts))
-            },
+            text = stringResource(R.string.onboarding_description),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
@@ -293,7 +283,7 @@ fun OnboardingScreen(
             onClick = { /* Show info dialog */ }
         ) {
             Text(
-                text = stringResource(R.string.why_is_this_needed),
+                text = stringResource(R.string.why_needed),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.width(4.dp))

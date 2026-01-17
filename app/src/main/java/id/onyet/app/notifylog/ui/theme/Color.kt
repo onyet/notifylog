@@ -2,10 +2,10 @@ package id.onyet.app.notifylog.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Primary Brand Colors
-val Primary = Color(0xFF135BEC)
-val PrimaryLight = Color(0xFF4D8AFF)
-val PrimaryDark = Color(0xFF0A2E7A)
+// Primary Brand Colors - Brighter blue for better visibility
+val Primary = Color(0xFF3B82F6)
+val PrimaryLight = Color(0xFF60A5FA)
+val PrimaryDark = Color(0xFF2563EB)
 
 // Background Colors
 val BackgroundLight = Color(0xFFF6F6F8)

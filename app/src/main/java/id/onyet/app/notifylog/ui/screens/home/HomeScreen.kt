@@ -24,6 +24,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShieldMoon
@@ -124,11 +126,25 @@ fun HomeScreen(
                             contentDescription = stringResource(R.string.language)
                         )
                     }
-                    IconButton(onClick = { viewModel.showFilterSheet() }) {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = stringResource(R.string.search_and_filter)
-                        )
+                    // Search/Filter button with badge when filter is active
+                    Box {
+                        IconButton(onClick = { viewModel.showFilterSheet() }) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = stringResource(R.string.search_and_filter)
+                            )
+                        }
+                        // Badge indicator when filter is active
+                        if (filterState.isActive) {
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .padding(8.dp)
+                                    .size(10.dp)
+                                    .clip(CircleShape)
+                                    .background(Primary)
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -166,7 +182,54 @@ fun HomeScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            
+
+            // Filter active indicator
+            if (filterState.isActive) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Primary.copy(alpha = 0.1f))
+                        .clickable { viewModel.clearFilters() }
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.FilterList,
+                            contentDescription = null,
+                            tint = Primary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Column {
+                            Text(
+                                text = stringResource(R.string.filter_active),
+                                fontWeight = FontWeight.SemiBold,
+                                color = Primary,
+                                fontSize = 14.sp
+                            )
+                            Text(
+                                text = stringResource(R.string.clear_filter_hint),
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(R.string.clear_filter),
+                        tint = Primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
             // Filter chips
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 16.dp),

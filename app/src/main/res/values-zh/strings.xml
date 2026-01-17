@@ -11,6 +11,10 @@
     <string name="settings">设置</string>
     <string name="search">搜索</string>
     <string name="all">全部</string>
+    <string name="exit">退出</string>
+    <string name="exit_app">退出应用？</string>
+    <string name="exit_app_message">您确定要退出吗？NotifyLog将继续在后台运行以捕获通知。</string>
+    <string name="stay">留下</string>
 
     <!-- Home Screen -->
     <string name="notification_history">通知\n历史</string>
@@ -22,6 +26,8 @@
     <string name="no_notifications_yet">暂无通知</string>
     <string name="notifications_will_appear">新通知将显示在这里</string>
     <string name="search_and_filter">搜索和筛选</string>
+    <string name="filter_active">筛选已启用</string>
+    <string name="clear_filter_hint">点击清除筛选</string>
 
     <!-- Filter Bottom Sheet -->
     <string name="filter_and_search">筛选和搜索</string>

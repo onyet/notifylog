@@ -11,6 +11,10 @@
     <string name="settings">Pengaturan</string>
     <string name="search">Cari</string>
     <string name="all">Semua</string>
+    <string name="exit">Keluar</string>
+    <string name="exit_app">Keluar Aplikasi?</string>
+    <string name="exit_app_message">Apakah Anda yakin ingin keluar? NotifyLog akan terus berjalan di latar belakang untuk menangkap notifikasi.</string>
+    <string name="stay">Tetap</string>
 
     <!-- Home Screen -->
     <string name="notification_history">Riwayat\nNotifikasi</string>
@@ -22,6 +26,8 @@
     <string name="no_notifications_yet">Belum ada notifikasi</string>
     <string name="notifications_will_appear">Notifikasi baru akan muncul di sini</string>
     <string name="search_and_filter">Cari &amp; Filter</string>
+    <string name="filter_active">Filter aktif</string>
+    <string name="clear_filter_hint">Ketuk untuk menghapus filter</string>
 
     <!-- Filter Bottom Sheet -->
     <string name="filter_and_search">Filter &amp; Cari</string>

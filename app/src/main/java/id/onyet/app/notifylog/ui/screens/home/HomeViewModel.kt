@@ -21,7 +21,10 @@ data class FilterState(
     val selectedPackage: String? = null,
     val startDate: Long? = null,
     val endDate: Long? = null
-)
+) {
+    val isActive: Boolean
+        get() = searchQuery.isNotBlank() || selectedPackage != null || startDate != null || endDate != null
+}
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(

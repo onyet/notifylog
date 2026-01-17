@@ -11,6 +11,10 @@
     <string name="settings">الإعدادات</string>
     <string name="search">بحث</string>
     <string name="all">الكل</string>
+    <string name="exit">خروج</string>
+    <string name="exit_app">الخروج من التطبيق؟</string>
+    <string name="exit_app_message">هل أنت متأكد أنك تريد الخروج؟ سيستمر NotifyLog في العمل في الخلفية لالتقاط الإشعارات.</string>
+    <string name="stay">البقاء</string>
 
     <!-- Home Screen -->
     <string name="notification_history">سجل\nالإشعارات</string>
@@ -22,6 +26,8 @@
     <string name="no_notifications_yet">لا توجد إشعارات بعد</string>
     <string name="notifications_will_appear">ستظهر الإشعارات الجديدة هنا</string>
     <string name="search_and_filter">البحث والتصفية</string>
+    <string name="filter_active">التصفية نشطة</string>
+    <string name="clear_filter_hint">انقر لمسح التصفية</string>
 
     <!-- Filter Bottom Sheet -->
     <string name="filter_and_search">التصفية والبحث</string>

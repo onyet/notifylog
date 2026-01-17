@@ -10,6 +10,10 @@
     <string name="settings">Settings</string>
     <string name="search">Search</string>
     <string name="all">All</string>
+    <string name="exit">Exit</string>
+    <string name="exit_app">Exit App?</string>
+    <string name="exit_app_message">Are you sure you want to exit? NotifyLog will continue running in background to capture notifications.</string>
+    <string name="stay">Stay</string>
 
     <!-- Home Screen -->
     <string name="notification_history">Notification\nHistory</string>
@@ -21,6 +25,8 @@
     <string name="no_notifications_yet">No notifications yet</string>
     <string name="notifications_will_appear">New notifications will appear here</string>
     <string name="search_and_filter">Search &amp; Filter</string>
+    <string name="filter_active">Filter active</string>
+    <string name="clear_filter_hint">Tap to clear filter</string>
 
     <!-- Filter Bottom Sheet -->
     <string name="filter_and_search">Filter &amp; Search</string>
