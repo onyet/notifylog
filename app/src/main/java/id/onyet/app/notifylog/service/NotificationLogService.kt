@@ -38,19 +38,17 @@ class NotificationLogService : NotificationListenerService() {
     }
 
     private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                "NotifyLog Service",
-                NotificationManager.IMPORTANCE_LOW
-            ).apply {
-                description = "Keeps NotifyLog running to capture notifications"
-                setShowBadge(false)
-            }
-
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.createNotificationChannel(channel)
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            "NotifyLog Service",
+            NotificationManager.IMPORTANCE_LOW
+        ).apply {
+            description = "Keeps NotifyLog running to capture notifications"
+            setShowBadge(false)
         }
+
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
     }
 
     private fun startForegroundServiceNotification() {
@@ -63,7 +61,7 @@ class NotificationLogService : NotificationListenerService() {
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.privacy_focused_logging))
-            .setSmallIcon(R.drawable.ic_notification)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)

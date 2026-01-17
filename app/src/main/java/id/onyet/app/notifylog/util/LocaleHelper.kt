@@ -4,15 +4,16 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.os.LocaleList
+import android.view.View
 import java.util.Locale
 
 object LocaleHelper {
 
-    enum class Language(val code: String, val displayName: String, val flag: String) {
+    enum class Language(val code: String, val displayName: String, val flag: String, val isRtl: Boolean = false) {
         ENGLISH("en", "English", "🇺🇸"),
         INDONESIAN("in", "Bahasa Indonesia", "🇮🇩"),
         CHINESE("zh", "中文", "🇨🇳"),
-        ARABIC("ar", "العربية", "🇸🇦"),
+        ARABIC("ar", "العربية", "🇸🇦", isRtl = true),
         RUSSIAN("ru", "Русский", "🇷🇺"),
         GERMAN("de", "Deutsch", "🇩🇪");
 
@@ -28,6 +29,10 @@ object LocaleHelper {
         Locale.setDefault(locale)
 
         val config = Configuration(context.resources.configuration)
+
+        // Set layout direction for RTL languages
+        val language = Language.fromCode(languageCode)
+        config.setLayoutDirection(locale)
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             config.setLocales(LocaleList(locale))
@@ -53,5 +58,13 @@ object LocaleHelper {
     fun getCurrentLanguage(context: Context): Language {
         val locale = getLocale(context)
         return Language.fromCode(locale.language)
+    }
+
+    fun isRtl(languageCode: String): Boolean {
+        return Language.fromCode(languageCode).isRtl
+    }
+
+    fun getLayoutDirection(languageCode: String): Int {
+        return if (isRtl(languageCode)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
     }
 }

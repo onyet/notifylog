@@ -22,7 +22,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.compose.rememberNavController
 import id.onyet.app.notifylog.ui.navigation.NotifyLogNavGraph
 import id.onyet.app.notifylog.ui.navigation.Screen
@@ -45,7 +47,17 @@ class MainActivity : ComponentActivity() {
             // Apply locale
             val localizedContext = LocaleHelper.setLocale(LocalContext.current, languageCode)
 
-            CompositionLocalProvider(LocalAppLocale provides languageCode) {
+            // Determine layout direction based on language
+            val layoutDirection = if (LocaleHelper.isRtl(languageCode)) {
+                LayoutDirection.Rtl
+            } else {
+                LayoutDirection.Ltr
+            }
+
+            CompositionLocalProvider(
+                LocalAppLocale provides languageCode,
+                LocalLayoutDirection provides layoutDirection
+            ) {
                 NotifyLogTheme(darkTheme = isDarkMode) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),
