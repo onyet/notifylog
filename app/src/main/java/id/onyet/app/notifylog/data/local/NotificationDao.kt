@@ -1,5 +1,6 @@
 package id.onyet.app.notifylog.data.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy

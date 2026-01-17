@@ -64,19 +64,6 @@ fun FilterBottomSheet(
             .fillMaxWidth()
             .padding(bottom = 32.dp)
     ) {
-        // Handle bar
-        Box(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 8.dp, bottom = 16.dp)
-                .width(40.dp)
-                .height(4.dp)
-                .background(
-                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-                    RoundedCornerShape(2.dp)
-                )
-        )
-        
         // Header
         Row(
             modifier = Modifier
