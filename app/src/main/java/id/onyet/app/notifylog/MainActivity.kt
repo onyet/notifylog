@@ -3,7 +3,7 @@ package id.onyet.app.notifylog
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +17,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
@@ -25,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import id.onyet.app.notifylog.ui.navigation.NotifyLogNavGraph
 import id.onyet.app.notifylog.ui.navigation.Screen
@@ -34,11 +34,48 @@ import id.onyet.app.notifylog.util.LocaleHelper
 
 val LocalAppLocale = staticCompositionLocalOf { "en" }
 
+// Global state for exit dialog
+var showExitDialog by mutableStateOf(false)
+    private set
+
+fun requestExitConfirmation() {
+    showExitDialog = true
+}
+
+fun dismissExitDialog() {
+    showExitDialog = false
+}
+
 class MainActivity : ComponentActivity() {
+
+    private lateinit var navController: NavHostController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         
+        // Handle back button press
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Check if we can navigate back or if we're at a root screen
+                if (::navController.isInitialized) {
+                    val currentRoute = navController.currentDestination?.route
+
+                    // Show exit dialog on root screens
+                    if (currentRoute == Screen.Home.route ||
+                        currentRoute == Screen.Splash.route ||
+                        currentRoute == Screen.Onboarding.route) {
+                        showExitDialog = true
+                    } else {
+                        // Navigate back normally
+                        navController.popBackStack()
+                    }
+                } else {
+                    showExitDialog = true
+                }
+            }
+        })
+
         setContent {
             val app = application as NotifyLogApp
             val isDarkMode by app.userPreferences.isDarkMode.collectAsState(initial = true)
@@ -64,15 +101,7 @@ class MainActivity : ComponentActivity() {
                         color = MaterialTheme.colorScheme.background
                     ) {
                         ProvideLocalizedContext(localizedContext) {
-                            val navController = rememberNavController()
-                            var showExitDialog by remember { mutableStateOf(false) }
-
-                            // Handle back press on home screen
-                            BackHandler(
-                                enabled = navController.currentBackStackEntry?.destination?.route == Screen.Home.route
-                            ) {
-                                showExitDialog = true
-                            }
+                            navController = rememberNavController()
 
                             NotifyLogNavGraph(navController = navController)
 
@@ -82,7 +111,7 @@ class MainActivity : ComponentActivity() {
                                     onDismiss = { showExitDialog = false },
                                     onConfirm = {
                                         showExitDialog = false
-                                        moveTaskToBack(true)
+                                        finishAffinity()
                                     }
                                 )
                             }
@@ -114,7 +143,7 @@ fun ExitConfirmationDialog(
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.stay))
+                Text(stringResource(R.string.cancel))
             }
         }
     )
@@ -128,5 +157,7 @@ fun ProvideLocalizedContext(
     CompositionLocalProvider(
         LocalContext provides context,
         content = content
+    )
+}
     )
 }

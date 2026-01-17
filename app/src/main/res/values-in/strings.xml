@@ -71,6 +71,9 @@
     <string name="clear_all">Hapus Semua</string>
     <string name="notifications_stored">%d notifikasi tersimpan</string>
     <string name="privacy_first_history">Riwayat notifikasi yang mengutamakan privasi</string>
+    <string name="close">Tutup</string>
+    <string name="open">Buka</string>
+    <string name="open_privacy_policy_message">Apakah Anda ingin membuka halaman Kebijakan Privasi &amp; Ketentuan Layanan di browser?</string>
 
     <!-- Language Settings -->
     <string name="language">Bahasa</string>

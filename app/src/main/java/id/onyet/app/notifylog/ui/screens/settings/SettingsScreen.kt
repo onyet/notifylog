@@ -94,6 +94,8 @@ fun SettingsScreen(
 
     var showClearDialog by remember { mutableStateOf(false) }
     var isLanguageSheetVisible by remember { mutableStateOf(false) }
+    var showDeveloperDialog by remember { mutableStateOf(false) }
+    var showPrivacyConfirmDialog by remember { mutableStateOf(false) }
 
     val languageSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -328,88 +330,19 @@ fun SettingsScreen(
                     icon = Icons.Default.Policy,
                     title = stringResource(R.string.privacy_policy_terms),
                     onClick = {
-                        uriHandler.openUri("https://onyet.github.io/privacy-police.html")
+                        showPrivacyConfirmDialog = true
                     },
                     showDivider = true
                 )
                 
-                // Author Info Section
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = null,
-                            tint = Primary,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Text(
-                            text = stringResource(R.string.developer),
-                            fontWeight = FontWeight.Medium
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Column(
-                        modifier = Modifier.padding(start = 32.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = "Dian Mukti Wibowo",
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Email,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Text(
-                                text = "onyetcorp@gmail.com",
-                                fontSize = 14.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Phone,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Text(
-                                text = "+6282221874400 (WhatsApp)",
-                                fontSize = 14.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                }
-
-                // Divider
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .height(1.dp)
-                        .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+                // Developer Info (Clickable)
+                SettingsClickableItem(
+                    icon = Icons.Default.Person,
+                    title = stringResource(R.string.developer),
+                    onClick = {
+                        showDeveloperDialog = true
+                    },
+                    showDivider = true
                 )
 
                 // App Version
@@ -526,6 +459,90 @@ fun SettingsScreen(
                 }
             )
         }
+    }
+
+    // Developer Info Dialog
+    if (showDeveloperDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeveloperDialog = false },
+            title = { Text(stringResource(R.string.developer)) },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        text = "Dian Mukti Wibowo",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Email,
+                            contentDescription = null,
+                            tint = Primary,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Text(
+                            text = "onyetcorp@gmail.com",
+                            fontSize = 14.sp
+                        )
+                    }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Phone,
+                            contentDescription = null,
+                            tint = Primary,
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Text(
+                            text = "+6282221874400",
+                            fontSize = 14.sp
+                        )
+                    }
+
+                    Text(
+                        text = "WhatsApp",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showDeveloperDialog = false }) {
+                    Text(stringResource(R.string.close), color = Primary)
+                }
+            }
+        )
+    }
+
+    // Privacy Policy Confirmation Dialog
+    if (showPrivacyConfirmDialog) {
+        AlertDialog(
+            onDismissRequest = { showPrivacyConfirmDialog = false },
+            title = { Text(stringResource(R.string.privacy_policy_terms)) },
+            text = { Text(stringResource(R.string.open_privacy_policy_message)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showPrivacyConfirmDialog = false
+                    uriHandler.openUri("https://onyet.github.io/privacy-police.html")
+                }) {
+                    Text(stringResource(R.string.open), color = Primary)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showPrivacyConfirmDialog = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
     }
 }
 

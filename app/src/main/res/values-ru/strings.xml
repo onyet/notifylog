@@ -71,6 +71,9 @@
     <string name="clear_all">Очистить всё</string>
     <string name="notifications_stored">%d уведомлений сохранено</string>
     <string name="privacy_first_history">История уведомлений с приоритетом конфиденциальности</string>
+    <string name="close">Закрыть</string>
+    <string name="open">Открыть</string>
+    <string name="open_privacy_policy_message">Вы хотите открыть страницу Политики конфиденциальности и Условий использования в браузере?</string>
 
     <!-- Language Settings -->
     <string name="language">Язык</string>

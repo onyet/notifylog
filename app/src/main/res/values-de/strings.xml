@@ -71,6 +71,9 @@
     <string name="clear_all">Alles löschen</string>
     <string name="notifications_stored">%d Benachrichtigungen gespeichert</string>
     <string name="privacy_first_history">Datenschutzorientierter Benachrichtigungsverlauf</string>
+    <string name="close">Schließen</string>
+    <string name="open">Öffnen</string>
+    <string name="open_privacy_policy_message">Möchten Sie die Seite Datenschutzrichtlinie und Nutzungsbedingungen im Browser öffnen?</string>
 
     <!-- Language Settings -->
     <string name="language">Sprache</string>

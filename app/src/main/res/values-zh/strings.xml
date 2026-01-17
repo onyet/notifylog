@@ -71,6 +71,9 @@
     <string name="clear_all">全部清除</string>
     <string name="notifications_stored">已存储 %d 条通知</string>
     <string name="privacy_first_history">隐私优先的通知历史</string>
+    <string name="close">关闭</string>
+    <string name="open">打开</string>
+    <string name="open_privacy_policy_message">您想在浏览器中打开隐私政策和服务条款页面吗？</string>
 
     <!-- Language Settings -->
     <string name="language">语言</string>

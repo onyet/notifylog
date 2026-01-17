@@ -71,6 +71,9 @@
     <string name="clear_all">مسح الكل</string>
     <string name="notifications_stored">%d إشعارات مخزنة</string>
     <string name="privacy_first_history">سجل الإشعارات مع الخصوصية أولاً</string>
+    <string name="close">إغلاق</string>
+    <string name="open">فتح</string>
+    <string name="open_privacy_policy_message">هل تريد فتح صفحة سياسة الخصوصية وشروط الخدمة في المتصفح؟</string>
 
     <!-- Language Settings -->
     <string name="language">اللغة</string>
