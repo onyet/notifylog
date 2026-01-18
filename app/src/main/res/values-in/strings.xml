@@ -105,5 +105,10 @@
     <string name="why_is_this_needed">Mengapa ini diperlukan?</string>
     <string name="hundred_percent_private">100% pribadi</string>
     <string name="to_log_and_search_your_history">Untuk mencatat dan mencari riwayat Anda,</string>
-    <string name="needs_permission_to_read_incoming_alerts"> memerlukan izin untuk membaca notifikasi masuk.\n\nData Anda tidak pernah meninggalkan perangkat—arsitektur offline-first kami memastikan riwayat Anda 100% pribadi.</string>
-</resources>
+    <string name="needs_permission_to_read_incoming_alerts"> memerlukan izin untuk membaca notifikasi masuk.\n\nData Anda tidak pernah meninggalkan perangkat—arsitektur offline-first kami memastikan riwayat Anda 100% pribadi.</string>    <string name="why_needed_explanation">NotifyLog memerlukan izin akses notifikasi untuk menangkap dan menyimpan notifikasi Anda secara lokal.</string>
+    <string name="why_needed_point1_title">Menangkap Notifikasi</string>
+    <string name="why_needed_point1_desc">Membaca notifikasi masuk dari semua aplikasi untuk disimpan sebagai referensi nanti.</string>
+    <string name="why_needed_point2_title">100% Penyimpanan Lokal</string>
+    <string name="why_needed_point2_desc">Semua data hanya disimpan di perangkat Anda. Tidak ada yang dikirim ke server manapun.</string>
+    <string name="why_needed_point3_title">Privasi Anda, Prioritas Kami</string>
+    <string name="why_needed_point3_desc">Kami tidak dapat membaca data Anda. Hanya Anda yang memiliki akses ke riwayat notifikasi Anda.</string></resources>

@@ -106,4 +106,11 @@
     <string name="hundred_percent_private">100% 私密</string>
     <string name="to_log_and_search_your_history">要记录和搜索您的历史，</string>
     <string name="needs_permission_to_read_incoming_alerts"> 需要读取通知的权限。\n\n您的数据永远不会离开您的设备——我们的离线优先架构确保您的历史 100% 私密。</string>
+    <string name="why_needed_explanation">NotifyLog 需要通知访问权限来捕获并本地存储您的通知。</string>
+    <string name="why_needed_point1_title">捕获通知</string>
+    <string name="why_needed_point1_desc">读取所有应用的传入通知，以便以后参考。</string>
+    <string name="why_needed_point2_title">100% 本地存储</string>
+    <string name="why_needed_point2_desc">所有数据仅存储在您的设备上。不会发送到任何服务器。</string>
+    <string name="why_needed_point3_title">您的隐私，我们的优先事项</string>
+    <string name="why_needed_point3_desc">我们无法读取您的数据。只有您才能访问您的通知历史。</string>
 </resources>

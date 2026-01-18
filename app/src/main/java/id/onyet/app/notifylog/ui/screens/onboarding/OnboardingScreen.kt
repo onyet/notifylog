@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.OpenInNew
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -59,6 +60,8 @@ fun OnboardingScreen(
     var hasPermission by remember {
         mutableStateOf(NotificationPermissionHelper.hasNotificationListenerPermission(context))
     }
+    
+    var showWhyNeededDialog by remember { mutableStateOf(false) }
     
     // Check permission when returning to the app
     DisposableEffect(lifecycleOwner) {
@@ -276,11 +279,11 @@ fun OnboardingScreen(
                 fontWeight = FontWeight.SemiBold
             )
         }
-        
+
         Spacer(modifier = Modifier.height(12.dp))
         
         TextButton(
-            onClick = { /* Show info dialog */ }
+            onClick = { showWhyNeededDialog = true }
         ) {
             Text(
                 text = stringResource(R.string.why_needed),
@@ -296,6 +299,82 @@ fun OnboardingScreen(
         }
         
         Spacer(modifier = Modifier.height(32.dp))
+    }
+    
+    // Why is this needed dialog
+    if (showWhyNeededDialog) {
+        AlertDialog(
+            onDismissRequest = { showWhyNeededDialog = false },
+            title = { 
+                Text(
+                    text = stringResource(R.string.why_is_this_needed),
+                    fontWeight = FontWeight.Bold
+                ) 
+            },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.why_needed_explanation),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    
+                    Spacer(modifier = Modifier.height(8.dp))
+                    
+                    // Privacy points
+                    WhyNeededPoint(
+                        title = stringResource(R.string.why_needed_point1_title),
+                        description = stringResource(R.string.why_needed_point1_desc)
+                    )
+                    WhyNeededPoint(
+                        title = stringResource(R.string.why_needed_point2_title),
+                        description = stringResource(R.string.why_needed_point2_desc)
+                    )
+                    WhyNeededPoint(
+                        title = stringResource(R.string.why_needed_point3_title),
+                        description = stringResource(R.string.why_needed_point3_desc)
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showWhyNeededDialog = false }) {
+                    Text(stringResource(R.string.close), color = Primary)
+                }
+            }
+        )
+    }
+}
+
+@Composable
+private fun WhyNeededPoint(
+    title: String,
+    description: String
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(8.dp)
+                .padding(top = 6.dp)
+                .background(Primary, CircleShape)
+        )
+        Column {
+            Text(
+                text = title,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = description,
+                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                lineHeight = 18.sp
+            )
+        }
     }
 }
 

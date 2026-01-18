@@ -105,4 +105,11 @@
     <string name="hundred_percent_private">100% private</string>
     <string name="to_log_and_search_your_history">To log and search your history,</string>
     <string name="needs_permission_to_read_incoming_alerts"> needs permission to read incoming alerts.\n\nYour data never leaves your device—our offline-first architecture ensures your history is 100% private.</string>
+    <string name="why_needed_explanation">NotifyLog requires notification access permission to capture and store your notifications locally.</string>
+    <string name="why_needed_point1_title">Capture Notifications</string>
+    <string name="why_needed_point1_desc">Read incoming notifications from all apps to save them for later reference.</string>
+    <string name="why_needed_point2_title">100% Local Storage</string>
+    <string name="why_needed_point2_desc">All data is stored only on your device. Nothing is sent to any server.</string>
+    <string name="why_needed_point3_title">Your Privacy, Our Priority</string>
+    <string name="why_needed_point3_desc">We cannot read your data. Only you have access to your notification history.</string>
 </resources>

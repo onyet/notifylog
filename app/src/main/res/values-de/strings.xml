@@ -105,5 +105,10 @@
     <string name="why_is_this_needed">Warum wird das benötigt?</string>
     <string name="hundred_percent_private">100% privat</string>
     <string name="to_log_and_search_your_history">Um Ihren Verlauf zu protokollieren und zu durchsuchen,</string>
-    <string name="needs_permission_to_read_incoming_alerts"> benötigt NotifyLog die Berechtigung, eingehende Benachrichtigungen zu lesen.\n\nIhre Daten verlassen niemals Ihr Gerät – unsere Offline-First-Architektur stellt sicher, dass Ihr Verlauf zu 100% privat ist.</string>
-</resources>
+    <string name="needs_permission_to_read_incoming_alerts"> benötigt NotifyLog die Berechtigung, eingehende Benachrichtigungen zu lesen.\n\nIhre Daten verlassen niemals Ihr Gerät – unsere Offline-First-Architektur stellt sicher, dass Ihr Verlauf zu 100% privat ist.</string>    <string name="why_needed_explanation">NotifyLog benötigt die Berechtigung zum Zugriff auf Benachrichtigungen, um Ihre Benachrichtigungen lokal zu erfassen und zu speichern.</string>
+    <string name="why_needed_point1_title">Benachrichtigungen erfassen</string>
+    <string name="why_needed_point1_desc">Eingehende Benachrichtigungen von allen Apps lesen, um sie für spätere Referenz zu speichern.</string>
+    <string name="why_needed_point2_title">100% lokale Speicherung</string>
+    <string name="why_needed_point2_desc">Alle Daten werden nur auf Ihrem Gerät gespeichert. Nichts wird an Server gesendet.</string>
+    <string name="why_needed_point3_title">Ihre Privatsphäre, unsere Priorität</string>
+    <string name="why_needed_point3_desc">Wir können Ihre Daten nicht lesen. Nur Sie haben Zugriff auf Ihren Benachrichtigungsverlauf.</string></resources>

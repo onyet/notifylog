@@ -105,5 +105,10 @@
     <string name="why_is_this_needed">Зачем это нужно?</string>
     <string name="hundred_percent_private">100% конфиденциально</string>
     <string name="to_log_and_search_your_history">Для записи и поиска в вашей истории</string>
-    <string name="needs_permission_to_read_incoming_alerts"> требуется разрешение на чтение входящих оповещений.\n\nВаши данные никогда не покидают ваше устройство — наша офлайн-архитектура гарантирует, что ваша история на 100% конфиденциальна.</string>
-</resources>
+    <string name="needs_permission_to_read_incoming_alerts"> требуется разрешение на чтение входящих оповещений.\n\nВаши данные никогда не покидают ваше устройство — наша офлайн-архитектура гарантирует, что ваша история на 100% конфиденциальна.</string>    <string name="why_needed_explanation">NotifyLog требует разрешение на доступ к уведомлениям для захвата и локального хранения ваших уведомлений.</string>
+    <string name="why_needed_point1_title">Захват уведомлений</string>
+    <string name="why_needed_point1_desc">Чтение входящих уведомлений от всех приложений для сохранения для последующего обращения.</string>
+    <string name="why_needed_point2_title">100% локальное хранение</string>
+    <string name="why_needed_point2_desc">Все данные хранятся только на вашем устройстве. Ничего не отправляется на сервер.</string>
+    <string name="why_needed_point3_title">Ваша конфиденциальность — наш приоритет</string>
+    <string name="why_needed_point3_desc">Мы не можем читать ваши данные. Только вы имеете доступ к истории уведомлений.</string></resources>

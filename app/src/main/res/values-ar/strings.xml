@@ -106,4 +106,11 @@
     <string name="hundred_percent_private">خاص 100%</string>
     <string name="to_log_and_search_your_history">لتسجيل والبحث في سجلك،</string>
     <string name="needs_permission_to_read_incoming_alerts"> يحتاج إلى إذن لقراءة التنبيهات الواردة.\n\nبياناتك لا تغادر جهازك أبدًا—بنيتنا التي تعمل بدون اتصال تضمن أن سجلك خاص 100%.</string>
+    <string name="why_needed_explanation">يتطلب NotifyLog إذن الوصول إلى الإشعارات لالتقاط وتخزين إشعاراتك محليًا.</string>
+    <string name="why_needed_point1_title">التقاط الإشعارات</string>
+    <string name="why_needed_point1_desc">قراءة الإشعارات الواردة من جميع التطبيقات لحفظها للرجوع إليها لاحقًا.</string>
+    <string name="why_needed_point2_title">100% تخزين محلي</string>
+    <string name="why_needed_point2_desc">يتم تخزين جميع البيانات على جهازك فقط. لا يتم إرسال أي شيء إلى أي خادم.</string>
+    <string name="why_needed_point3_title">خصوصيتك، أولويتنا</string>
+    <string name="why_needed_point3_desc">لا يمكننا قراءة بياناتك. أنت فقط من يملك حق الوصول إلى سجل إشعاراتك.</string>
 </resources>
