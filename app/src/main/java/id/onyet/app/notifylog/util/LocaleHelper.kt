@@ -2,7 +2,6 @@ package id.onyet.app.notifylog.util
 
 import android.content.Context
 import android.content.res.Configuration
-import android.os.Build
 import android.os.LocaleList
 import android.view.View
 import java.util.Locale
@@ -30,37 +29,41 @@ object LocaleHelper {
 
         val config = Configuration(context.resources.configuration)
 
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.setLocales(LocaleList(locale))
-            context.createConfigurationContext(config)
-        } else {
-            @Suppress("DEPRECATION")
-            config.locale = locale
-            @Suppress("DEPRECATION")
-            context.resources.updateConfiguration(config, context.resources.displayMetrics)
-            context
+        // Also update the application-level resources for dialogs and modals
+        updateResources(context, locale)
+
+        config.setLocales(LocaleList(locale))
+        return context.createConfigurationContext(config)
+    }
+
+    @Suppress("DEPRECATION")
+    private fun updateResources(context: Context, locale: Locale) {
+        // Update application context resources if available
+        val appContext = try {
+            context.applicationContext
+        } catch (e: Exception) {
+            null
         }
+
+        if (appContext != null && appContext !== context) {
+            val appResources = appContext.resources
+            val appConfig = Configuration(appResources.configuration)
+            appConfig.setLocales(LocaleList(locale))
+            appResources.updateConfiguration(appConfig, appResources.displayMetrics)
+        }
+
+        // Also update the current context resources
+        val resources = context.resources
+        val config = Configuration(resources.configuration)
+        config.setLocales(LocaleList(locale))
+        resources.updateConfiguration(config, resources.displayMetrics)
     }
 
     fun getLocale(context: Context): Locale {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            context.resources.configuration.locales[0]
-        } else {
-            @Suppress("DEPRECATION")
-            context.resources.configuration.locale
-        }
-    }
-
-    fun getCurrentLanguage(context: Context): Language {
-        val locale = getLocale(context)
-        return Language.fromCode(locale.language)
+        return context.resources.configuration.locales[0]
     }
 
     fun isRtl(languageCode: String): Boolean {
         return Language.fromCode(languageCode).isRtl
-    }
-
-    fun getLayoutDirection(languageCode: String): Int {
-        return if (isRtl(languageCode)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
     }
 }

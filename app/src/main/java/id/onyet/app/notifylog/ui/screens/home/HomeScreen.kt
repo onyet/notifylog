@@ -298,6 +298,8 @@ fun HomeScreen(
                         app.userPreferences.setLanguageCode(language.code)
                     }
                     isLanguageSheetVisible = false
+                    // Recreate activity to apply new locale
+                    (context as? androidx.activity.ComponentActivity)?.recreate()
                 }
             )
         }

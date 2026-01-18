@@ -79,6 +79,12 @@ class UserPreferences(private val context: Context) {
     }
 
     suspend fun setLanguageCode(code: String) {
+        // Also save to SharedPreferences synchronously for attachBaseContext
+        context.getSharedPreferences("user_preferences", Context.MODE_PRIVATE)
+            .edit()
+            .putString("language_code", code)
+            .apply()
+
         context.dataStore.edit { preferences ->
             preferences[LANGUAGE_CODE] = code
         }

@@ -456,6 +456,8 @@ fun SettingsScreen(
                         app.userPreferences.setLanguageCode(language.code)
                     }
                     isLanguageSheetVisible = false
+                    // Recreate activity to apply new locale
+                    (context as? androidx.activity.ComponentActivity)?.recreate()
                 }
             )
         }
@@ -507,12 +509,6 @@ fun SettingsScreen(
                             fontSize = 14.sp
                         )
                     }
-
-                    Text(
-                        text = "WhatsApp",
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
                 }
             },
             confirmButton = {

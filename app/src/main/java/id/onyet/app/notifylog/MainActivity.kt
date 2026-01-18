@@ -39,13 +39,6 @@ val LocalAppLocale = staticCompositionLocalOf { "en" }
 var showExitDialog by mutableStateOf(false)
     private set
 
-fun requestExitConfirmation() {
-    showExitDialog = true
-}
-
-fun dismissExitDialog() {
-    showExitDialog = false
-}
 
 class MainActivity : ComponentActivity() {
 
@@ -124,6 +117,17 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun attachBaseContext(newBase: Context?) {
+        if (newBase != null) {
+            val app = newBase.applicationContext as? NotifyLogApp
+            if (app != null) {
+                // Get the saved language synchronously for attachBaseContext
+                val prefs = newBase.getSharedPreferences("user_preferences", MODE_PRIVATE)
+                val languageCode = prefs.getString("language_code", "en") ?: "en"
+                val localizedContext = LocaleHelper.setLocale(newBase, languageCode)
+                super.attachBaseContext(localizedContext)
+                return
+            }
+        }
         super.attachBaseContext(newBase)
     }
 }
