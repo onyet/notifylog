@@ -47,9 +47,7 @@ Preview images are located in `assets/screenshot/`.
 
 | ![1](assets/screenshot/1.png) | ![2](assets/screenshot/2.png) | ![3](assets/screenshot/3.png) |
 |---|---|---|
-| Home | Detail | Filter |
 | ![4](assets/screenshot/4.png) | ![5](assets/screenshot/5.png) | ![6](assets/screenshot/6.png) |
-| Search | Settings | Onboarding |
 
 Use the original files in `assets/screenshot/` for high-resolution images.
 
