@@ -26,6 +26,11 @@ class NotificationLogService : NotificationListenerService() {
     
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     
+    // De-duplication cache: stores hash of recent notifications
+    // Key = hash of (packageName + title + content), Value = timestamp
+    private val recentNotifications = mutableMapOf<String, Long>()
+    private val deduplicationWindowMs = 3000L // 3 seconds window
+    
     companion object {
         private const val CHANNEL_ID = "notifylog_service_channel"
         private const val NOTIFICATION_ID = 1001
@@ -106,6 +111,27 @@ class NotificationLogService : NotificationListenerService() {
                 // Skip notifications without meaningful content
                 if (title.isNullOrBlank() && content.isNullOrBlank()) return@launch
                 
+                // De-duplication check
+                val notificationHash = generateNotificationHash(sbn.packageName, title, content)
+                val currentTime = System.currentTimeMillis()
+                
+                synchronized(recentNotifications) {
+                    // Clean up old entries
+                    recentNotifications.entries.removeIf { 
+                        currentTime - it.value > deduplicationWindowMs 
+                    }
+                    
+                    // Check if this notification was recently logged
+                    val lastSeen = recentNotifications[notificationHash]
+                    if (lastSeen != null && currentTime - lastSeen < deduplicationWindowMs) {
+                        // Duplicate notification, skip it
+                        return@launch
+                    }
+                    
+                    // Record this notification
+                    recentNotifications[notificationHash] = currentTime
+                }
+                
                 val log = NotificationLog(
                     packageName = sbn.packageName,
                     appName = getAppName(sbn.packageName),
@@ -151,5 +177,13 @@ class NotificationLogService : NotificationListenerService() {
         } catch (e: PackageManager.NameNotFoundException) {
             false
         }
+    }
+    
+    /**
+     * Generate a hash for deduplication based on package, title, and content.
+     * Notifications with same hash within the deduplication window are considered duplicates.
+     */
+    private fun generateNotificationHash(packageName: String, title: String?, content: String?): String {
+        return "${packageName}_${title.orEmpty()}_${content.orEmpty()}".hashCode().toString()
     }
 }
