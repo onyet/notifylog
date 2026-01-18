@@ -2,9 +2,16 @@ package id.onyet.app.notifylog.ui.screens.home
 
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,12 +31,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.filled.ShieldMoon
 import androidx.compose.material.icons.filled.VerifiedUser
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -75,7 +87,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     onNavigateToDetail: (Long) -> Unit,
@@ -93,6 +105,13 @@ fun HomeScreen(
     val filterState by viewModel.filterState.collectAsState()
     val isFilterSheetVisible by viewModel.isFilterSheetVisible.collectAsState()
     val languageCode by app.userPreferences.languageCode.collectAsState(initial = "en")
+    
+    // Multi-select state
+    val isSelectionMode by viewModel.isSelectionMode.collectAsState()
+    val selectedIds by viewModel.selectedIds.collectAsState()
+    
+    // Delete confirmation dialog state
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
 
     var isLanguageSheetVisible by remember { mutableStateOf(false) }
 
@@ -103,47 +122,86 @@ fun HomeScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ShieldMoon,
-                            contentDescription = null,
-                            tint = Primary,
-                            modifier = Modifier.size(24.dp)
-                        )
+                    if (isSelectionMode) {
                         Text(
-                            text = stringResource(R.string.app_name),
+                            text = "${selectedIds.size} ${stringResource(R.string.selected)}",
                             fontWeight = FontWeight.Bold
                         )
+                    } else {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.ShieldMoon,
+                                contentDescription = null,
+                                tint = Primary,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Text(
+                                text = stringResource(R.string.app_name),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                },
+                navigationIcon = {
+                    if (isSelectionMode) {
+                        IconButton(onClick = { viewModel.exitSelectionMode() }) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = stringResource(R.string.cancel)
+                            )
+                        }
                     }
                 },
                 actions = {
-                    IconButton(onClick = { isLanguageSheetVisible = true }) {
-                        Icon(
-                            imageVector = Icons.Default.Language,
-                            contentDescription = stringResource(R.string.language)
-                        )
-                    }
-                    // Search/Filter button with badge when filter is active
-                    Box {
-                        IconButton(onClick = { viewModel.showFilterSheet() }) {
+                    if (isSelectionMode) {
+                        // Select all button
+                        IconButton(
+                            onClick = { viewModel.selectAll(notifications.map { it.id }) }
+                        ) {
                             Icon(
-                                imageVector = Icons.Default.Search,
-                                contentDescription = stringResource(R.string.search_and_filter)
+                                imageVector = Icons.Default.SelectAll,
+                                contentDescription = stringResource(R.string.select_all)
                             )
                         }
-                        // Badge indicator when filter is active
-                        if (filterState.isActive) {
-                            Box(
-                                modifier = Modifier
-                                    .align(Alignment.TopEnd)
-                                    .padding(8.dp)
-                                    .size(10.dp)
-                                    .clip(CircleShape)
-                                    .background(Primary)
+                        // Delete selected button
+                        IconButton(
+                            onClick = { showDeleteConfirmation = true }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = stringResource(R.string.delete),
+                                tint = MaterialTheme.colorScheme.error
                             )
+                        }
+                    } else {
+                        IconButton(onClick = { isLanguageSheetVisible = true }) {
+                            Icon(
+                                imageVector = Icons.Default.Language,
+                                contentDescription = stringResource(R.string.language)
+                            )
+                        }
+                        // Search/Filter button with badge when filter is active
+                        Box {
+                            IconButton(onClick = { viewModel.showFilterSheet() }) {
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = stringResource(R.string.search_and_filter)
+                                )
+                            }
+                            // Badge indicator when filter is active
+                            if (filterState.isActive) {
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.TopEnd)
+                                        .padding(8.dp)
+                                        .size(10.dp)
+                                        .clip(CircleShape)
+                                        .background(Primary)
+                                )
+                            }
                         }
                     }
                 },
@@ -156,113 +214,93 @@ fun HomeScreen(
             BottomBar(onNavigateToSettings = onNavigateToSettings)
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            // Header
+        if (notifications.isEmpty()) {
             Column(
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
             ) {
-                Text(
-                    text = stringResource(R.string.notification),
-                    style = MaterialTheme.typography.displaySmall,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Text(
-                    text = stringResource(R.string.history),
-                    style = MaterialTheme.typography.displaySmall,
-                    fontWeight = FontWeight.ExtraBold
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(R.string.privacy_focused_logging),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-
-            // Filter active indicator
-            if (filterState.isActive) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Primary.copy(alpha = 0.1f))
-                        .clickable { viewModel.clearFilters() }
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                // Header
+                Column(
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.FilterList,
-                            contentDescription = null,
-                            tint = Primary,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Column {
-                            Text(
-                                text = stringResource(R.string.filter_active),
-                                fontWeight = FontWeight.SemiBold,
-                                color = Primary,
-                                fontSize = 14.sp
-                            )
-                            Text(
-                                text = stringResource(R.string.clear_filter_hint),
-                                fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(R.string.clear_filter),
-                        tint = Primary,
-                        modifier = Modifier.size(20.dp)
+                    Text(
+                        text = stringResource(R.string.notification),
+                        style = MaterialTheme.typography.displaySmall,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    Text(
+                        text = stringResource(R.string.history),
+                        style = MaterialTheme.typography.displaySmall,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(R.string.privacy_focused_logging),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            // Filter chips
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                item {
-                    FilterChip(
-                        label = stringResource(R.string.all_logs),
-                        isSelected = filterState.selectedPackage == null,
-                        onClick = { viewModel.updateSelectedPackage(null) }
-                    )
-                }
-                items(apps) { appInfo ->
-                    FilterChip(
-                        label = appInfo.appName ?: appInfo.packageName,
-                        isSelected = filterState.selectedPackage == appInfo.packageName,
-                        onClick = { viewModel.updateSelectedPackage(appInfo.packageName) }
-                    )
-                }
-            }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-            
-            // Notifications list
-            if (notifications.isEmpty()) {
                 EmptyState()
-            } else {
-                NotificationsList(
-                    notifications = notifications,
-                    onNotificationClick = onNavigateToDetail
-                )
             }
+        } else {
+            NotificationsList(
+                notifications = notifications,
+                filterState = filterState,
+                apps = apps,
+                isSelectionMode = isSelectionMode,
+                selectedIds = selectedIds,
+                onNotificationClick = { id ->
+                    if (isSelectionMode) {
+                        viewModel.toggleSelection(id)
+                    } else {
+                        onNavigateToDetail(id)
+                    }
+                },
+                onNotificationLongClick = { id ->
+                    if (!isSelectionMode) {
+                        viewModel.enterSelectionMode(id)
+                    }
+                },
+                onSelectedPackageChange = viewModel::updateSelectedPackage,
+                onClearFilters = viewModel::clearFilters,
+                modifier = Modifier.padding(paddingValues)
+            )
         }
+    }
+    
+    // Delete confirmation dialog
+    if (showDeleteConfirmation) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmation = false },
+            title = { Text(stringResource(R.string.delete_confirmation_title)) },
+            text = { 
+                Text(
+                    stringResource(
+                        R.string.delete_multiple_confirmation_message,
+                        selectedIds.size
+                    )
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.deleteSelectedNotifications()
+                        showDeleteConfirmation = false
+                    }
+                ) {
+                    Text(
+                        stringResource(R.string.delete),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteConfirmation = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
     }
     
     // Filter Bottom Sheet
@@ -333,10 +371,19 @@ private fun FilterChip(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun NotificationsList(
     notifications: List<NotificationLog>,
-    onNotificationClick: (Long) -> Unit
+    filterState: FilterState,
+    apps: List<id.onyet.app.notifylog.data.local.AppInfo>,
+    isSelectionMode: Boolean,
+    selectedIds: Set<Long>,
+    onNotificationClick: (Long) -> Unit,
+    onNotificationLongClick: (Long) -> Unit,
+    onSelectedPackageChange: (String?) -> Unit,
+    onClearFilters: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val groupedNotifications = remember(notifications) {
         notifications.groupBy { notification ->
@@ -363,9 +410,113 @@ private fun NotificationsList(
     val yesterday = remember { today - 24 * 60 * 60 * 1000 }
     
     LazyColumn(
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        contentPadding = PaddingValues(bottom = 80.dp),
+        modifier = modifier.fillMaxSize()
     ) {
+        // Header (scrolls away)
+        item {
+            Column(
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.notification),
+                    style = MaterialTheme.typography.displaySmall,
+                    fontWeight = FontWeight.ExtraBold
+                )
+                Text(
+                    text = stringResource(R.string.history),
+                    style = MaterialTheme.typography.displaySmall,
+                    fontWeight = FontWeight.ExtraBold
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = stringResource(R.string.privacy_focused_logging),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+        
+        // Filter active indicator (scrolls away)
+        if (filterState.isActive) {
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Primary.copy(alpha = 0.1f))
+                        .clickable { onClearFilters() }
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.FilterList,
+                            contentDescription = null,
+                            tint = Primary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Column {
+                            Text(
+                                text = stringResource(R.string.filter_active),
+                                fontWeight = FontWeight.SemiBold,
+                                color = Primary,
+                                fontSize = 14.sp
+                            )
+                            Text(
+                                text = stringResource(R.string.clear_filter_hint),
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = stringResource(R.string.clear_filter),
+                        tint = Primary,
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
+        
+        // Filter chips - STICKY
+        stickyHeader {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(vertical = 8.dp)
+            ) {
+                LazyRow(
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    item {
+                        FilterChip(
+                            label = stringResource(R.string.all_logs),
+                            isSelected = filterState.selectedPackage == null,
+                            onClick = { onSelectedPackageChange(null) }
+                        )
+                    }
+                    items(apps) { appInfo ->
+                        FilterChip(
+                            label = appInfo.appName ?: appInfo.packageName,
+                            isSelected = filterState.selectedPackage == appInfo.packageName,
+                            onClick = { onSelectedPackageChange(appInfo.packageName) }
+                        )
+                    }
+                }
+            }
+        }
+        
+        // Notifications grouped by date
         groupedNotifications.forEach { (dateMillis, notificationsForDate) ->
             item {
                 val dateLabel = when {
@@ -378,7 +529,7 @@ private fun NotificationsList(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp, horizontal = 4.dp),
+                        .padding(horizontal = 20.dp, vertical = 12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -395,21 +546,26 @@ private fun NotificationsList(
             items(notificationsForDate, key = { it.id }) { notification ->
                 NotificationItem(
                     notification = notification,
-                    onClick = { onNotificationClick(notification.id) }
+                    isSelectionMode = isSelectionMode,
+                    isSelected = selectedIds.contains(notification.id),
+                    onClick = { onNotificationClick(notification.id) },
+                    onLongClick = { onNotificationLongClick(notification.id) },
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
                 )
             }
-        }
-        
-        item {
-            Spacer(modifier = Modifier.height(80.dp))
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun NotificationItem(
     notification: NotificationLog,
-    onClick: () -> Unit
+    isSelectionMode: Boolean,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val appIcon = remember(notification.packageName) {
@@ -421,12 +577,18 @@ private fun NotificationItem(
     }
     
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            ),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = if (isSelected) 
+                Primary.copy(alpha = 0.15f)
+            else 
+                MaterialTheme.colorScheme.surfaceVariant
         )
     ) {
         Row(
@@ -436,6 +598,21 @@ private fun NotificationItem(
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // Checkbox for selection mode
+            if (isSelectionMode) {
+                Icon(
+                    imageVector = if (isSelected) 
+                        Icons.Default.CheckCircle 
+                    else 
+                        Icons.Default.RadioButtonUnchecked,
+                    contentDescription = null,
+                    tint = if (isSelected) Primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.CenterVertically)
+                )
+            }
+            
             // App icon
             Box(
                 modifier = Modifier

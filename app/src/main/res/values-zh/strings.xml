@@ -49,6 +49,10 @@
     <string name="delete_notification">删除通知</string>
     <string name="delete">删除</string>
     <string name="delete_confirmation">您确定要删除此通知吗？</string>
+    <string name="delete_confirmation_title">删除通知？</string>
+    <string name="delete_multiple_confirmation_message">您确定要删除 %d 条选中的通知吗？</string>
+    <string name="selected">已选择</string>
+    <string name="select_all">全选</string>
 
     <!-- Settings Screen -->
     <string name="general">通用</string>
@@ -66,6 +70,8 @@
     <string name="developer">开发者</string>
     <string name="app_version">应用版本</string>
     <string name="notifylog_privacy_core">NOTIFYLOG 隐私核心</string>
+    <string name="open_source_project">这是一个开源项目</string>
+    <string name="github_url">github.com/onyet/notifylog</string>
     <string name="clear_all_history">清除所有历史？</string>
     <string name="clear_all_history_message">这将永久删除所有 %d 条存储的通知。此操作无法撤消。</string>
     <string name="clear_all">全部清除</string>

@@ -49,6 +49,10 @@
     <string name="delete_notification">Удалить уведомление</string>
     <string name="delete">Удалить</string>
     <string name="delete_confirmation">Вы уверены, что хотите удалить это уведомление?</string>
+    <string name="delete_confirmation_title">Удалить уведомление?</string>
+    <string name="delete_multiple_confirmation_message">Вы уверены, что хотите удалить %d выбранных уведомлений?</string>
+    <string name="selected">выбрано</string>
+    <string name="select_all">Выбрать все</string>
 
     <!-- Settings Screen -->
     <string name="general">Общие</string>
@@ -66,6 +70,8 @@
     <string name="developer">Разработчик</string>
     <string name="app_version">Версия приложения</string>
     <string name="notifylog_privacy_core">NOTIFYLOG ЯДРО КОНФИДЕНЦИАЛЬНОСТИ</string>
+    <string name="open_source_project">Это проект с открытым исходным кодом</string>
+    <string name="github_url">github.com/onyet/notifylog</string>
     <string name="clear_all_history">Очистить всю историю?</string>
     <string name="clear_all_history_message">Это навсегда удалит все %d сохранённых уведомлений. Это действие нельзя отменить.</string>
     <string name="clear_all">Очистить всё</string>

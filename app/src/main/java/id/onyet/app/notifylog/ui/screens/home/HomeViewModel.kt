@@ -37,6 +37,13 @@ class HomeViewModel(
     private val _isFilterSheetVisible = MutableStateFlow(false)
     val isFilterSheetVisible: StateFlow<Boolean> = _isFilterSheetVisible.asStateFlow()
     
+    // Multi-select mode state
+    private val _isSelectionMode = MutableStateFlow(false)
+    val isSelectionMode: StateFlow<Boolean> = _isSelectionMode.asStateFlow()
+    
+    private val _selectedIds = MutableStateFlow<Set<Long>>(emptySet())
+    val selectedIds: StateFlow<Set<Long>> = _selectedIds.asStateFlow()
+    
     val apps: StateFlow<List<AppInfo>> = repository.distinctApps
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     
@@ -82,6 +89,42 @@ class HomeViewModel(
     fun deleteNotification(id: Long) {
         viewModelScope.launch {
             repository.delete(id)
+        }
+    }
+    
+    // Multi-select functions
+    fun enterSelectionMode(initialId: Long) {
+        _isSelectionMode.value = true
+        _selectedIds.value = setOf(initialId)
+    }
+    
+    fun exitSelectionMode() {
+        _isSelectionMode.value = false
+        _selectedIds.value = emptySet()
+    }
+    
+    fun toggleSelection(id: Long) {
+        _selectedIds.value = if (_selectedIds.value.contains(id)) {
+            _selectedIds.value - id
+        } else {
+            _selectedIds.value + id
+        }
+        // Exit selection mode if no items selected
+        if (_selectedIds.value.isEmpty()) {
+            _isSelectionMode.value = false
+        }
+    }
+    
+    fun selectAll(ids: List<Long>) {
+        _selectedIds.value = ids.toSet()
+    }
+    
+    fun deleteSelectedNotifications() {
+        viewModelScope.launch {
+            _selectedIds.value.forEach { id ->
+                repository.delete(id)
+            }
+            exitSelectionMode()
         }
     }
 }

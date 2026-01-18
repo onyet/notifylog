@@ -401,11 +401,22 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 
                 Text(
-                    text = stringResource(R.string.notifylog_privacy_core),
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
-                    letterSpacing = 2.sp
+                    text = stringResource(R.string.open_source_project),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
+                
+                Spacer(modifier = Modifier.height(4.dp))
+                
+                Text(
+                    text = stringResource(R.string.github_url),
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = Primary,
+                    modifier = Modifier.clickable {
+                        uriHandler.openUri("https://github.com/onyet/notifylog")
+                    }
                 )
             }
             

@@ -49,6 +49,10 @@
     <string name="delete_notification">حذف الإشعار</string>
     <string name="delete">حذف</string>
     <string name="delete_confirmation">هل أنت متأكد أنك تريد حذف هذا الإشعار؟</string>
+    <string name="delete_confirmation_title">حذف الإشعار؟</string>
+    <string name="delete_multiple_confirmation_message">هل أنت متأكد أنك تريد حذف %d إشعارات محددة؟</string>
+    <string name="selected">محدد</string>
+    <string name="select_all">تحديد الكل</string>
 
     <!-- Settings Screen -->
     <string name="general">عام</string>
@@ -66,6 +70,8 @@
     <string name="developer">المطور</string>
     <string name="app_version">إصدار التطبيق</string>
     <string name="notifylog_privacy_core">نواة خصوصية NOTIFYLOG</string>
+    <string name="open_source_project">هذا مشروع مفتوح المصدر</string>
+    <string name="github_url">github.com/onyet/notifylog</string>
     <string name="clear_all_history">مسح كل السجل؟</string>
     <string name="clear_all_history_message">سيؤدي هذا إلى حذف جميع الإشعارات المخزنة البالغ عددها %d بشكل دائم. لا يمكن التراجع عن هذا الإجراء.</string>
     <string name="clear_all">مسح الكل</string>

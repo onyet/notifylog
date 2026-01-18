@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.OpenInNew
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -43,6 +44,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -50,6 +52,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,15 +60,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import id.onyet.app.notifylog.NotifyLogApp
+import id.onyet.app.notifylog.R
 import id.onyet.app.notifylog.data.local.NotificationLog
 import id.onyet.app.notifylog.ui.theme.Primary
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -79,15 +85,49 @@ fun NotificationDetailScreen(
 ) {
     val context = LocalContext.current
     val app = context.applicationContext as NotifyLogApp
+    val scope = rememberCoroutineScope()
     
     var notification by remember { mutableStateOf<NotificationLog?>(null) }
     var isLoading by remember { mutableStateOf(true) }
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
     
     LaunchedEffect(notificationId) {
         notification = withContext(Dispatchers.IO) {
             app.repository.getById(notificationId)
         }
         isLoading = false
+    }
+    
+    // Delete confirmation dialog
+    if (showDeleteConfirmation) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmation = false },
+            title = { Text(stringResource(R.string.delete_confirmation_title)) },
+            text = { Text(stringResource(R.string.delete_confirmation)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        scope.launch {
+                            withContext(Dispatchers.IO) {
+                                app.repository.delete(notificationId)
+                            }
+                            showDeleteConfirmation = false
+                            onNavigateBack()
+                        }
+                    }
+                ) {
+                    Text(
+                        stringResource(R.string.delete),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteConfirmation = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
     }
     
     Scaffold(
@@ -104,13 +144,7 @@ fun NotificationDetailScreen(
                 },
                 actions = {
                     IconButton(
-                        onClick = {
-                            notification?.let {
-                                app.repository
-                                // Delete notification logic
-                            }
-                            onNavigateBack()
-                        }
+                        onClick = { showDeleteConfirmation = true }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Delete,
