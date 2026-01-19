@@ -28,6 +28,8 @@
     <string name="search_and_filter">Поиск и фильтр</string>
     <string name="filter_active">Фильтр активен</string>
     <string name="clear_filter_hint">Нажмите для сброса фильтра</string>
+    <string name="no_filter_results">Результаты не найдены</string>
+    <string name="try_different_filter">Попробуйте изменить критерии фильтра</string>
 
     <!-- Filter Bottom Sheet -->
     <string name="filter_and_search">Фильтр и поиск</string>

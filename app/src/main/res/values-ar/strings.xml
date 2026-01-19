@@ -28,6 +28,8 @@
     <string name="search_and_filter">البحث والتصفية</string>
     <string name="filter_active">التصفية نشطة</string>
     <string name="clear_filter_hint">انقر لمسح التصفية</string>
+    <string name="no_filter_results">لم يتم العثور على نتائج</string>
+    <string name="try_different_filter">حاول تعديل معايير التصفية</string>
 
     <!-- Filter Bottom Sheet -->
     <string name="filter_and_search">التصفية والبحث</string>

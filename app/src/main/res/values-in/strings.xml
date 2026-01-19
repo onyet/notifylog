@@ -28,6 +28,8 @@
     <string name="search_and_filter">Cari &amp; Filter</string>
     <string name="filter_active">Filter aktif</string>
     <string name="clear_filter_hint">Ketuk untuk menghapus filter</string>
+    <string name="no_filter_results">Tidak ada hasil ditemukan</string>
+    <string name="try_different_filter">Coba ubah kriteria filter Anda</string>
 
     <!-- Filter Bottom Sheet -->
     <string name="filter_and_search">Filter &amp; Cari</string>

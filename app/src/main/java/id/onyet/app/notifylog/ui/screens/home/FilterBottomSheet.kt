@@ -120,8 +120,13 @@ fun FilterBottomSheet(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp)
                 .height(48.dp)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                    shape = RoundedCornerShape(12.dp)
+                )
                 .background(
-                    MaterialTheme.colorScheme.surfaceVariant,
+                    MaterialTheme.colorScheme.surface,
                     RoundedCornerShape(12.dp)
                 )
                 .padding(horizontal = 16.dp),
@@ -229,8 +234,13 @@ fun FilterBottomSheet(
             Box(
                 modifier = Modifier
                     .weight(1f)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(12.dp)
+                    )
                     .background(
-                        MaterialTheme.colorScheme.surfaceVariant,
+                        MaterialTheme.colorScheme.surface,
                         RoundedCornerShape(12.dp)
                     )
                     .clickable {
@@ -278,8 +288,13 @@ fun FilterBottomSheet(
             Box(
                 modifier = Modifier
                     .weight(1f)
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(12.dp)
+                    )
                     .background(
-                        MaterialTheme.colorScheme.surfaceVariant,
+                        MaterialTheme.colorScheme.surface,
                         RoundedCornerShape(12.dp)
                     )
                     .clickable {

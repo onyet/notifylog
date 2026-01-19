@@ -44,6 +44,17 @@ var showExitDialog by mutableStateOf(false)
 class MainActivity : ComponentActivity() {
 
     private lateinit var navController: NavHostController
+    
+    // Cache language preference synchronously for faster startup
+    private val initialLanguage: String by lazy {
+        getSharedPreferences("user_preferences", MODE_PRIVATE)
+            .getString("language_code", "en") ?: "en"
+    }
+    
+    private val initialDarkMode: Boolean by lazy {
+        getSharedPreferences("user_preferences", MODE_PRIVATE)
+            .getBoolean("dark_mode", true)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,8 +84,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val app = application as NotifyLogApp
-            val isDarkMode by app.userPreferences.isDarkMode.collectAsState(initial = true)
-            val languageCode by app.userPreferences.languageCode.collectAsState(initial = "en")
+            // Use cached initial values for faster first render, then observe changes
+            val isDarkMode by app.userPreferences.isDarkMode.collectAsState(initial = initialDarkMode)
+            val languageCode by app.userPreferences.languageCode.collectAsState(initial = initialLanguage)
 
             // Apply locale
             val localizedContext = LocaleHelper.setLocale(LocalContext.current, languageCode)

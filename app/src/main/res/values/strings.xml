@@ -27,6 +27,8 @@
     <string name="search_and_filter">Search &amp; Filter</string>
     <string name="filter_active">Filter active</string>
     <string name="clear_filter_hint">Tap to clear filter</string>
+    <string name="no_filter_results">No results found</string>
+    <string name="try_different_filter">Try adjusting your filter criteria</string>
 
     <!-- Filter Bottom Sheet -->
     <string name="filter_and_search">Filter &amp; Search</string>

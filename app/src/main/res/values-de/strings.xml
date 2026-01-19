@@ -28,6 +28,8 @@
     <string name="search_and_filter">Suchen &amp; Filtern</string>
     <string name="filter_active">Filter aktiv</string>
     <string name="clear_filter_hint">Tippen zum Löschen des Filters</string>
+    <string name="no_filter_results">Keine Ergebnisse gefunden</string>
+    <string name="try_different_filter">Versuchen Sie, Ihre Filterkriterien anzupassen</string>
 
     <!-- Filter Bottom Sheet -->
     <string name="filter_and_search">Filtern &amp; Suchen</string>

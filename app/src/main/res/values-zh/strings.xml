@@ -28,6 +28,8 @@
     <string name="search_and_filter">搜索和筛选</string>
     <string name="filter_active">筛选已启用</string>
     <string name="clear_filter_hint">点击清除筛选</string>
+    <string name="no_filter_results">未找到结果</string>
+    <string name="try_different_filter">尝试调整您的筛选条件</string>
 
     <!-- Filter Bottom Sheet -->
     <string name="filter_and_search">筛选和搜索</string>

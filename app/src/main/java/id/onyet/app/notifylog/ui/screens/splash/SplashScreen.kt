@@ -47,24 +47,29 @@ fun SplashScreen(
     onNavigateToOnboarding: () -> Unit
 ) {
     val context = LocalContext.current
+    
+    // Check permission early (non-blocking)
+    val hasPermission = remember {
+        NotificationPermissionHelper.hasNotificationListenerPermission(context)
+    }
 
     var startAnimation by remember { mutableStateOf(false) }
     val alphaAnim by animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
-        animationSpec = tween(durationMillis = 1000),
+        animationSpec = tween(durationMillis = 600),
         label = "alpha"
     )
     val scaleAnim by animateFloatAsState(
-        targetValue = if (startAnimation) 1f else 0.8f,
-        animationSpec = tween(durationMillis = 1000),
+        targetValue = if (startAnimation) 1f else 0.9f,
+        animationSpec = tween(durationMillis = 600),
         label = "scale"
     )
     
     LaunchedEffect(key1 = true) {
         startAnimation = true
-        delay(2000)
+        // Reduced delay for faster startup
+        delay(1200)
         
-        val hasPermission = NotificationPermissionHelper.hasNotificationListenerPermission(context)
         if (hasPermission) {
             onNavigateToHome()
         } else {

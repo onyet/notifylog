@@ -1,9 +1,12 @@
 package id.onyet.app.notifylog.ui.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -16,7 +19,8 @@ import id.onyet.app.notifylog.ui.screens.onboarding.OnboardingScreen
 import id.onyet.app.notifylog.ui.screens.settings.SettingsScreen
 import id.onyet.app.notifylog.ui.screens.splash.SplashScreen
 
-private const val ANIMATION_DURATION = 300
+private const val ANIMATION_DURATION = 250
+private const val FADE_DURATION = 200
 
 @Composable
 fun NotifyLogNavGraph(
@@ -31,10 +35,10 @@ fun NotifyLogNavGraph(
         composable(
             route = Screen.Splash.route,
             enterTransition = {
-                fadeIn(animationSpec = tween(ANIMATION_DURATION))
+                fadeIn(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             },
             exitTransition = {
-                fadeOut(animationSpec = tween(ANIMATION_DURATION))
+                fadeOut(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             }
         ) {
             SplashScreen(
@@ -51,14 +55,20 @@ fun NotifyLogNavGraph(
             )
         }
         
-        // Onboarding Screen - Fade transition
+        // Onboarding Screen - Scale + Fade transition
         composable(
             route = Screen.Onboarding.route,
             enterTransition = {
-                fadeIn(animationSpec = tween(ANIMATION_DURATION))
+                scaleIn(
+                    initialScale = 0.95f,
+                    animationSpec = tween(ANIMATION_DURATION, easing = FastOutSlowInEasing)
+                ) + fadeIn(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             },
             exitTransition = {
-                fadeOut(animationSpec = tween(ANIMATION_DURATION))
+                scaleOut(
+                    targetScale = 0.95f,
+                    animationSpec = tween(ANIMATION_DURATION, easing = FastOutSlowInEasing)
+                ) + fadeOut(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             }
         ) {
             OnboardingScreen(
@@ -70,20 +80,32 @@ fun NotifyLogNavGraph(
             )
         }
         
-        // Home Screen - Fade transition
+        // Home Screen - Scale + Fade transition
         composable(
             route = Screen.Home.route,
             enterTransition = {
-                fadeIn(animationSpec = tween(ANIMATION_DURATION))
+                scaleIn(
+                    initialScale = 0.95f,
+                    animationSpec = tween(ANIMATION_DURATION, easing = FastOutSlowInEasing)
+                ) + fadeIn(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             },
             exitTransition = {
-                fadeOut(animationSpec = tween(ANIMATION_DURATION / 2))
+                scaleOut(
+                    targetScale = 1.02f,
+                    animationSpec = tween(ANIMATION_DURATION / 2, easing = FastOutSlowInEasing)
+                ) + fadeOut(animationSpec = tween(FADE_DURATION / 2, easing = FastOutSlowInEasing))
             },
             popEnterTransition = {
-                fadeIn(animationSpec = tween(ANIMATION_DURATION))
+                scaleIn(
+                    initialScale = 1.02f,
+                    animationSpec = tween(ANIMATION_DURATION, easing = FastOutSlowInEasing)
+                ) + fadeIn(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             },
             popExitTransition = {
-                fadeOut(animationSpec = tween(ANIMATION_DURATION / 2))
+                scaleOut(
+                    targetScale = 0.95f,
+                    animationSpec = tween(ANIMATION_DURATION / 2, easing = FastOutSlowInEasing)
+                ) + fadeOut(animationSpec = tween(FADE_DURATION / 2, easing = FastOutSlowInEasing))
             }
         ) {
             HomeScreen(
@@ -96,7 +118,7 @@ fun NotifyLogNavGraph(
             )
         }
         
-        // Notification Detail Screen - Slide from right
+        // Notification Detail Screen - Slide from right with smooth easing
         composable(
             route = Screen.NotificationDetail.route,
             arguments = listOf(
@@ -105,26 +127,26 @@ fun NotifyLogNavGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(ANIMATION_DURATION)
-                ) + fadeIn(animationSpec = tween(ANIMATION_DURATION))
+                    animationSpec = tween(ANIMATION_DURATION, easing = FastOutSlowInEasing)
+                ) + fadeIn(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             },
             exitTransition = {
                 slideOutOfContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(ANIMATION_DURATION)
-                ) + fadeOut(animationSpec = tween(ANIMATION_DURATION))
+                    animationSpec = tween(ANIMATION_DURATION, easing = FastOutSlowInEasing)
+                ) + fadeOut(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             },
             popEnterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(ANIMATION_DURATION)
-                ) + fadeIn(animationSpec = tween(ANIMATION_DURATION))
+                    animationSpec = tween(ANIMATION_DURATION, easing = FastOutSlowInEasing)
+                ) + fadeIn(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             },
             popExitTransition = {
                 slideOutOfContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(ANIMATION_DURATION)
-                ) + fadeOut(animationSpec = tween(ANIMATION_DURATION))
+                    animationSpec = tween(ANIMATION_DURATION, easing = FastOutSlowInEasing)
+                ) + fadeOut(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             }
         ) { backStackEntry ->
             val notificationId = backStackEntry.arguments?.getLong("notificationId") ?: 0L
@@ -134,32 +156,32 @@ fun NotifyLogNavGraph(
             )
         }
         
-        // Settings Screen - Slide from bottom
+        // Settings Screen - Slide from bottom with smooth easing
         composable(
             route = Screen.Settings.route,
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                    animationSpec = tween(ANIMATION_DURATION)
-                ) + fadeIn(animationSpec = tween(ANIMATION_DURATION))
+                    animationSpec = tween(ANIMATION_DURATION, easing = FastOutSlowInEasing)
+                ) + fadeIn(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             },
             exitTransition = {
                 slideOutOfContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                    animationSpec = tween(ANIMATION_DURATION)
-                ) + fadeOut(animationSpec = tween(ANIMATION_DURATION))
+                    animationSpec = tween(ANIMATION_DURATION, easing = FastOutSlowInEasing)
+                ) + fadeOut(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             },
             popEnterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Down,
-                    animationSpec = tween(ANIMATION_DURATION)
-                ) + fadeIn(animationSpec = tween(ANIMATION_DURATION))
+                    animationSpec = tween(ANIMATION_DURATION, easing = FastOutSlowInEasing)
+                ) + fadeIn(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             },
             popExitTransition = {
                 slideOutOfContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Down,
-                    animationSpec = tween(ANIMATION_DURATION)
-                ) + fadeOut(animationSpec = tween(ANIMATION_DURATION))
+                    animationSpec = tween(ANIMATION_DURATION, easing = FastOutSlowInEasing)
+                ) + fadeOut(animationSpec = tween(FADE_DURATION, easing = FastOutSlowInEasing))
             }
         ) {
             SettingsScreen(

@@ -226,36 +226,12 @@ fun HomeScreen(
                 .padding(paddingValues), contentAlignment = Alignment.Center) {
                 androidx.compose.material3.CircularProgressIndicator(color = Primary)
             }
-        } else if (notifications.isEmpty()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                // Header
-                Column(
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp)
-                ) {
-                    Text(
-                        text = stringResource(R.string.notification),
-                        style = MaterialTheme.typography.displaySmall,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                    Text(
-                        text = stringResource(R.string.history),
-                        style = MaterialTheme.typography.displaySmall,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = stringResource(R.string.privacy_focused_logging),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-                EmptyState()
-            }
         } else {
+            // Determine if we have any logged notifications (apps list not empty means notifications exist)
+            val hasAnyNotifications = apps.isNotEmpty()
+            val isFilterResultEmpty = hasAnyNotifications && notifications.isEmpty()
+            val isNoNotificationsAtAll = !hasAnyNotifications && notifications.isEmpty()
+            
             NotificationsList(
                 notifications = notifications,
                 filterState = filterState,
@@ -264,6 +240,9 @@ fun HomeScreen(
                 selectedIds = selectedIds,
                 isLoadingInitial = isLoadingInitial,
                 isLoadingMore = isLoadingMore,
+                hasAnyNotifications = hasAnyNotifications,
+                isFilterResultEmpty = isFilterResultEmpty,
+                isNoNotificationsAtAll = isNoNotificationsAtAll,
                 onLoadMore = viewModel::loadMore,
                 onNotificationClick = { id ->
                     if (isSelectionMode) {
@@ -396,6 +375,9 @@ private fun NotificationsList(
     selectedIds: Set<Long>,
     isLoadingInitial: Boolean,
     isLoadingMore: Boolean,
+    hasAnyNotifications: Boolean,
+    isFilterResultEmpty: Boolean,
+    isNoNotificationsAtAll: Boolean,
     onLoadMore: () -> Unit,
     prefetchDistance: Int = 15,
     onNotificationClick: (Long) -> Unit,
@@ -547,6 +529,24 @@ private fun NotificationsList(
                         )
                     }
                 }
+            }
+        }
+
+        // Empty states - show when no notifications to display
+        if (isNoNotificationsAtAll) {
+            // No notifications logged at all
+            item {
+                EmptyState(
+                    isFilterEmpty = false
+                )
+            }
+        } else if (isFilterResultEmpty) {
+            // Has notifications but filter returned no results
+            item {
+                EmptyState(
+                    isFilterEmpty = true,
+                    onClearFilters = onClearFilters
+                )
             }
         }
         
@@ -735,31 +735,55 @@ private fun NotificationItem(
 }
 
 @Composable
-private fun EmptyState() {
+private fun EmptyState(
+    isFilterEmpty: Boolean = false,
+    onClearFilters: (() -> Unit)? = null
+) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Icon(
-                imageVector = Icons.Default.VerifiedUser,
+                imageVector = if (isFilterEmpty) Icons.Default.FilterList else Icons.Default.VerifiedUser,
                 contentDescription = null,
                 modifier = Modifier.size(64.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = stringResource(R.string.no_notifications_yet),
+                text = stringResource(
+                    if (isFilterEmpty) R.string.no_filter_results
+                    else R.string.no_notifications_yet
+                ),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Text(
-                text = stringResource(R.string.notifications_will_appear),
+                text = stringResource(
+                    if (isFilterEmpty) R.string.try_different_filter
+                    else R.string.notifications_will_appear
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
             )
+            
+            // Show clear filter button when filter is active
+            if (isFilterEmpty && onClearFilters != null) {
+                Spacer(modifier = Modifier.height(16.dp))
+                TextButton(onClick = onClearFilters) {
+                    Text(
+                        text = stringResource(R.string.clear_filter),
+                        color = Primary,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            }
         }
     }
 }
