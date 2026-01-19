@@ -1,6 +1,8 @@
 package id.onyet.app.notifylog.ui.screens.home
 
 import android.app.DatePickerDialog
+import android.content.pm.PackageManager
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,6 +26,7 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -42,11 +45,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.drawable.toBitmap
 import id.onyet.app.notifylog.R
 import id.onyet.app.notifylog.data.local.AppInfo
 import id.onyet.app.notifylog.ui.theme.Primary
@@ -189,6 +194,7 @@ fun FilterBottomSheet(
             item {
                 AppFilterItem(
                     label = stringResource(R.string.all),
+                    packageName = null,
                     isSelected = filterState.selectedPackage == null,
                     onClick = { onPackageSelect(null) }
                 )
@@ -196,6 +202,7 @@ fun FilterBottomSheet(
             items(apps) { appInfo ->
                 AppFilterItem(
                     label = appInfo.appName ?: appInfo.packageName.substringAfterLast("."),
+                    packageName = appInfo.packageName,
                     isSelected = filterState.selectedPackage == appInfo.packageName,
                     onClick = { onPackageSelect(appInfo.packageName) }
                 )
@@ -361,9 +368,21 @@ fun FilterBottomSheet(
 @Composable
 private fun AppFilterItem(
     label: String,
+    packageName: String?,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
+    val context = LocalContext.current
+    val appIcon = remember(packageName) {
+        packageName?.let {
+            try {
+                context.packageManager.getApplicationIcon(it)
+            } catch (e: PackageManager.NameNotFoundException) {
+                null
+            }
+        }
+    }
+    
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -387,12 +406,31 @@ private fun AppFilterItem(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = label.take(2).uppercase(),
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = if (isSelected) Primary else MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            if (appIcon != null) {
+                // Show app icon
+                Image(
+                    bitmap = appIcon.toBitmap(96, 96).asImageBitmap(),
+                    contentDescription = label,
+                    modifier = Modifier.size(40.dp)
+                )
+            } else {
+                // Show "All" icon or fallback to initials
+                if (packageName == null) {
+                    Icon(
+                        imageVector = Icons.Default.SelectAll,
+                        contentDescription = null,
+                        tint = if (isSelected) Primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(28.dp)
+                    )
+                } else {
+                    Text(
+                        text = label.take(2).uppercase(),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = if (isSelected) Primary else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
