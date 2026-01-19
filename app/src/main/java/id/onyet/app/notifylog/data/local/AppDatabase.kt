@@ -6,7 +6,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [NotificationLog::class],
+    entities = [
+        NotificationLog::class,
+        NotificationLogFts::class
+    ],
     version = 1,
     exportSchema = false
 )

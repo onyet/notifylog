@@ -32,6 +32,8 @@ import id.onyet.app.notifylog.ui.navigation.Screen
 import id.onyet.app.notifylog.ui.theme.NotifyLogTheme
 import id.onyet.app.notifylog.ui.theme.Primary
 import id.onyet.app.notifylog.util.LocaleHelper
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+
 
 val LocalAppLocale = staticCompositionLocalOf { "en" }
 
@@ -48,22 +50,6 @@ class MainActivity : ComponentActivity() {
         // Install SplashScreen early to prevent OS blank/white screen
         val splashScreen = installSplashScreen()
 
-        // Small fade transition when exiting the platform splash to app UI
-        splashScreen.setOnExitAnimationListener { splashScreenView ->
-            val duration = 250L
-            // Prefer animating the icon if available
-            val icon = splashScreenView.iconView
-            if (icon != null) {
-                icon.animate().alpha(0f).setDuration(duration).withEndAction {
-                    splashScreenView.remove()
-                }
-            } else {
-                // Fallback to animating the whole splash view
-                splashScreenView.view.animate().alpha(0f).setDuration(duration).withEndAction {
-                    splashScreenView.remove()
-                }
-            }
-        }
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

@@ -82,6 +82,10 @@ import id.onyet.app.notifylog.ui.components.LanguageBottomSheet
 import id.onyet.app.notifylog.ui.theme.Primary
 import id.onyet.app.notifylog.util.LocaleHelper
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.collectLatest
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date

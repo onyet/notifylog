@@ -102,13 +102,12 @@ interface NotificationDao {
     ): List<NotificationLog>
 
     @Query("""
-        SELECT nl.* FROM notification_logs nl
-        JOIN notification_logs_fts fts ON nl.rowid = fts.rowid
-        WHERE fts MATCH :matchQuery
-          AND (:packageName IS NULL OR nl.package_name = :packageName)
-          AND (:startDate IS NULL OR nl.received_time >= :startDate)
-          AND (:endDate IS NULL OR nl.received_time <= :endDate)
-        ORDER BY nl.received_time DESC
+        SELECT * FROM notification_logs 
+        WHERE id IN (SELECT rowid FROM notification_logs_fts WHERE notification_logs_fts MATCH :matchQuery)
+          AND (:packageName IS NULL OR package_name = :packageName)
+          AND (:startDate IS NULL OR received_time >= :startDate)
+          AND (:endDate IS NULL OR received_time <= :endDate)
+        ORDER BY received_time DESC
         LIMIT :limit OFFSET :offset
     """)
     suspend fun searchWithFtsPage(
