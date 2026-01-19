@@ -12,12 +12,14 @@
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <!-- Launch splash theme to avoid OS blank screen on cold start -->
+    <!-- Splash theme dengan drawable yang sama dengan Compose SplashScreen -->
     <style name="Theme.NotifyLog.Splash" parent="Theme.NotifyLog">
         <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:windowDisablePreview">false</item>
     </style>
 
     <style name="Theme.NotifyLog.Splash.Dark" parent="Theme.NotifyLog.Dark">
         <item name="android:windowBackground">@drawable/splash_screen_dark</item>
+        <item name="android:windowDisablePreview">false</item>
     </style>
 </resources>

@@ -7,6 +7,7 @@ import id.onyet.app.notifylog.data.local.AppInfo
 import id.onyet.app.notifylog.data.local.NotificationLog
 import id.onyet.app.notifylog.data.repository.NotificationRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +28,7 @@ data class FilterState(
         get() = searchQuery.isNotBlank() || selectedPackage != null || startDate != null || endDate != null
 }
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 class HomeViewModel(
     private val repository: NotificationRepository
 ) : ViewModel() {

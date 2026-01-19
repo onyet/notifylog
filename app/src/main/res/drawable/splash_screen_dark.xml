@@ -1,12 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Dark background color matching dark theme -->
+    <!-- Dark background color sama dengan Compose SplashScreen dark -->
     <item android:drawable="@color/background_dark" />
 
-    <!-- Centered app icon (use the same launcher icon) -->
+    <!-- Radial gradient effect (subtle primary tint) -->
     <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@mipmap/ic_launcher" />
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="400dp"
+                android:centerX="50%"
+                android:centerY="40%"
+                android:startColor="#1F135BEC"
+                android:endColor="#00135BEC" />
+        </shape>
     </item>
+
+    <!-- Icon background circle -->
+    <item
+        android:width="120dp"
+        android:height="120dp"
+        android:gravity="center">
+        <shape android:shape="oval">
+            <solid android:color="#1A135BEC" />
+        </shape>
+    </item>
+
+    <!-- Notification icon centered -->
+    <item
+        android:width="56dp"
+        android:height="56dp"
+        android:drawable="@drawable/ic_notification"
+        android:gravity="center" />
 </layer-list>

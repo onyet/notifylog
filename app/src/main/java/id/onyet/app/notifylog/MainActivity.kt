@@ -32,7 +32,6 @@ import id.onyet.app.notifylog.ui.navigation.Screen
 import id.onyet.app.notifylog.ui.theme.NotifyLogTheme
 import id.onyet.app.notifylog.ui.theme.Primary
 import id.onyet.app.notifylog.util.LocaleHelper
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 
 val LocalAppLocale = staticCompositionLocalOf { "en" }
@@ -47,15 +46,8 @@ class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Install SplashScreen early to prevent OS blank/white screen
-        val splashScreen = installSplashScreen()
-
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
-        // Optionally keep splash until first frame or some condition
-        // splashScreen.setKeepOnScreenCondition { /* return true while loading */ false }
         
         // Handle back button press
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {

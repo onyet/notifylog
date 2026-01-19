@@ -5,4 +5,9 @@
         <item name="android:navigationBarColor">@color/background_dark</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
+
+    <style name="Theme.NotifyLog.Splash" parent="Theme.NotifyLog">
+        <item name="android:windowBackground">@drawable/splash_screen_dark</item>
+        <item name="android:windowDisablePreview">false</item>
+    </style>
 </resources>

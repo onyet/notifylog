@@ -2,6 +2,7 @@ package id.onyet.app.notifylog.ui.screens.onboarding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,29 +14,38 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.OpenInNew
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -46,22 +56,35 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import id.onyet.app.notifylog.NotifyLogApp
 import id.onyet.app.notifylog.R
+import id.onyet.app.notifylog.ui.components.LanguageBottomSheet
 import id.onyet.app.notifylog.ui.theme.Primary
+import id.onyet.app.notifylog.util.LocaleHelper
 import id.onyet.app.notifylog.util.NotificationPermissionHelper
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
     onNavigateToHome: () -> Unit
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val scope = rememberCoroutineScope()
+    
+    // Get app preferences for language
+    val app = context.applicationContext as NotifyLogApp
+    val languageCode by app.userPreferences.languageCode.collectAsState(initial = "en")
+    val currentLanguage = LocaleHelper.Language.fromCode(languageCode)
     
     var hasPermission by remember {
         mutableStateOf(NotificationPermissionHelper.hasNotificationListenerPermission(context))
     }
     
     var showWhyNeededDialog by remember { mutableStateOf(false) }
+    var showLanguageSheet by remember { mutableStateOf(false) }
+    val languageSheetState = rememberModalBottomSheetState()
     
     // Check permission when returning to the app
     DisposableEffect(lifecycleOwner) {
@@ -83,18 +106,51 @@ fun OnboardingScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .statusBarsPadding()
             .navigationBarsPadding()
-            .padding(24.dp),
+            .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
-        
-        // Header
-        Text(
-            text = stringResource(R.string.setup),
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+        // Top bar with language switcher
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Header
+            Text(
+                text = stringResource(R.string.setup),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            
+            // Language switcher button
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+                    .clickable { showLanguageSheet = true }
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(
+                        text = currentLanguage.flag,
+                        fontSize = 16.sp
+                    )
+                    Icon(
+                        imageVector = Icons.Default.Language,
+                        contentDescription = stringResource(R.string.language),
+                        modifier = Modifier.size(18.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
         
         Spacer(modifier = Modifier.weight(0.5f))
         
@@ -281,7 +337,7 @@ fun OnboardingScreen(
         }
 
         Spacer(modifier = Modifier.height(12.dp))
-        
+
         TextButton(
             onClick = { showWhyNeededDialog = true }
         ) {
@@ -344,6 +400,25 @@ fun OnboardingScreen(
                 }
             }
         )
+    }
+    
+    // Language Bottom Sheet
+    if (showLanguageSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showLanguageSheet = false },
+            sheetState = languageSheetState
+        ) {
+            LanguageBottomSheet(
+                currentLanguage = currentLanguage,
+                onLanguageSelected = { language ->
+                    scope.launch {
+                        app.userPreferences.setLanguageCode(language.code)
+                        languageSheetState.hide()
+                        showLanguageSheet = false
+                    }
+                }
+            )
+        }
     }
 }
 
