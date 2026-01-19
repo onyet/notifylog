@@ -31,10 +31,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.NotifyLog">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+            android:theme="@style/Theme.NotifyLog.Splash">
             </intent-filter>
         </activity>
         

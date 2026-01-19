@@ -73,6 +73,7 @@
     <string name="github_url">github.com/onyet/notifylog</string>
     <string name="clear_all_history">Clear All History?</string>
     <string name="clear_all_history_message">This will permanently delete all %d stored notifications. This action cannot be undone.</string>
+    <string name="loading_settings">Loading settings...</string>
     <string name="clear_all">Clear All</string>
     <string name="notifications_stored">%d notifications stored</string>
     <string name="privacy_first_history">Privacy-first notification history</string>

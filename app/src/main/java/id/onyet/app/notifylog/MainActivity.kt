@@ -45,8 +45,31 @@ class MainActivity : ComponentActivity() {
     private lateinit var navController: NavHostController
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Install SplashScreen early to prevent OS blank/white screen
+        val splashScreen = installSplashScreen()
+
+        // Small fade transition when exiting the platform splash to app UI
+        splashScreen.setOnExitAnimationListener { splashScreenView ->
+            val duration = 250L
+            // Prefer animating the icon if available
+            val icon = splashScreenView.iconView
+            if (icon != null) {
+                icon.animate().alpha(0f).setDuration(duration).withEndAction {
+                    splashScreenView.remove()
+                }
+            } else {
+                // Fallback to animating the whole splash view
+                splashScreenView.view.animate().alpha(0f).setDuration(duration).withEndAction {
+                    splashScreenView.remove()
+                }
+            }
+        }
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        
+        // Optionally keep splash until first frame or some condition
+        // splashScreen.setKeepOnScreenCondition { /* return true while loading */ false }
         
         // Handle back button press
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {

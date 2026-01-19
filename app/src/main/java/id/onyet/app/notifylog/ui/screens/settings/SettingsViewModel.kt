@@ -15,6 +15,10 @@ class SettingsViewModel(
     private val repository: NotificationRepository
 ) : ViewModel() {
     
+    // Loading state: becomes true after initial data is loaded
+    private val _isLoaded = kotlinx.coroutines.flow.MutableStateFlow(false)
+    val isLoaded: kotlinx.coroutines.flow.StateFlow<Boolean> = _isLoaded.asStateFlow()
+
     val isLoggingEnabled: StateFlow<Boolean> = userPreferences.isLoggingEnabled
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
     
@@ -30,6 +34,19 @@ class SettingsViewModel(
     fun setLoggingEnabled(enabled: Boolean) {
         viewModelScope.launch {
             userPreferences.setLoggingEnabled(enabled)
+        }
+    }
+
+    init {
+        // Wait for first emission of key flows and mark loaded
+        viewModelScope.launch {
+            kotlinx.coroutines.flow.combine(
+                userPreferences.isLoggingEnabled,
+                userPreferences.ignoreSystemApps,
+                repository.notificationCount
+            ) { a, b, c -> Triple(a, b, c) }
+                .first()
+            _isLoaded.value = true
         }
     }
     

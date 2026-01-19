@@ -38,6 +38,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Switch
@@ -91,6 +92,7 @@ fun SettingsScreen(
     val autoDeleteDays by viewModel.autoDeleteDays.collectAsState()
     val notificationCount by viewModel.notificationCount.collectAsState()
     val languageCode by app.userPreferences.languageCode.collectAsState(initial = "en")
+    val isLoaded by viewModel.isLoaded.collectAsState(initial = false)
 
     var showClearDialog by remember { mutableStateOf(false) }
     var isLanguageSheetVisible by remember { mutableStateOf(false) }
@@ -117,6 +119,23 @@ fun SettingsScreen(
             )
         }
     ) { paddingValues ->
+        Box(modifier = Modifier.fillMaxSize()) {
+        // Show loading overlay until initial data is loaded
+        if (!isLoaded) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    CircularProgressIndicator(color = Primary)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(text = stringResource(R.string.loading_settings), color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
