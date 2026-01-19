@@ -24,6 +24,13 @@ interface NotificationDao {
         ORDER BY received_time DESC
     """)
     suspend fun getAllSync(): List<NotificationLog>
+
+    @Query("""
+        SELECT * FROM notification_logs
+        ORDER BY received_time DESC
+        LIMIT :limit OFFSET :offset
+    """)
+    suspend fun getPage(limit: Int, offset: Int): List<NotificationLog>
     
     @Query("""
         SELECT * FROM notification_logs 
@@ -75,6 +82,43 @@ interface NotificationDao {
         startDate: Long?,
         endDate: Long?
     ): Flow<List<NotificationLog>>
+
+    @Query("""
+        SELECT * FROM notification_logs 
+        WHERE (title LIKE '%' || :query || '%' OR content LIKE '%' || :query || '%')
+          AND (:packageName IS NULL OR package_name = :packageName)
+          AND (:startDate IS NULL OR received_time >= :startDate)
+          AND (:endDate IS NULL OR received_time <= :endDate)
+        ORDER BY received_time DESC
+        LIMIT :limit OFFSET :offset
+    """)
+    suspend fun searchWithFiltersPage(
+        query: String,
+        packageName: String?,
+        startDate: Long?,
+        endDate: Long?,
+        limit: Int,
+        offset: Int
+    ): List<NotificationLog>
+
+    @Query("""
+        SELECT nl.* FROM notification_logs nl
+        JOIN notification_logs_fts fts ON nl.rowid = fts.rowid
+        WHERE fts MATCH :matchQuery
+          AND (:packageName IS NULL OR nl.package_name = :packageName)
+          AND (:startDate IS NULL OR nl.received_time >= :startDate)
+          AND (:endDate IS NULL OR nl.received_time <= :endDate)
+        ORDER BY nl.received_time DESC
+        LIMIT :limit OFFSET :offset
+    """)
+    suspend fun searchWithFtsPage(
+        matchQuery: String,
+        packageName: String?,
+        startDate: Long?,
+        endDate: Long?,
+        limit: Int,
+        offset: Int
+    ): List<NotificationLog>
     
     @Query("""
         UPDATE notification_logs 

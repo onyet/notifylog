@@ -109,6 +109,8 @@ fun HomeScreen(
     // Multi-select state
     val isSelectionMode by viewModel.isSelectionMode.collectAsState()
     val selectedIds by viewModel.selectedIds.collectAsState()
+    val isLoadingInitial by viewModel.isLoadingInitial.collectAsState()
+    val isLoadingMore by viewModel.isLoadingMore.collectAsState()
     
     // Delete confirmation dialog state
     var showDeleteConfirmation by remember { mutableStateOf(false) }
@@ -214,7 +216,13 @@ fun HomeScreen(
             BottomBar(onNavigateToSettings = onNavigateToSettings)
         }
     ) { paddingValues ->
-        if (notifications.isEmpty()) {
+        if (isLoadingInitial) {
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues), contentAlignment = Alignment.Center) {
+                androidx.compose.material3.CircularProgressIndicator(color = Primary)
+            }
+        } else if (notifications.isEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -250,6 +258,9 @@ fun HomeScreen(
                 apps = apps,
                 isSelectionMode = isSelectionMode,
                 selectedIds = selectedIds,
+                isLoadingInitial = isLoadingInitial,
+                isLoadingMore = isLoadingMore,
+                onLoadMore = viewModel::loadMore,
                 onNotificationClick = { id ->
                     if (isSelectionMode) {
                         viewModel.toggleSelection(id)
@@ -379,6 +390,10 @@ private fun NotificationsList(
     apps: List<id.onyet.app.notifylog.data.local.AppInfo>,
     isSelectionMode: Boolean,
     selectedIds: Set<Long>,
+    isLoadingInitial: Boolean,
+    isLoadingMore: Boolean,
+    onLoadMore: () -> Unit,
+    prefetchDistance: Int = 15,
     onNotificationClick: (Long) -> Unit,
     onNotificationLongClick: (Long) -> Unit,
     onSelectedPackageChange: (String?) -> Unit,
@@ -409,7 +424,22 @@ private fun NotificationsList(
     
     val yesterday = remember { today - 24 * 60 * 60 * 1000 }
     
+    val listState = rememberLazyListState()
+
+    // Prefetch when user is within prefetchDistance from the end
+    LaunchedEffect(listState, notifications, isLoadingMore, isLoadingInitial) {
+        snapshotFlow { listState.layoutInfo }
+            .collectLatest { layout ->
+                val total = layout.totalItemsCount
+                val lastVisible = layout.visibleItemsInfo.lastOrNull()?.index ?: 0
+                if (!isLoadingMore && !isLoadingInitial && total > 0 && total - lastVisible <= prefetchDistance) {
+                    onLoadMore()
+                }
+            }
+    }
+
     LazyColumn(
+        state = listState,
         contentPadding = PaddingValues(bottom = 80.dp),
         modifier = modifier.fillMaxSize()
     ) {
@@ -552,6 +582,20 @@ private fun NotificationsList(
                     onLongClick = { onNotificationLongClick(notification.id) },
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
                 )
+            }
+        }
+
+        // Loading more indicator
+        item {
+            if (isLoadingMore) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    androidx.compose.material3.CircularProgressIndicator(color = Primary)
+                }
             }
         }
     }

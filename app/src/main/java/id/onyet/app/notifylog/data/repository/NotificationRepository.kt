@@ -20,6 +20,33 @@ class NotificationRepository(private val notificationDao: NotificationDao) {
     suspend fun getById(id: Long): NotificationLog? {
         return notificationDao.getById(id)
     }
+
+    suspend fun getPage(limit: Int, offset: Int): List<NotificationLog> {
+        return notificationDao.getPage(limit, offset)
+    }
+
+    suspend fun getFilteredPage(
+        query: String,
+        packageName: String?,
+        startDate: Long?,
+        endDate: Long?,
+        limit: Int,
+        offset: Int
+    ): List<NotificationLog> {
+        // If query is wildcard or empty, use LIKE-based query
+        val trimmed = query.trim()
+        if (trimmed.isBlank() || trimmed == "%") {
+            return notificationDao.searchWithFiltersPage(query, packageName, startDate, endDate, limit, offset)
+        }
+
+        // Build FTS match query: split terms and append wildcard * for prefix matching
+        val tokens = trimmed.split(Regex("\\s+"))
+            .filter { it.isNotBlank() }
+            .map { it.replace("'", "''") + "*" }
+
+        val matchQuery = tokens.joinToString(" OR ")
+        return notificationDao.searchWithFtsPage(matchQuery, packageName, startDate, endDate, limit, offset)
+    }
     
     fun getByPackage(packageName: String): Flow<List<NotificationLog>> {
         return notificationDao.getByPackage(packageName)
