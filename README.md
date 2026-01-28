@@ -1,5 +1,9 @@
 # NotifyLog
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+[![Get it on Google Play](https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=id.onyet.app.notifylog)
+
 NotifyLog records device notifications and stores them locally for personal reference. The app is designed with an offline-first approach and does not transmit notification contents to external services.
 
 ---
