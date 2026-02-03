@@ -1,5 +1,7 @@
 package id.onyet.app.notifylog.ui.screens.home
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import androidx.compose.animation.AnimatedVisibility
@@ -331,7 +333,7 @@ fun HomeScreen(
                     }
                     isLanguageSheetVisible = false
                     // Recreate activity to apply new locale
-                    (context as? androidx.activity.ComponentActivity)?.recreate()
+                    getActivity(context)?.recreate()
                 }
             )
         }
@@ -843,6 +845,17 @@ private fun BottomBar(
             }
         }
     }
+}
+
+private fun getActivity(context: Context): androidx.activity.ComponentActivity? {
+    var ctx = context
+    while (ctx is ContextWrapper) {
+        if (ctx is androidx.activity.ComponentActivity) {
+            return ctx
+        }
+        ctx = ctx.baseContext
+    }
+    return null
 }
 
 private fun formatTime(timestamp: Long): String {

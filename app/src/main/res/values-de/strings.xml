@@ -76,6 +76,7 @@
     <string name="github_url">github.com/onyet/notifylog</string>
     <string name="clear_all_history">Gesamten Verlauf löschen?</string>
     <string name="clear_all_history_message">Dadurch werden alle %d gespeicherten Benachrichtigungen dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="loading_settings">Einstellungen werden geladen...</string>
     <string name="clear_all">Alles löschen</string>
     <string name="notifications_stored">%d Benachrichtigungen gespeichert</string>
     <string name="privacy_first_history">Datenschutzorientierter Benachrichtigungsverlauf</string>

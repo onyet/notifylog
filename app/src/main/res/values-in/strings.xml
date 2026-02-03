@@ -76,6 +76,7 @@
     <string name="github_url">github.com/onyet/notifylog</string>
     <string name="clear_all_history">Hapus Semua Riwayat?</string>
     <string name="clear_all_history_message">Ini akan menghapus semua %d notifikasi yang tersimpan secara permanen. Tindakan ini tidak dapat dibatalkan.</string>
+    <string name="loading_settings">Memuat pengaturan...</string>
     <string name="clear_all">Hapus Semua</string>
     <string name="notifications_stored">%d notifikasi tersimpan</string>
     <string name="privacy_first_history">Riwayat notifikasi yang mengutamakan privasi</string>

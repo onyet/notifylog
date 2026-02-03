@@ -76,6 +76,7 @@
     <string name="github_url">github.com/onyet/notifylog</string>
     <string name="clear_all_history">Очистить всю историю?</string>
     <string name="clear_all_history_message">Это навсегда удалит все %d сохранённых уведомлений. Это действие нельзя отменить.</string>
+    <string name="loading_settings">Загрузка настроек...</string>
     <string name="clear_all">Очистить всё</string>
     <string name="notifications_stored">%d уведомлений сохранено</string>
     <string name="privacy_first_history">История уведомлений с приоритетом конфиденциальности</string>

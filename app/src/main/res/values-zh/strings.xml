@@ -76,6 +76,7 @@
     <string name="github_url">github.com/onyet/notifylog</string>
     <string name="clear_all_history">清除所有历史？</string>
     <string name="clear_all_history_message">这将永久删除所有 %d 条存储的通知。此操作无法撤消。</string>
+    <string name="loading_settings">正在加载设置...</string>
     <string name="clear_all">全部清除</string>
     <string name="notifications_stored">已存储 %d 条通知</string>
     <string name="privacy_first_history">隐私优先的通知历史</string>

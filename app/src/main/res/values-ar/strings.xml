@@ -76,6 +76,7 @@
     <string name="github_url">github.com/onyet/notifylog</string>
     <string name="clear_all_history">مسح كل السجل؟</string>
     <string name="clear_all_history_message">سيؤدي هذا إلى حذف جميع الإشعارات المخزنة البالغ عددها %d بشكل دائم. لا يمكن التراجع عن هذا الإجراء.</string>
+    <string name="loading_settings">جارٍ تحميل الإعدادات...</string>
     <string name="clear_all">مسح الكل</string>
     <string name="notifications_stored">%d إشعارات مخزنة</string>
     <string name="privacy_first_history">سجل الإشعارات مع الخصوصية أولاً</string>
