@@ -91,6 +91,7 @@
     <string name="export_successful">تم التصدير بنجاح</string>
     <string name="export_failed">فشل التصدير</string>
     <string name="no_notifications_to_export">لا توجد إشعارات للتصدير</string>
+    <string name="saved_to_downloads">تم الحفظ في التنزيلات: %s</string>
     <string name="clear_all">مسح الكل</string>
     <string name="notifications_stored">%d إشعارات مخزنة</string>
     <string name="privacy_first_history">سجل الإشعارات مع الخصوصية أولاً</string>

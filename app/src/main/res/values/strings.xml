@@ -98,6 +98,7 @@
     <string name="export_confirm_message">Export %d notifications to CSV and share it as a file?</string>
     <string name="export_confirm_yes">Export</string>
     <string name="export_in_progress">Exporting...</string>
+    <string name="saved_to_downloads">Saved to Downloads: %s</string>
     <!-- Language Settings -->
     <string name="language">Language</string>
     <string name="select_language">Select Language</string>

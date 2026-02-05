@@ -4,6 +4,7 @@ import android.content.Context
 import id.onyet.app.notifylog.data.local.NotificationLog
 import java.io.File
 import java.io.OutputStreamWriter
+import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -44,5 +45,31 @@ object ExportUtils {
         }
 
         return file
+    }
+
+    fun writeNotificationsToStream(out: OutputStream, notifications: List<NotificationLog>) {
+        OutputStreamWriter(out).use { writer ->
+            writer.append("id,package_name,app_name,title,content,posted_time,received_time,is_cleared\n")
+            notifications.forEach { n ->
+                fun esc(s: String?): String {
+                    if (s == null) return ""
+                    val replaced = s.replace("\"", "\"\"")
+                    return "\"$replaced\""
+                }
+                val line = listOf(
+                    n.id.toString(),
+                    esc(n.packageName),
+                    esc(n.appName),
+                    esc(n.title),
+                    esc(n.content),
+                    n.postedTime.toString(),
+                    n.receivedTime.toString(),
+                    n.isCleared.toString()
+                ).joinToString(",")
+                writer.append(line)
+                writer.append("\n")
+            }
+            writer.flush()
+        }
     }
 }

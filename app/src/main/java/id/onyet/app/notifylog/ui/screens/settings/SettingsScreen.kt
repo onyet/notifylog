@@ -29,6 +29,18 @@ import androidx.compose.material.icons.filled.Policy
 import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.Notifications
 import android.util.Log
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import android.content.ContentValues
+import android.os.Environment
+import android.provider.MediaStore
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.io.File
+import java.io.FileOutputStream
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -103,6 +115,26 @@ fun SettingsScreen(
     var showPrivacyConfirmDialog by remember { mutableStateOf(false) }
     var showExportConfirmDialog by remember { mutableStateOf(false) }
     var isExporting by remember { mutableStateOf(false) }
+    // For permission flow on pre-Android Q
+    var pendingExportAction by remember { mutableStateOf(false) }
+
+    // performExport is defined below and used both by the confirm button and permission callback
+    lateinit var performExportAction: suspend () -> Unit
+
+    val writePermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            if (pendingExportAction) {
+                // proceed with export
+                scope.launch { performExportAction() }
+                pendingExportAction = false
+            }
+        } else {
+            android.widget.Toast.makeText(context, context.getString(R.string.export_failed) + ": permission required", android.widget.Toast.LENGTH_LONG).show()
+            pendingExportAction = false
+        }
+    }
 
     val languageSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -515,26 +547,83 @@ fun SettingsScreen(
                 TextButton(onClick = {
                     showExportConfirmDialog = false
                     if (isExporting) return@TextButton
-                    scope.launch {
+
+                    // For pre-Q, check WRITE_EXTERNAL_STORAGE permission
+                    if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+                        val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == android.content.pm.PackageManager.PERMISSION_GRANTED
+                        if (!granted) {
+                            pendingExportAction = true
+                            writePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            return@TextButton
+                        }
+                    }
+
+                    // Define export action and store it so permission callback can reuse it
+                    performExportAction = suspend {
                         isExporting = true
                         try {
                             val list = try { viewModel.getAllNotifications() } catch (e: Exception) { emptyList<id.onyet.app.notifylog.data.local.NotificationLog>() }
                             if (list.isEmpty()) {
                                 android.widget.Toast.makeText(context, context.getString(R.string.no_notifications_to_export), android.widget.Toast.LENGTH_SHORT).show()
                                 isExporting = false
-                                return@launch
+                            } else {
+                                val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+                                val filename = "notifylog_export_$timestamp.csv"
+
+                                var shareUri: android.net.Uri? = null
+                                // Try MediaStore (API 29+)
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                                    val values = ContentValues().apply {
+                                        put(MediaStore.Downloads.DISPLAY_NAME, filename)
+                                        put(MediaStore.Downloads.MIME_TYPE, "text/csv")
+                                        put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/NotifyLog")
+                                    }
+                                    val resolver = context.contentResolver
+                                    val uri = resolver.insert(MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY), values)
+                                    if (uri == null) throw java.io.IOException("Failed to create file in Downloads")
+
+                                    resolver.openOutputStream(uri)?.use { out ->
+                                        id.onyet.app.notifylog.util.ExportUtils.writeNotificationsToStream(out, list)
+                                    } ?: throw java.io.IOException("Failed to open stream for uri")
+
+                                    shareUri = uri
+                                    android.widget.Toast.makeText(context, context.getString(R.string.saved_to_downloads, filename), android.widget.Toast.LENGTH_LONG).show()
+                                } else {
+                                    // Pre-Q: try writing to public Downloads folder (may require permission)
+                                    val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                                    val appDir = File(downloadsDir, "NotifyLog")
+                                    if (!appDir.exists()) appDir.mkdirs()
+                                    val file = File(appDir, filename)
+                                    FileOutputStream(file).use { fos ->
+                                        id.onyet.app.notifylog.util.ExportUtils.writeNotificationsToStream(fos, list)
+                                    }
+                                    // Use FileProvider for sharing the file
+                                    shareUri = androidx.core.content.FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+                                    android.widget.Toast.makeText(context, context.getString(R.string.saved_to_downloads, file.absolutePath), android.widget.Toast.LENGTH_LONG).show()
+                                }
+
+                                // Now open share chooser if we have URI
+                                shareUri?.let { uri ->
+                                    val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                                        type = "text/csv"
+                                        putExtra(android.content.Intent.EXTRA_STREAM, uri)
+                                        addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                    }
+                                    val chooser = android.content.Intent.createChooser(intent, null)
+                                    try {
+                                        val activity = context as? androidx.activity.ComponentActivity
+                                        if (activity != null) {
+                                            activity.startActivity(chooser)
+                                        } else {
+                                            chooser.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                            context.startActivity(chooser)
+                                        }
+                                    } catch (e: Exception) {
+                                        Log.e("SettingsScreen", "Failed to launch chooser", e)
+                                    }
+                                }
                             }
 
-                            val file = id.onyet.app.notifylog.util.ExportUtils.writeNotificationsToCsv(context, list)
-                            val uri = androidx.core.content.FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
-
-                            val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                                type = "text/csv"
-                                putExtra(android.content.Intent.EXTRA_STREAM, uri)
-                                addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                            }
-                            context.startActivity(android.content.Intent.createChooser(intent, null))
-                            android.widget.Toast.makeText(context, context.getString(R.string.export_successful), android.widget.Toast.LENGTH_SHORT).show()
                         } catch (e: Exception) {
                             Log.e("SettingsScreen", "Export failed", e)
                             android.widget.Toast.makeText(context, context.getString(R.string.export_failed) + ": " + (e.localizedMessage ?: ""), android.widget.Toast.LENGTH_LONG).show()
@@ -542,6 +631,9 @@ fun SettingsScreen(
                             isExporting = false
                         }
                     }
+
+                    // Launch export
+                    scope.launch { performExportAction() }
                 }) {
                     Text(stringResource(R.string.export_confirm_yes), color = Primary)
                 }
