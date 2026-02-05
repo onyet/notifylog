@@ -32,6 +32,7 @@ import id.onyet.app.notifylog.ui.navigation.Screen
 import id.onyet.app.notifylog.ui.theme.NotifyLogTheme
 import id.onyet.app.notifylog.ui.theme.Primary
 import id.onyet.app.notifylog.util.LocaleHelper
+import android.content.Intent
 
 
 val LocalAppLocale = staticCompositionLocalOf { "en" }
@@ -56,10 +57,25 @@ class MainActivity : ComponentActivity() {
             .getBoolean("dark_mode", true)
     }
 
+    private lateinit var appUpdateManager: com.google.android.play.core.appupdate.AppUpdateManager
+    private val installStateListener = com.google.android.play.core.install.InstallStateUpdatedListener { state ->
+        if (state.installStatus() == com.google.android.play.core.install.model.InstallStatus.DOWNLOADED) {
+            // For flexible updates, prompt user to complete; here we complete immediately
+            appUpdateManager.completeUpdate()
+        }
+    }
+
+    companion object {
+        private const val REQUEST_CODE_UPDATE = 2001
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
+
+        // Initialize AppUpdateManager
+        appUpdateManager = com.google.android.play.core.appupdate.AppUpdateManagerFactory.create(this)
+
         // Handle back button press
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -127,6 +143,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        // Handle update intent if activity launched from notification
+        checkAndStartUpdateFromIntent(intent)
     }
 
     override fun attachBaseContext(newBase: Context?) {
@@ -142,6 +161,78 @@ class MainActivity : ComponentActivity() {
             }
         }
         super.attachBaseContext(newBase)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Register install listener for flexible updates
+        appUpdateManager.registerListener(installStateListener)
+        // If activity was started with update intent, try to start update
+        checkAndStartUpdateFromIntent(intent)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        try {
+            appUpdateManager.unregisterListener(installStateListener)
+        } catch (_: Exception) {
+            // ignore
+        }
+    }
+
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        checkAndStartUpdateFromIntent(intent)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_UPDATE) {
+            if (resultCode != RESULT_OK) {
+                // User canceled or update failed; no-op or show message
+            }
+        }
+    }
+
+    private fun checkAndStartUpdateFromIntent(intent: Intent?) {
+        val shouldStart = intent?.getBooleanExtra(id.onyet.app.notifylog.update.UpdateNotificationHelper.EXTRA_START_UPDATE, false) ?: false
+        if (shouldStart) {
+            startFlexibleUpdate()
+        }
+    }
+
+    private fun startFlexibleUpdate() {
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == com.google.android.play.core.install.model.UpdateAvailability.UPDATE_AVAILABLE &&
+                appUpdateInfo.isUpdateTypeAllowed(com.google.android.play.core.install.model.AppUpdateType.FLEXIBLE)
+            ) {
+                try {
+                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, com.google.android.play.core.install.model.AppUpdateType.FLEXIBLE, this, REQUEST_CODE_UPDATE)
+                } catch (e: Exception) {
+                    openPlayStore()
+                }
+            } else {
+                openPlayStore()
+            }
+        }.addOnFailureListener {
+            openPlayStore()
+        }
+    }
+
+    private fun openPlayStore() {
+        val uri = android.net.Uri.parse("https://play.google.com/store/apps/details?id=id.onyet.app.notifylog")
+        val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, uri).apply {
+            setPackage("com.android.vending")
+            addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        try {
+            startActivity(intent)
+        } catch (e: Exception) {
+            // Fallback to browser
+            startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, uri))
+        }
     }
 }
 

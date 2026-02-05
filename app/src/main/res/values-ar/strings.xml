@@ -70,6 +70,7 @@
     <string name="about">حول</string>
     <string name="privacy_policy_terms">سياسة الخصوصية وشروط الخدمة</string>
     <string name="developer">المطور</string>
+    <string name="developer_description">تم إنشاء هذا التطبيق بواسطة مطور يشعر بالانزعاج كثيرًا عندما يتم حذف رسائل WhatsApp قبل أن يتمكن من قراءتها.</string>
     <string name="app_version">إصدار التطبيق</string>
     <string name="notifylog_privacy_core">نواة خصوصية NOTIFYLOG</string>
     <string name="open_source_project">هذا مشروع مفتوح المصدر</string>
@@ -77,6 +78,11 @@
     <string name="clear_all_history">مسح كل السجل؟</string>
     <string name="clear_all_history_message">سيؤدي هذا إلى حذف جميع الإشعارات المخزنة البالغ عددها %d بشكل دائم. لا يمكن التراجع عن هذا الإجراء.</string>
     <string name="loading_settings">جارٍ تحميل الإعدادات...</string>
+    <string name="update_available_title">تحديث متاح</string>
+    <string name="update_available_message">يتوفر إصدار جديد من NotifyLog. انقر للتحديث.</string>
+    <string name="update_now">تحديث</string>
+    <string name="update_channel_name">التحديثات</string>
+    <string name="update_channel_description">إشعارات حول تحديثات التطبيق</string>
     <string name="clear_all">مسح الكل</string>
     <string name="notifications_stored">%d إشعارات مخزنة</string>
     <string name="privacy_first_history">سجل الإشعارات مع الخصوصية أولاً</string>

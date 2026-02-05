@@ -69,6 +69,7 @@
     <string name="about">About</string>
     <string name="privacy_policy_terms">Privacy Policy &amp; Terms of Service</string>
     <string name="developer">Developer</string>
+    <string name="developer_description">Aplikasi ini dibuat oleh seorang developer yang sering merasa terganggu karena pesan WhatsApp orang dihapus sebelum sempat dibaca.</string>
     <string name="app_version">App Version</string>
     <string name="notifylog_privacy_core">NOTIFYLOG PRIVACY CORE</string>
     <string name="open_source_project">This is an open source project</string>
@@ -76,12 +77,22 @@
     <string name="clear_all_history">Clear All History?</string>
     <string name="clear_all_history_message">This will permanently delete all %d stored notifications. This action cannot be undone.</string>
     <string name="loading_settings">Loading settings...</string>
+    <string name="update_available_title">Update available</string>
+    <string name="update_available_message">A new version of NotifyLog is available. Tap to update.</string>
+    <string name="update_now">Update</string>
+    <string name="update_channel_name">Updates</string>
+    <string name="update_channel_description">Notifications about app updates</string>
     <string name="clear_all">Clear All</string>
     <string name="notifications_stored">%d notifications stored</string>
     <string name="privacy_first_history">Privacy-first notification history</string>
     <string name="close">Close</string>
     <string name="open">Open</string>
     <string name="open_privacy_policy_message">Do you want to open the Privacy Policy &amp; Terms of Service page in your browser?</string>
+    <string name="export_notifications">Export Notifications</string>
+    <string name="export_as_csv">Export as CSV</string>
+    <string name="export_successful">Export successful</string>
+    <string name="export_failed">Export failed</string>
+    <string name="no_notifications_to_export">No notifications to export</string>
 
     <!-- Language Settings -->
     <string name="language">Language</string>

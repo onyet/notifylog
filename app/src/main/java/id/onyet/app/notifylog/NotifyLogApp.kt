@@ -33,5 +33,24 @@ class NotifyLogApp : Application() {
                 // Ignore initialization errors
             }
         }
+
+        // Schedule periodic update checks (every 12 hours) using WorkManager
+        try {
+            val request = androidx.work.PeriodicWorkRequestBuilder<id.onyet.app.notifylog.update.UpdateCheckWorker>(12, java.util.concurrent.TimeUnit.HOURS)
+                .setConstraints(
+                    androidx.work.Constraints.Builder()
+                        .setRequiredNetworkType(androidx.work.NetworkType.CONNECTED)
+                        .build()
+                )
+                .build()
+
+            androidx.work.WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+                "update_check",
+                androidx.work.ExistingPeriodicWorkPolicy.KEEP,
+                request
+            )
+        } catch (e: Exception) {
+            // Ignore scheduling errors on older devices
+        }
     }
 }

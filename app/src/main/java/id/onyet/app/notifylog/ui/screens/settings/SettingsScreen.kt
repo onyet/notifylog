@@ -328,6 +328,44 @@ fun SettingsScreen(
                         Text(stringResource(R.string.clear), fontWeight = FontWeight.Bold)
                     }
                 }
+
+                // Export history
+                SettingsClickableItem(
+                    icon = Icons.Default.History,
+                    title = stringResource(R.string.export_notifications),
+                    onClick = {
+                        scope.launch {
+                            // Fetch all notifications from ViewModel
+                            val list = try {
+                                viewModel.getAllNotifications()
+                            } catch (e: Exception) {
+                                emptyList<id.onyet.app.notifylog.data.local.NotificationLog>()
+                            }
+
+                            if (list.isEmpty()) {
+                                // Show simple toast
+                                android.widget.Toast.makeText(context, context.getString(R.string.no_notifications_to_export), android.widget.Toast.LENGTH_SHORT).show()
+                                return@launch
+                            }
+
+                            try {
+                                val file = id.onyet.app.notifylog.util.ExportUtils.writeNotificationsToCsv(context, list)
+                                val uri = androidx.core.content.FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+
+                                val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                                    type = "text/csv"
+                                    putExtra(android.content.Intent.EXTRA_STREAM, uri)
+                                    addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                }
+                                context.startActivity(android.content.Intent.createChooser(intent, null))
+                                android.widget.Toast.makeText(context, context.getString(R.string.export_successful), android.widget.Toast.LENGTH_SHORT).show()
+                            } catch (e: Exception) {
+                                android.widget.Toast.makeText(context, context.getString(R.string.export_failed), android.widget.Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    },
+                    showDivider = true
+                )
             }
             
             Spacer(modifier = Modifier.height(24.dp))
@@ -499,47 +537,46 @@ fun SettingsScreen(
             onDismissRequest = { showDeveloperDialog = false },
             title = { Text(stringResource(R.string.developer)) },
             text = {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Text(
-                        text = "Dian Mukti Wibowo",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        Column(
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Email,
-                            contentDescription = null,
-                            tint = Primary,
-                            modifier = Modifier.size(18.dp)
-                        )
                         Text(
-                            text = "onyetcorp@gmail.com",
+                            text = stringResource(R.string.developer_description),
                             fontSize = 14.sp
                         )
-                    }
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Phone,
-                            contentDescription = null,
-                            tint = Primary,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Text(
-                            text = "+6282221874400",
-                            fontSize = 14.sp
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Email,
+                                contentDescription = null,
+                                tint = Primary,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Text(
+                                text = "onyetcorp@gmail.com",
+                                fontSize = 14.sp
+                            )
+                        }
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Phone,
+                                contentDescription = null,
+                                tint = Primary,
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Text(
+                                text = "+6282221874400",
+                                fontSize = 14.sp
+                            )
+                        }
                     }
-                }
             },
             confirmButton = {
                 TextButton(onClick = { showDeveloperDialog = false }) {

@@ -70,6 +70,7 @@
     <string name="about">Über</string>
     <string name="privacy_policy_terms">Datenschutzrichtlinie &amp; Nutzungsbedingungen</string>
     <string name="developer">Entwickler</string>
+    <string name="developer_description">Diese App wurde von einem Entwickler erstellt, der sich oft darüber ärgert, dass WhatsApp-Nachrichten gelöscht werden, bevor er sie lesen kann.</string>
     <string name="app_version">App-Version</string>
     <string name="notifylog_privacy_core">NOTIFYLOG DATENSCHUTZKERN</string>
     <string name="open_source_project">Dies ist ein Open-Source-Projekt</string>
@@ -77,6 +78,11 @@
     <string name="clear_all_history">Gesamten Verlauf löschen?</string>
     <string name="clear_all_history_message">Dadurch werden alle %d gespeicherten Benachrichtigungen dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</string>
     <string name="loading_settings">Einstellungen werden geladen...</string>
+    <string name="update_available_title">Update verfügbar</string>
+    <string name="update_available_message">Eine neue Version von NotifyLog ist verfügbar. Tippen Sie zum Aktualisieren.</string>
+    <string name="update_now">Aktualisieren</string>
+    <string name="update_channel_name">Updates</string>
+    <string name="update_channel_description">Benachrichtigungen über App-Aktualisierungen</string>
     <string name="clear_all">Alles löschen</string>
     <string name="notifications_stored">%d Benachrichtigungen gespeichert</string>
     <string name="privacy_first_history">Datenschutzorientierter Benachrichtigungsverlauf</string>

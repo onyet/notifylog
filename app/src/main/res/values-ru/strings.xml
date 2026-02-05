@@ -70,6 +70,7 @@
     <string name="about">О приложении</string>
     <string name="privacy_policy_terms">Политика конфиденциальности и условия использования</string>
     <string name="developer">Разработчик</string>
+    <string name="developer_description">Это приложение создано разработчиком, которого часто раздражает, что сообщения WhatsApp удаляются, прежде чем он успевает их прочитать.</string>
     <string name="app_version">Версия приложения</string>
     <string name="notifylog_privacy_core">NOTIFYLOG ЯДРО КОНФИДЕНЦИАЛЬНОСТИ</string>
     <string name="open_source_project">Это проект с открытым исходным кодом</string>
@@ -77,6 +78,11 @@
     <string name="clear_all_history">Очистить всю историю?</string>
     <string name="clear_all_history_message">Это навсегда удалит все %d сохранённых уведомлений. Это действие нельзя отменить.</string>
     <string name="loading_settings">Загрузка настроек...</string>
+    <string name="update_available_title">Доступно обновление</string>
+    <string name="update_available_message">Доступна новая версия NotifyLog. Нажмите, чтобы обновить.</string>
+    <string name="update_now">Обновить</string>
+    <string name="update_channel_name">Обновления</string>
+    <string name="update_channel_description">Уведомления об обновлениях приложения</string>
     <string name="clear_all">Очистить всё</string>
     <string name="notifications_stored">%d уведомлений сохранено</string>
     <string name="privacy_first_history">История уведомлений с приоритетом конфиденциальности</string>

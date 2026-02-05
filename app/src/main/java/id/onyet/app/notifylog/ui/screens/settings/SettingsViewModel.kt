@@ -69,6 +69,10 @@ class SettingsViewModel(
             repository.deleteAll()
         }
     }
+
+    suspend fun getAllNotifications(): List<id.onyet.app.notifylog.data.local.NotificationLog> {
+        return repository.allNotifications.first()
+    }
 }
 
 class SettingsViewModelFactory(

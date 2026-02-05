@@ -79,6 +79,12 @@ dependencies {
     
     // DataStore Preferences
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    // WorkManager (periodic background work)
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
+
+    // Play Core (In-App Updates)
+    implementation("com.google.android.play:core:1.10.3")
     
     // Testing
     testImplementation("junit:junit:4.13.2")

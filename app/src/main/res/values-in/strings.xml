@@ -70,6 +70,7 @@
     <string name="about">Tentang</string>
     <string name="privacy_policy_terms">Kebijakan Privasi &amp; Ketentuan Layanan</string>
     <string name="developer">Pengembang</string>
+    <string name="developer_description">Aplikasi ini dibuat oleh seorang developer yang sering merasa terganggu karena pesan WhatsApp orang dihapus sebelum sempat dibaca.</string>
     <string name="app_version">Versi Aplikasi</string>
     <string name="notifylog_privacy_core">INTI PRIVASI NOTIFYLOG</string>
     <string name="open_source_project">Ini adalah proyek open source</string>
@@ -77,6 +78,11 @@
     <string name="clear_all_history">Hapus Semua Riwayat?</string>
     <string name="clear_all_history_message">Ini akan menghapus semua %d notifikasi yang tersimpan secara permanen. Tindakan ini tidak dapat dibatalkan.</string>
     <string name="loading_settings">Memuat pengaturan...</string>
+    <string name="update_available_title">Pembaruan tersedia</string>
+    <string name="update_available_message">Versi terbaru NotifyLog tersedia. Ketuk untuk memperbarui.</string>
+    <string name="update_now">Perbarui</string>
+    <string name="update_channel_name">Pembaruan</string>
+    <string name="update_channel_description">Notifikasi tentang pembaruan aplikasi</string>
     <string name="clear_all">Hapus Semua</string>
     <string name="notifications_stored">%d notifikasi tersimpan</string>
     <string name="privacy_first_history">Riwayat notifikasi yang mengutamakan privasi</string>
