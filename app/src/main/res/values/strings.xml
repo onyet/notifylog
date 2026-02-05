@@ -82,6 +82,8 @@
     <string name="update_now">Update</string>
     <string name="update_channel_name">Updates</string>
     <string name="update_channel_description">Notifications about app updates</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="dark_mode_summary">Use the dark theme for the app</string>
     <string name="clear_all">Clear All</string>
     <string name="notifications_stored">%d notifications stored</string>
     <string name="privacy_first_history">Privacy-first notification history</string>
@@ -93,7 +95,9 @@
     <string name="export_successful">Export successful</string>
     <string name="export_failed">Export failed</string>
     <string name="no_notifications_to_export">No notifications to export</string>
-
+    <string name="export_confirm_message">Export %d notifications to CSV and share it as a file?</string>
+    <string name="export_confirm_yes">Export</string>
+    <string name="export_in_progress">Exporting...</string>
     <!-- Language Settings -->
     <string name="language">Language</string>
     <string name="select_language">Select Language</string>

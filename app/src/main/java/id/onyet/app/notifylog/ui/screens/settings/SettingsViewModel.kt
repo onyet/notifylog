@@ -32,6 +32,9 @@ class SettingsViewModel(
     
     val notificationCount: StateFlow<Int> = repository.notificationCount
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
+
+    val isDarkMode: StateFlow<Boolean> = userPreferences.isDarkMode
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
     
     fun setLoggingEnabled(enabled: Boolean) {
         viewModelScope.launch {
@@ -61,6 +64,12 @@ class SettingsViewModel(
     fun setAutoDeleteDays(days: Int) {
         viewModelScope.launch {
             userPreferences.setAutoDeleteDays(days)
+        }
+    }
+
+    fun setDarkMode(dark: Boolean) {
+        viewModelScope.launch {
+            userPreferences.setDarkMode(dark)
         }
     }
     

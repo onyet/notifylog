@@ -26,6 +26,9 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Policy
+import androidx.compose.material.icons.filled.Brightness4
+import androidx.compose.material.icons.filled.Notifications
+import android.util.Log
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -98,6 +101,8 @@ fun SettingsScreen(
     var isLanguageSheetVisible by remember { mutableStateOf(false) }
     var showDeveloperDialog by remember { mutableStateOf(false) }
     var showPrivacyConfirmDialog by remember { mutableStateOf(false) }
+    var showExportConfirmDialog by remember { mutableStateOf(false) }
+    var isExporting by remember { mutableStateOf(false) }
 
     val languageSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -202,6 +207,7 @@ fun SettingsScreen(
             ) {
                 // Enable logging
                 SettingsToggleItem(
+                    icon = Icons.Default.Notifications,
                     title = stringResource(R.string.enable_notification_logging),
                     subtitle = stringResource(R.string.logs_stored_securely),
                     checked = isLoggingEnabled,
@@ -215,6 +221,17 @@ fun SettingsScreen(
                     title = stringResource(R.string.ignore_system_apps),
                     checked = ignoreSystemApps,
                     onCheckedChange = viewModel::setIgnoreSystemApps,
+                    showDivider = true
+                )
+
+                // Dark mode toggle
+                val isDarkMode by viewModel.isDarkMode.collectAsState()
+                SettingsToggleItem(
+                    icon = Icons.Default.Brightness4,
+                    title = stringResource(R.string.dark_mode),
+                    subtitle = stringResource(R.string.dark_mode_summary),
+                    checked = isDarkMode,
+                    onCheckedChange = viewModel::setDarkMode,
                     showDivider = true
                 )
 
@@ -334,35 +351,7 @@ fun SettingsScreen(
                     icon = Icons.Default.History,
                     title = stringResource(R.string.export_notifications),
                     onClick = {
-                        scope.launch {
-                            // Fetch all notifications from ViewModel
-                            val list = try {
-                                viewModel.getAllNotifications()
-                            } catch (e: Exception) {
-                                emptyList<id.onyet.app.notifylog.data.local.NotificationLog>()
-                            }
-
-                            if (list.isEmpty()) {
-                                // Show simple toast
-                                android.widget.Toast.makeText(context, context.getString(R.string.no_notifications_to_export), android.widget.Toast.LENGTH_SHORT).show()
-                                return@launch
-                            }
-
-                            try {
-                                val file = id.onyet.app.notifylog.util.ExportUtils.writeNotificationsToCsv(context, list)
-                                val uri = androidx.core.content.FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
-
-                                val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
-                                    type = "text/csv"
-                                    putExtra(android.content.Intent.EXTRA_STREAM, uri)
-                                    addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                                }
-                                context.startActivity(android.content.Intent.createChooser(intent, null))
-                                android.widget.Toast.makeText(context, context.getString(R.string.export_successful), android.widget.Toast.LENGTH_SHORT).show()
-                            } catch (e: Exception) {
-                                android.widget.Toast.makeText(context, context.getString(R.string.export_failed), android.widget.Toast.LENGTH_SHORT).show()
-                            }
-                        }
+                        showExportConfirmDialog = true
                     },
                     showDivider = true
                 )
@@ -513,6 +502,74 @@ fun SettingsScreen(
                     Text(stringResource(R.string.cancel))
                 }
             }
+        )
+    }
+
+    // Export confirmation dialog
+    if (showExportConfirmDialog) {
+        AlertDialog(
+            onDismissRequest = { showExportConfirmDialog = false },
+            title = { Text(stringResource(R.string.export_notifications)) },
+            text = { Text(stringResource(R.string.export_confirm_message, notificationCount)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showExportConfirmDialog = false
+                    if (isExporting) return@TextButton
+                    scope.launch {
+                        isExporting = true
+                        try {
+                            val list = try { viewModel.getAllNotifications() } catch (e: Exception) { emptyList<id.onyet.app.notifylog.data.local.NotificationLog>() }
+                            if (list.isEmpty()) {
+                                android.widget.Toast.makeText(context, context.getString(R.string.no_notifications_to_export), android.widget.Toast.LENGTH_SHORT).show()
+                                isExporting = false
+                                return@launch
+                            }
+
+                            val file = id.onyet.app.notifylog.util.ExportUtils.writeNotificationsToCsv(context, list)
+                            val uri = androidx.core.content.FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+
+                            val intent = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                                type = "text/csv"
+                                putExtra(android.content.Intent.EXTRA_STREAM, uri)
+                                addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            }
+                            context.startActivity(android.content.Intent.createChooser(intent, null))
+                            android.widget.Toast.makeText(context, context.getString(R.string.export_successful), android.widget.Toast.LENGTH_SHORT).show()
+                        } catch (e: Exception) {
+                            Log.e("SettingsScreen", "Export failed", e)
+                            android.widget.Toast.makeText(context, context.getString(R.string.export_failed) + ": " + (e.localizedMessage ?: ""), android.widget.Toast.LENGTH_LONG).show()
+                        } finally {
+                            isExporting = false
+                        }
+                    }
+                }) {
+                    Text(stringResource(R.string.export_confirm_yes), color = Primary)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showExportConfirmDialog = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
+    }
+
+    // Export progress dialog
+    if (isExporting) {
+        AlertDialog(
+            onDismissRequest = { /* non-dismissible while exporting */ },
+            title = { Text(stringResource(R.string.export_in_progress)) },
+            text = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    CircularProgressIndicator(color = Primary)
+                    Text(stringResource(R.string.export_in_progress))
+                }
+            },
+            confirmButton = {},
+            dismissButton = {}
         )
     }
 

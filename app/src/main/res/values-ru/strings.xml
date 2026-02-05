@@ -82,8 +82,8 @@
     <string name="update_available_message">Доступна новая версия NotifyLog. Нажмите, чтобы обновить.</string>
     <string name="update_now">Обновить</string>
     <string name="update_channel_name">Обновления</string>
-    <string name="update_channel_description">Уведомления об обновлениях приложения</string>
-    <string name="clear_all">Очистить всё</string>
+    <string name="update_channel_description">Уведомления об обновлениях приложения</string>    <string name="dark_mode">Тёмная тема</string>
+    <string name="dark_mode_summary">Использовать тёмную тему для приложения</string>    <string name="clear_all">Очистить всё</string>
     <string name="notifications_stored">%d уведомлений сохранено</string>
     <string name="privacy_first_history">История уведомлений с приоритетом конфиденциальности</string>
     <string name="close">Закрыть</string>

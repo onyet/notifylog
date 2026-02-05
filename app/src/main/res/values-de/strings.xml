@@ -83,6 +83,8 @@
     <string name="update_now">Aktualisieren</string>
     <string name="update_channel_name">Updates</string>
     <string name="update_channel_description">Benachrichtigungen über App-Aktualisierungen</string>
+    <string name="dark_mode">Dunkler Modus</string>
+    <string name="dark_mode_summary">Verwende das dunkle Design für die App</string>
     <string name="clear_all">Alles löschen</string>
     <string name="notifications_stored">%d Benachrichtigungen gespeichert</string>
     <string name="privacy_first_history">Datenschutzorientierter Benachrichtigungsverlauf</string>

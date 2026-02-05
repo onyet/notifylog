@@ -84,6 +84,11 @@
     <string name="update_now">Perbarui</string>
     <string name="update_channel_name">Pembaruan</string>
     <string name="update_channel_description">Notifikasi tentang pembaruan aplikasi</string>
+    <string name="dark_mode">Mode Gelap</string>
+    <string name="dark_mode_summary">Gunakan tema gelap untuk aplikasi</string>
+    <string name="export_confirm_message">Ekspor %d notifikasi ke CSV dan bagikan sebagai file?</string>
+    <string name="export_confirm_yes">Ekspor</string>
+    <string name="export_in_progress">Sedang mengekspor...</string>
     <string name="clear_all">Hapus Semua</string>
     <string name="notifications_stored">%d notifikasi tersimpan</string>
     <string name="privacy_first_history">Riwayat notifikasi yang mengutamakan privasi</string>

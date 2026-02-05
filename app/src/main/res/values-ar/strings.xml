@@ -83,6 +83,8 @@
     <string name="update_now">تحديث</string>
     <string name="update_channel_name">التحديثات</string>
     <string name="update_channel_description">إشعارات حول تحديثات التطبيق</string>
+    <string name="dark_mode">الوضع الداكن</string>
+    <string name="dark_mode_summary">استخدم السمة الداكنة للتطبيق</string>
     <string name="clear_all">مسح الكل</string>
     <string name="notifications_stored">%d إشعارات مخزنة</string>
     <string name="privacy_first_history">سجل الإشعارات مع الخصوصية أولاً</string>
