@@ -85,6 +85,12 @@
     <string name="update_channel_description">有关应用更新的通知</string>
     <string name="dark_mode">深色模式</string>
     <string name="dark_mode_summary">为应用使用深色主题</string>
+    <string name="export_confirm_message">将 %d 条通知导出为 CSV 并分享该文件？</string>
+    <string name="export_confirm_yes">导出</string>
+    <string name="export_in_progress">正在导出...</string>
+    <string name="export_successful">导出成功</string>
+    <string name="export_failed">导出失败</string>
+    <string name="no_notifications_to_export">没有可导出的通知</string>
     <string name="clear_all">全部清除</string>
     <string name="notifications_stored">已存储 %d 条通知</string>
     <string name="privacy_first_history">隐私优先的通知历史</string>

@@ -89,6 +89,9 @@
     <string name="export_confirm_message">Ekspor %d notifikasi ke CSV dan bagikan sebagai file?</string>
     <string name="export_confirm_yes">Ekspor</string>
     <string name="export_in_progress">Sedang mengekspor...</string>
+    <string name="export_successful">Ekspor berhasil</string>
+    <string name="export_failed">Ekspor gagal</string>
+    <string name="no_notifications_to_export">Tidak ada notifikasi untuk diekspor</string>
     <string name="clear_all">Hapus Semua</string>
     <string name="notifications_stored">%d notifikasi tersimpan</string>
     <string name="privacy_first_history">Riwayat notifikasi yang mengutamakan privasi</string>
