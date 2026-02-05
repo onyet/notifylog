@@ -166,7 +166,12 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         // Register install listener for flexible updates
-        appUpdateManager.registerListener(installStateListener)
+        // Guard against SecurityException on some platforms / older Play Core libs
+        try {
+            appUpdateManager.registerListener(installStateListener)
+        } catch (e: SecurityException) {
+            // ignore - avoid crashing app if system disallows registering the listener
+        }
         // If activity was started with update intent, try to start update
         checkAndStartUpdateFromIntent(intent)
     }
