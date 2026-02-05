@@ -92,6 +92,8 @@
     <string name="export_failed">Export fehlgeschlagen</string>
     <string name="no_notifications_to_export">Keine Benachrichtigungen zum Exportieren</string>
     <string name="saved_to_downloads">In Downloads gespeichert: %s</string>
+    <string name="open_downloads">Downloads öffnen</string>
+    <string name="opened_downloads">Downloads geöffnet</string>
     <string name="clear_all">Alles löschen</string>
     <string name="notifications_stored">%d Benachrichtigungen gespeichert</string>
     <string name="privacy_first_history">Datenschutzorientierter Benachrichtigungsverlauf</string>

@@ -90,6 +90,8 @@
     <string name="export_confirm_yes">Ekspor</string>
     <string name="export_in_progress">Sedang mengekspor...</string>
     <string name="saved_to_downloads">Tersimpan di Downloads: %s</string>
+    <string name="open_downloads">Buka Downloads</string>
+    <string name="opened_downloads">Membuka Downloads</string>
     <string name="export_successful">Ekspor berhasil</string>
     <string name="export_failed">Ekspor gagal</string>
     <string name="no_notifications_to_export">Tidak ada notifikasi untuk diekspor</string>

@@ -92,6 +92,8 @@
     <string name="export_failed">Ошибка экспорта</string>
     <string name="no_notifications_to_export">Нет уведомлений для экспорта</string>
     <string name="saved_to_downloads">Сохранено в загрузках: %s</string>
+    <string name="open_downloads">Открыть загрузки</string>
+    <string name="opened_downloads">Открыт каталог загрузок</string>
     <string name="clear_all">Очистить всё</string>
     <string name="notifications_stored">%d уведомлений сохранено</string>
     <string name="privacy_first_history">История уведомлений с приоритетом конфиденциальности</string>

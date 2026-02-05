@@ -41,6 +41,7 @@ import java.util.Date
 import java.util.Locale
 import java.io.File
 import java.io.FileOutputStream
+import android.app.DownloadManager
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -138,7 +139,11 @@ fun SettingsScreen(
 
     val languageSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    // Snackbar host for actionable toasts (e.g., Open Downloads)
+    val snackbarHostState = remember { androidx.compose.material3.SnackbarHostState() }
+
     Scaffold(
+        snackbarHost = { androidx.compose.material3.SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.settings), fontWeight = FontWeight.Bold) },
@@ -587,7 +592,28 @@ fun SettingsScreen(
                                     } ?: throw java.io.IOException("Failed to open stream for uri")
 
                                     shareUri = uri
-                                    android.widget.Toast.makeText(context, context.getString(R.string.saved_to_downloads, filename), android.widget.Toast.LENGTH_LONG).show()
+                                    // Inform user and offer "Open Downloads" action via snackbar
+                                    scope.launch {
+                                        val msg = context.getString(R.string.saved_to_downloads, filename)
+                                        val result = snackbarHostState.showSnackbar(
+                                            message = msg,
+                                            actionLabel = context.getString(R.string.open_downloads)
+                                        )
+                                        if (result == androidx.compose.material3.SnackbarResult.ActionPerformed) {
+                                            try {
+                                                val dmIntent = android.content.Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
+                                                val activity = context as? androidx.activity.ComponentActivity
+                                                if (activity != null) {
+                                                    activity.startActivity(dmIntent)
+                                                } else {
+                                                    dmIntent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                    context.startActivity(dmIntent)
+                                                }
+                                            } catch (e: Exception) {
+                                                Log.e("SettingsScreen", "Failed to open Downloads view", e)
+                                            }
+                                        }
+                                    }
                                 } else {
                                     // Pre-Q: try writing to public Downloads folder (may require permission)
                                     val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -599,7 +625,28 @@ fun SettingsScreen(
                                     }
                                     // Use FileProvider for sharing the file
                                     shareUri = androidx.core.content.FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
-                                    android.widget.Toast.makeText(context, context.getString(R.string.saved_to_downloads, file.absolutePath), android.widget.Toast.LENGTH_LONG).show()
+                                    // Inform user and offer "Open Downloads" action via snackbar
+                                    scope.launch {
+                                        val msg = context.getString(R.string.saved_to_downloads, file.absolutePath)
+                                        val result = snackbarHostState.showSnackbar(
+                                            message = msg,
+                                            actionLabel = context.getString(R.string.open_downloads)
+                                        )
+                                        if (result == androidx.compose.material3.SnackbarResult.ActionPerformed) {
+                                            try {
+                                                val dmIntent = android.content.Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
+                                                val activity = context as? androidx.activity.ComponentActivity
+                                                if (activity != null) {
+                                                    activity.startActivity(dmIntent)
+                                                } else {
+                                                    dmIntent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+                                                    context.startActivity(dmIntent)
+                                                }
+                                            } catch (e: Exception) {
+                                                Log.e("SettingsScreen", "Failed to open Downloads view", e)
+                                            }
+                                        }
+                                    }
                                 }
 
                                 // Now open share chooser if we have URI
@@ -621,6 +668,8 @@ fun SettingsScreen(
                                     } catch (e: Exception) {
                                         Log.e("SettingsScreen", "Failed to launch chooser", e)
                                     }
+
+                                    // Opening Downloads is now handled via the snackbar action ("Open Downloads")
                                 }
                             }
 

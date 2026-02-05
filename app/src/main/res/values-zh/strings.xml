@@ -92,6 +92,8 @@
     <string name="export_failed">导出失败</string>
     <string name="no_notifications_to_export">没有可导出的通知</string>
     <string name="saved_to_downloads">已保存到下载: %s</string>
+    <string name="open_downloads">打开下载</string>
+    <string name="opened_downloads">已打开下载</string>
     <string name="clear_all">全部清除</string>
     <string name="notifications_stored">已存储 %d 条通知</string>
     <string name="privacy_first_history">隐私优先的通知历史</string>
