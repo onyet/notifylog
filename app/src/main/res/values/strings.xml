@@ -69,7 +69,7 @@
     <string name="about">About</string>
     <string name="privacy_policy_terms">Privacy Policy &amp; Terms of Service</string>
     <string name="developer">Developer</string>
-    <string name="developer_description">Aplikasi ini dibuat oleh seorang developer yang sering merasa terganggu karena pesan WhatsApp orang dihapus sebelum sempat dibaca.</string>
+    <string name="developer_description">This app was created by a developer who is often annoyed when WhatsApp messages are deleted before he has a chance to read them.</string>
     <string name="app_version">App Version</string>
     <string name="notifylog_privacy_core">NOTIFYLOG PRIVACY CORE</string>
     <string name="open_source_project">This is an open source project</string>
@@ -107,7 +107,7 @@
     <!-- Splash Screen -->
     <string name="tagline">Your notification history,\nstored locally.</string>
     <string name="privacy_secure">PRIVACY FOCUSED • SECURE</string>
-    <string name="version_stored">Version 1.0.0 • Stored on device</string>
+    <string name="version_stored">Version %s • Stored on device</string>
 
     <!-- Onboarding Screen -->
     <string name="setup">Setup</string>

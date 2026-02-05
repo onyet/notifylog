@@ -76,6 +76,7 @@ lint/tmp/
 
 # Kotlin
 *.kotlin_module
+.kotlin/
 
 # Mac OS
 .DS_Store

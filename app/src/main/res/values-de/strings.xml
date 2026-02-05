@@ -103,7 +103,7 @@
     <!-- Splash Screen -->
     <string name="tagline">Ihr Benachrichtigungsverlauf,\nlokal gespeichert.</string>
     <string name="privacy_secure">DATENSCHUTZ • SICHER</string>
-    <string name="version_stored">Version 1.0.0 • Auf Gerät gespeichert</string>
+    <string name="version_stored">Version %s • Auf Gerät gespeichert</string>
 
     <!-- Onboarding Screen -->
     <string name="setup">Einrichtung</string>

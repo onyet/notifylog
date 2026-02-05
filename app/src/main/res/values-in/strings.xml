@@ -72,6 +72,7 @@
     <string name="developer">Pengembang</string>
     <string name="developer_description">Aplikasi ini dibuat oleh seorang developer yang sering merasa terganggu karena pesan WhatsApp orang dihapus sebelum sempat dibaca.</string>
     <string name="app_version">Versi Aplikasi</string>
+    <string name="version_stored">Versi %s • Tersimpan di perangkat</string>
     <string name="notifylog_privacy_core">INTI PRIVASI NOTIFYLOG</string>
     <string name="open_source_project">Ini adalah proyek open source</string>
     <string name="github_url">github.com/onyet/notifylog</string>
@@ -103,7 +104,7 @@
     <!-- Splash Screen -->
     <string name="tagline">Riwayat notifikasi Anda,\ntersimpan secara lokal.</string>
     <string name="privacy_secure">FOKUS PRIVASI • AMAN</string>
-    <string name="version_stored">Versi 1.0.0 • Tersimpan di perangkat</string>
+    <!-- replaced with parameterized version_stored above -->
 
     <!-- Onboarding Screen -->
     <string name="setup">Pengaturan</string>

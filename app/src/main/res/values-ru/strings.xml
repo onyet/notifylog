@@ -103,7 +103,7 @@
     <!-- Splash Screen -->
     <string name="tagline">Ваша история уведомлений,\nхранится локально.</string>
     <string name="privacy_secure">КОНФИДЕНЦИАЛЬНОСТЬ • БЕЗОПАСНОСТЬ</string>
-    <string name="version_stored">Версия 1.0.0 • Хранится на устройстве</string>
+    <string name="version_stored">Версия %s • Хранится на устройстве</string>
 
     <!-- Onboarding Screen -->
     <string name="setup">Настройка</string>

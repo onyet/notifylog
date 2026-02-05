@@ -425,8 +425,14 @@ fun SettingsScreen(
                             fontWeight = FontWeight.Medium
                         )
                     }
+                    val versionName = try { context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "" } catch (_: Exception) { "" }
+                    val versionCode = try {
+                        val pi = context.packageManager.getPackageInfo(context.packageName, 0)
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) pi.longVersionCode.toString() else pi.versionCode.toString()
+                    } catch (_: Exception) { "" }
+
                     Text(
-                        text = "v1.0.0 (Build 1)",
+                        text = "v$versionName (Build $versionCode)",
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 14.sp
                     )

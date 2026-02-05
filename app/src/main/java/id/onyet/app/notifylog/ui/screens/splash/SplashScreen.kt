@@ -177,8 +177,13 @@ fun SplashScreen(
             
             Spacer(modifier = Modifier.height(16.dp))
             
+            // Show dynamic version in the badge
+            val versionName = try {
+                context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: ""
+            } catch (_: Exception) { "" }
+
             Text(
-                text = stringResource(R.string.version_stored),
+                text = stringResource(R.string.version_stored, versionName),
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
             )

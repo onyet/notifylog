@@ -103,7 +103,7 @@
     <!-- Splash Screen -->
     <string name="tagline">您的通知历史，\n本地存储。</string>
     <string name="privacy_secure">注重隐私 • 安全</string>
-    <string name="version_stored">版本 1.0.0 • 存储在设备上</string>
+    <string name="version_stored">版本 %s • 存储在设备上</string>
 
     <!-- Onboarding Screen -->
     <string name="setup">设置</string>

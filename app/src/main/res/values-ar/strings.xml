@@ -103,7 +103,7 @@
     <!-- Splash Screen -->
     <string name="tagline">سجل إشعاراتك،\nمخزن محليًا.</string>
     <string name="privacy_secure">يركز على الخصوصية • آمن</string>
-    <string name="version_stored">الإصدار 1.0.0 • مخزن على الجهاز</string>
+    <string name="version_stored">الإصدار %s • مخزن على الجهاز</string>
 
     <!-- Onboarding Screen -->
     <string name="setup">الإعداد</string>
