@@ -122,20 +122,25 @@ fun SettingsScreen(
     // performExport is defined below and used both by the confirm button and permission callback
     lateinit var performExportAction: suspend () -> Unit
 
-    val writePermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        if (granted) {
-            if (pendingExportAction) {
-                // proceed with export
-                scope.launch { performExportAction() }
+    // The ActivityResult registry may not be available in some hosting contexts (e.g., tests).
+    // Check LocalActivityResultRegistryOwner.current and only create the launcher when available.
+    val activityResultOwner = androidx.activity.compose.LocalActivityResultRegistryOwner.current
+    val writePermissionLauncher = if (activityResultOwner != null) {
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission()
+        ) { granted ->
+            if (granted) {
+                if (pendingExportAction) {
+                    // proceed with export
+                    scope.launch { performExportAction() }
+                    pendingExportAction = false
+                }
+            } else {
+                android.widget.Toast.makeText(context, context.getString(R.string.export_failed) + ": permission required", android.widget.Toast.LENGTH_LONG).show()
                 pendingExportAction = false
             }
-        } else {
-            android.widget.Toast.makeText(context, context.getString(R.string.export_failed) + ": permission required", android.widget.Toast.LENGTH_LONG).show()
-            pendingExportAction = false
         }
-    }
+    } else null
 
     val languageSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -558,7 +563,13 @@ fun SettingsScreen(
                         val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == android.content.pm.PackageManager.PERMISSION_GRANTED
                         if (!granted) {
                             pendingExportAction = true
-                            writePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            if (writePermissionLauncher != null) {
+                                writePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            } else {
+                                // Permission request mechanism not available in this context; inform user
+                                android.widget.Toast.makeText(context, context.getString(R.string.export_failed) + ": permission request unavailable", android.widget.Toast.LENGTH_LONG).show()
+                                pendingExportAction = false
+                            }
                             return@TextButton
                         }
                     }
