@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.ktx.requestAppUpdateInfo
 
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -19,15 +20,7 @@ class UpdateCheckWorker(
             val appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
 
             // Await appUpdateInfo without using Tasks.await (use coroutine-friendly suspendCancellableCoroutine)
-            val appUpdateInfo = kotlinx.coroutines.suspendCancellableCoroutine<com.google.android.play.core.appupdate.AppUpdateInfo> { cont ->
-                val task = appUpdateManager.appUpdateInfo
-                task.addOnSuccessListener { info ->
-                    if (!cont.isCancelled) cont.resume(info) {}
-                }
-                task.addOnFailureListener { e ->
-                    if (!cont.isCancelled) cont.cancel(e)
-                }
-            }
+            val appUpdateInfo = appUpdateManager.requestAppUpdateInfo()
 
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
                 appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)

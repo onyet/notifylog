@@ -33,6 +33,9 @@ import id.onyet.app.notifylog.ui.theme.NotifyLogTheme
 import id.onyet.app.notifylog.ui.theme.Primary
 import id.onyet.app.notifylog.util.LocaleHelper
 import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 
 
 val LocalAppLocale = staticCompositionLocalOf { "en" }
@@ -58,15 +61,19 @@ class MainActivity : ComponentActivity() {
     }
 
     private lateinit var appUpdateManager: com.google.android.play.core.appupdate.AppUpdateManager
+
+    // ActivityResult launcher for update flow (uses StartIntentSenderForResult)
+    private val updateLauncher = registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+        if (result.resultCode != RESULT_OK) {
+            // User canceled or update failed
+        }
+    }
+
     private val installStateListener = com.google.android.play.core.install.InstallStateUpdatedListener { state ->
         if (state.installStatus() == com.google.android.play.core.install.model.InstallStatus.DOWNLOADED) {
             // For flexible updates, prompt user to complete; here we complete immediately
             appUpdateManager.completeUpdate()
         }
-    }
-
-    companion object {
-        private const val REQUEST_CODE_UPDATE = 2001
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -191,14 +198,7 @@ class MainActivity : ComponentActivity() {
         checkAndStartUpdateFromIntent(intent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_UPDATE) {
-            if (resultCode != RESULT_OK) {
-                // User canceled or update failed; no-op or show message
-            }
-        }
-    }
+
 
     private fun checkAndStartUpdateFromIntent(intent: Intent?) {
         val shouldStart = intent?.getBooleanExtra(id.onyet.app.notifylog.update.UpdateNotificationHelper.EXTRA_START_UPDATE, false) ?: false
@@ -214,7 +214,8 @@ class MainActivity : ComponentActivity() {
                 appUpdateInfo.isUpdateTypeAllowed(com.google.android.play.core.install.model.AppUpdateType.FLEXIBLE)
             ) {
                 try {
-                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, com.google.android.play.core.install.model.AppUpdateType.FLEXIBLE, this, REQUEST_CODE_UPDATE)
+                    val options = com.google.android.play.core.appupdate.AppUpdateOptions.newBuilder(com.google.android.play.core.install.model.AppUpdateType.FLEXIBLE).build()
+                    appUpdateManager.startUpdateFlowForResult(appUpdateInfo, updateLauncher, options)
                 } catch (e: Exception) {
                     openPlayStore()
                 }

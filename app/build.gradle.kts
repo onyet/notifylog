@@ -22,6 +22,25 @@ android {
         }
     }
 
+    // Signing configuration for release AAB. Values are read from Gradle project properties
+    // or environment variables to avoid committing secrets to the repository.
+    signingConfigs {
+        create("release") {
+            val keystoreFileProp = project.findProperty("keystoreFile") as String?
+                ?: System.getenv("KEYSTORE_FILE")
+
+            if (keystoreFileProp != null) {
+                storeFile = file(keystoreFileProp)
+                storePassword = (project.findProperty("keystorePassword") as String?)
+                    ?: System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = (project.findProperty("keyAlias") as String?)
+                    ?: System.getenv("KEY_ALIAS")
+                keyPassword = (project.findProperty("keyPassword") as String?)
+                    ?: System.getenv("KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -29,6 +48,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -83,8 +103,10 @@ dependencies {
     // WorkManager (periodic background work)
     implementation("androidx.work:work-runtime-ktx:2.8.1")
 
-    // Play Core (In-App Updates)
-    implementation("com.google.android.play:core:1.10.3")
+    // Play In-App Update (migrated from Play Core)
+    implementation("com.google.android.play:app-update:2.1.0")
+    // Optional: Kotlin extensions for Play In-App Update
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
     
     // Testing
     testImplementation("junit:junit:4.13.2")
