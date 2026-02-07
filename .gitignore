@@ -42,6 +42,8 @@ captures/
 # Keystore files
 *.jks
 *.keystore
+# Local keystore properties (contains secrets)
+keystore.properties
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
@@ -83,3 +85,4 @@ lint/tmp/
 
 # Blueprint folder
 blueprint/
+release_upload/

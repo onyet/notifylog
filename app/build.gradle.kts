@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -22,21 +25,45 @@ android {
         }
     }
 
-    // Signing configuration for release AAB. Values are read from Gradle project properties
-    // or environment variables to avoid committing secrets to the repository.
+    // Signing configuration for release AAB. Values are read from Gradle project properties,
+    // a local `keystore.properties` file, or environment variables to avoid committing secrets to the repository.
+    val keystorePropertiesFile = rootProject.file("keystore.properties")
+    val keystoreProps = Properties()
+    if (keystorePropertiesFile.exists()) {
+        keystoreProps.load(FileInputStream(keystorePropertiesFile))
+    }
+
     signingConfigs {
         create("release") {
-            val keystoreFileProp = project.findProperty("keystoreFile") as String?
+            val ksFile = (project.findProperty("keystoreFile") as String?)
                 ?: System.getenv("KEYSTORE_FILE")
+                ?: keystoreProps.getProperty("storeFile")
 
-            if (keystoreFileProp != null) {
-                storeFile = file(keystoreFileProp)
+            if (ksFile != null) {
+                // Try file path relative to this module
+                val candidate = file(ksFile)
+                if (candidate.exists()) {
+                    storeFile = candidate
+                } else {
+                    // Fall back to project root relative path
+                    val rootCandidate = rootProject.file(ksFile)
+                    if (rootCandidate.exists()) {
+                        storeFile = rootCandidate
+                    } else {
+                        // Use provided path as-is (will fail validation later with clear message)
+                        storeFile = candidate
+                    }
+                }
+
                 storePassword = (project.findProperty("keystorePassword") as String?)
                     ?: System.getenv("KEYSTORE_PASSWORD")
+                    ?: keystoreProps.getProperty("storePassword")
                 keyAlias = (project.findProperty("keyAlias") as String?)
                     ?: System.getenv("KEY_ALIAS")
+                    ?: keystoreProps.getProperty("keyAlias")
                 keyPassword = (project.findProperty("keyPassword") as String?)
                     ?: System.getenv("KEY_PASSWORD")
+                    ?: keystoreProps.getProperty("keyPassword")
             }
         }
     }
