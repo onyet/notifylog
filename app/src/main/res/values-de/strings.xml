@@ -85,6 +85,7 @@
     <string name="update_channel_description">Benachrichtigungen über App-Aktualisierungen</string>
     <string name="dark_mode">Dunkler Modus</string>
     <string name="dark_mode_summary">Verwende das dunkle Design für die App</string>
+    <string name="export_notifications">Benachrichtigungen exportieren</string>
     <string name="export_confirm_message">Exportiere %d Benachrichtigungen als CSV und teile die Datei?</string>
     <string name="export_confirm_yes">Exportieren</string>
     <string name="export_in_progress">Wird exportiert...</string>

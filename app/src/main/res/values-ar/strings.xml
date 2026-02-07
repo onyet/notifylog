@@ -85,6 +85,7 @@
     <string name="update_channel_description">إشعارات حول تحديثات التطبيق</string>
     <string name="dark_mode">الوضع الداكن</string>
     <string name="dark_mode_summary">استخدم السمة الداكنة للتطبيق</string>
+    <string name="export_notifications">تصدير الإشعارات</string>
     <string name="export_confirm_message">تصدير %d إشعارًا إلى CSV ومشاركتها كملف؟</string>
     <string name="export_confirm_yes">تصدير</string>
     <string name="export_in_progress">جارٍ التصدير...</string>

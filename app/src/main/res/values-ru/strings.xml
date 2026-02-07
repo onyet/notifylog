@@ -85,6 +85,7 @@
     <string name="update_channel_description">Уведомления об обновлениях приложения</string>
     <string name="dark_mode">Тёмная тема</string>
     <string name="dark_mode_summary">Использовать тёмную тему для приложения</string>
+    <string name="export_notifications">Экспорт уведомлений</string>
     <string name="export_confirm_message">Экспортировать %d уведомлений в CSV и поделиться файлом?</string>
     <string name="export_confirm_yes">Экспорт</string>
     <string name="export_in_progress">Выполняется экспорт...</string>
