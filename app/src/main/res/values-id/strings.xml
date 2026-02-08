@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NotifyLog</string>
+    <string name="notification_listener_service_description">NotifyLog memerlukan akses untuk membaca notifikasi Anda dan menyimpannya secara lokal untuk referensi Anda.</string>
+
+    <!-- Common -->
+    <string name="back">Kembali</string>
+    <string name="cancel">Batal</string>
+    <string name="clear">Hapus</string>
+    <string name="apply">Terapkan</string>
+    <string name="settings">Pengaturan</string>
+    <string name="search">Cari</string>
+    <string name="all">Semua</string>
+    <string name="exit">Keluar</string>
+    <string name="exit_app">Keluar Aplikasi?</string>
+    <string name="exit_app_message">Apakah Anda yakin ingin keluar? NotifyLog akan terus berjalan di latar belakang untuk menangkap notifikasi.</string>
+    <string name="stay">Tetap</string>
+
+    <!-- Home Screen -->
+    <string name="notification_history">Riwayat\nNotifikasi</string>
+    <string name="notification">Notifikasi</string>
+    <string name="history">Riwayat</string>
+    <string name="privacy_focused_logging">Pencatatan yang berfokus pada privasi aktif</string>
+    <string name="all_logs">Semua Log</string>
+    <string name="local_encryption_active">Enkripsi lokal aktif</string>
+    <string name="no_notifications_yet">Belum ada notifikasi</string>
+    <string name="notifications_will_appear">Notifikasi baru akan muncul di sini</string>
+    <string name="search_and_filter">Cari &amp; Filter</string>
+    <string name="filter_active">Filter aktif</string>
+    <string name="clear_filter_hint">Ketuk untuk menghapus filter</string>
+    <string name="no_filter_results">Tidak ada hasil ditemukan</string>
+    <string name="try_different_filter">Coba ubah kriteria filter Anda</string>
+
+    <!-- Filter Bottom Sheet -->
+    <string name="filter_and_search">Filter &amp; Cari</string>
+    <string name="clear_filter">Hapus Filter</string>
+    <string name="search_notifications">Cari notifikasi</string>
+    <string name="filter_by_app">Filter berdasarkan Aplikasi</string>
+    <string name="date_range">Rentang Tanggal</string>
+    <string name="start_date">Tanggal mulai</string>
+    <string name="end_date">Tanggal akhir</string>
+    <string name="apply_filter">Terapkan Filter</string>
+
+    <!-- Notification Detail Screen -->
+    <string name="notification_details">Detail Notifikasi</string>
+    <string name="no_title">Tidak ada judul</string>
+    <string name="no_content">Tidak ada konten</string>
+    <string name="received">DITERIMA</string>
+    <string name="app_info">INFO APLIKASI</string>
+    <string name="package_name">Nama Paket</string>
+    <string name="delete_notification">Hapus Notifikasi</string>
+    <string name="delete">Hapus</string>
+    <string name="delete_confirmation">Apakah Anda yakin ingin menghapus notifikasi ini?</string>
+    <string name="delete_confirmation_title">Hapus Notifikasi?</string>
+    <string name="delete_multiple_confirmation_message">Apakah Anda yakin ingin menghapus %d notifikasi yang dipilih?</string>
+    <string name="selected">dipilih</string>
+    <string name="select_all">Pilih semua</string>
+
+    <!-- Settings Screen -->
+    <string name="general">Umum</string>
+    <string name="enable_notification_logging">Aktifkan Pencatatan Notifikasi</string>
+    <string name="logs_stored_securely">Log disimpan dengan aman di perangkat ini</string>
+    <string name="ignore_system_apps">Abaikan Aplikasi Sistem</string>
+    <string name="storage_and_data">Penyimpanan &amp; Data</string>
+    <string name="auto_delete_logs">Hapus log otomatis</string>
+    <string name="after_days">Setelah %d hari</string>
+    <string name="one_day">1 HARI</string>
+    <string name="ninety_days">90 HARI</string>
+    <string name="clear_notification_history">Hapus Riwayat Notifikasi</string>
+    <string name="about">Tentang</string>
+    <string name="privacy_policy_terms">Kebijakan Privasi &amp; Ketentuan Layanan</string>
+    <string name="developer">Pengembang</string>
+    <string name="developer_description">Aplikasi ini dibuat oleh seorang developer yang sering merasa terganggu karena pesan WhatsApp orang dihapus sebelum sempat dibaca.</string>
+    <string name="app_version">Versi Aplikasi</string>
+    <string name="version_stored">Versi %s • Tersimpan di perangkat</string>
+    <string name="notifylog_privacy_core">INTI PRIVASI NOTIFYLOG</string>
+    <string name="open_source_project">Ini adalah proyek open source</string>
+    <string name="github_url">github.com/onyet/notifylog</string>
+    <string name="clear_all_history">Hapus Semua Riwayat?</string>
+    <string name="clear_all_history_message">Ini akan menghapus semua %d notifikasi yang tersimpan secara permanen. Tindakan ini tidak dapat dibatalkan.</string>
+    <string name="loading_settings">Memuat pengaturan...</string>
+    <string name="update_available_title">Pembaruan tersedia</string>
+    <string name="update_available_message">Versi terbaru NotifyLog tersedia. Ketuk untuk memperbarui.</string>
+    <string name="update_now">Perbarui</string>
+    <string name="update_channel_name">Pembaruan</string>
+    <string name="update_channel_description">Notifikasi tentang pembaruan aplikasi</string>
+    <string name="dark_mode">Mode Gelap</string>
+    <string name="dark_mode_summary">Gunakan tema gelap untuk aplikasi</string>
+    <string name="export_notifications">Ekspor Notifikasi</string>
+    <string name="export_confirm_message">Ekspor %d notifikasi ke CSV dan bagikan sebagai file?</string>
+    <string name="export_confirm_yes">Ekspor</string>
+    <string name="export_in_progress">Sedang mengekspor...</string>
+    <string name="saved_to_downloads">Tersimpan di Downloads: %s</string>
+    <string name="open_downloads">Buka Downloads</string>
+    <string name="opened_downloads">Membuka Downloads</string>
+    <string name="export_successful">Ekspor berhasil</string>
+    <string name="export_failed">Ekspor gagal</string>
+    <string name="no_notifications_to_export">Tidak ada notifikasi untuk diekspor</string>
+    <string name="clear_all">Hapus Semua</string>
+    <string name="notifications_stored">%d notifikasi tersimpan</string>
+    <string name="privacy_first_history">Riwayat notifikasi yang mengutamakan privasi</string>
+    <string name="close">Tutup</string>
+    <string name="open">Buka</string>
+    <string name="open_privacy_policy_message">Apakah Anda ingin membuka halaman Kebijakan Privasi &amp; Ketentuan Layanan di browser?</string>
+
+    <!-- Language Settings -->
+    <string name="language">Bahasa</string>
+    <string name="select_language">Pilih Bahasa</string>
+    <string name="language_english">English</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="language_chinese">中文</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_german">Deutsch</string>
+
+    <!-- Splash Screen -->
+    <string name="tagline">Riwayat notifikasi Anda,\ntersimpan secara lokal.</string>
+    <string name="privacy_secure">FOKUS PRIVASI • AMAN</string>
+
+    <!-- Onboarding Screen -->
+    <string name="setup">Pengaturan</string>
+    <string name="permission_not_granted">IZIN TIDAK DIBERIKAN</string>
+    <string name="enable_notification_access">Aktifkan Akses Notifikasi</string>
+    <string name="onboarding_description">Untuk mencatat dan mencari riwayat Anda, NotifyLog memerlukan izin untuk membaca notifikasi masuk.\n\nData Anda tidak pernah meninggalkan perangkat—arsitektur offline-first kami memastikan riwayat Anda 100% pribadi.</string>
+    <string name="why_needed">Mengapa ini diperlukan?</string>
+    <string name="why_is_this_needed">Mengapa ini diperlukan?</string>
+    <string name="hundred_percent_private">100% pribadi</string>
+    <string name="to_log_and_search_your_history">Untuk mencatat dan mencari riwayat Anda,</string>
+    <string name="needs_permission_to_read_incoming_alerts"> memerlukan izin untuk membaca notifikasi masuk.\n\nData Anda tidak pernah meninggalkan perangkat—arsitektur offline-first kami memastikan riwayat Anda 100% pribadi.</string>
+    <string name="why_needed_explanation">NotifyLog memerlukan izin akses notifikasi untuk menangkap dan menyimpan notifikasi Anda secara lokal.</string>
+    <string name="why_needed_point1_title">Menangkap Notifikasi</string>
+    <string name="why_needed_point1_desc">Membaca notifikasi masuk dari semua aplikasi untuk disimpan sebagai referensi nanti.</string>
+    <string name="why_needed_point2_title">100% Penyimpanan Lokal</string>
+    <string name="why_needed_point2_desc">Semua data hanya disimpan di perangkat Anda. Tidak ada yang dikirim ke server manapun.</string>
+    <string name="why_needed_point3_title">Privasi Anda, Prioritas Kami</string>
+    <string name="why_needed_point3_desc">Kami tidak dapat membaca data Anda. Hanya Anda yang memiliki akses ke riwayat notifikasi Anda.</string>
+</resources>

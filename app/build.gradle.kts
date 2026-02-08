@@ -68,6 +68,16 @@ android {
         }
     }
 
+    // Ensure all language resources are included in release bundles so in-app language switching
+    // works even when Google Play language splits are enabled. Otherwise languages not matched
+    // to the device locale may not be delivered with the app and the app will fall back to
+    // the default locale (usually English).
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true

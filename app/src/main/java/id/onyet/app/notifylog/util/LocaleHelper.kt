@@ -10,7 +10,8 @@ object LocaleHelper {
 
     enum class Language(val code: String, val displayName: String, val flag: String, val isRtl: Boolean = false) {
         ENGLISH("en", "English", "🇺🇸"),
-        INDONESIAN("in", "Bahasa Indonesia", "🇮🇩"),
+        // Use the canonical ISO code "id" for Indonesian, but accept legacy "in" values
+        INDONESIAN("id", "Bahasa Indonesia", "🇮🇩"),
         CHINESE("zh", "中文", "🇨🇳"),
         ARABIC("ar", "العربية", "🇸🇦", isRtl = true),
         RUSSIAN("ru", "Русский", "🇷🇺"),
@@ -18,7 +19,12 @@ object LocaleHelper {
 
         companion object {
             fun fromCode(code: String): Language {
-                return entries.find { it.code == code } ?: ENGLISH
+                // Accept both "id" (canonical) and legacy "in" codes for backward compatibility
+                val normalized = when (code.lowercase()) {
+                    "in" -> "id"
+                    else -> code.lowercase()
+                }
+                return entries.find { it.code == normalized } ?: ENGLISH
             }
         }
     }
