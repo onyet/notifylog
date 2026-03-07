@@ -15,7 +15,7 @@ class NotifyLogApp : Application() {
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     
     val database by lazy { AppDatabase.getInstance(this) }
-    val repository by lazy { NotificationRepository(database.notificationDao()) }
+    val repository by lazy { NotificationRepository(database.notificationDao(), this) }
     val userPreferences by lazy { UserPreferences(this) }
     
     override fun onCreate() {

@@ -8,7 +8,12 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Icon
 import android.os.Build
+import android.os.Bundle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat
@@ -16,6 +21,7 @@ import id.onyet.app.notifylog.MainActivity
 import id.onyet.app.notifylog.NotifyLogApp
 import id.onyet.app.notifylog.R
 import id.onyet.app.notifylog.data.local.NotificationLog
+import id.onyet.app.notifylog.util.NotificationImageManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -132,6 +138,15 @@ class NotificationLogService : NotificationListenerService() {
                     recentNotifications[notificationHash] = currentTime
                 }
                 
+                // Extract and save image preview only if user has enabled it
+                val saveImages = app.userPreferences.saveNotificationImages.first()
+                val imagePath = if (saveImages) {
+                    extractAndSaveNotificationImage(
+                        extras = extras,
+                        filename = "notif_${sbn.postTime}_${sbn.packageName.hashCode()}"
+                    )
+                } else null
+
                 val log = NotificationLog(
                     packageName = sbn.packageName,
                     appName = getAppName(sbn.packageName),
@@ -139,7 +154,8 @@ class NotificationLogService : NotificationListenerService() {
                     content = content,
                     postedTime = sbn.postTime,
                     receivedTime = System.currentTimeMillis(),
-                    isCleared = 0
+                    isCleared = 0,
+                    imagePath = imagePath
                 )
                 
                 app.repository.insert(log)
@@ -185,5 +201,83 @@ class NotificationLogService : NotificationListenerService() {
      */
     private fun generateNotificationHash(packageName: String, title: String?, content: String?): String {
         return "${packageName}_${title.orEmpty()}_${content.orEmpty()}".hashCode().toString()
+    }
+
+    /**
+     * Extracts an image bitmap from notification extras and saves it to internal storage.
+     *
+     * Priority order:
+     *  1. EXTRA_PICTURE       — BigPictureStyle image (e.g. WhatsApp image message)
+     *  2. EXTRA_LARGE_ICON_BIG — large icon in expanded view
+     *  3. EXTRA_LARGE_ICON    — standard large icon (profile picture, etc.)
+     *
+     * Returns the saved file path, or null if no image was found or saving failed.
+     */
+    private fun extractAndSaveNotificationImage(extras: Bundle, filename: String): String? {
+        val bitmap = extractBigPicture(extras)
+            ?: extractLargeIcon(extras, Notification.EXTRA_LARGE_ICON_BIG)
+            ?: extractLargeIcon(extras, Notification.EXTRA_LARGE_ICON)
+            ?: return null
+
+        return NotificationImageManager.saveBitmap(applicationContext, bitmap, filename)
+    }
+
+    /**
+     * Extracts the BigPictureStyle image from EXTRA_PICTURE.
+     * API 31+: stored as [Icon]; older: stored directly as [Bitmap].
+     */
+    @Suppress("DEPRECATION")
+    private fun extractBigPicture(extras: Bundle): Bitmap? {
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                // API 31+: EXTRA_PICTURE is an Icon
+                (extras.getParcelable(Notification.EXTRA_PICTURE) as? Icon)
+                    ?.loadDrawable(applicationContext)?.toBitmapOrNull()
+            } else {
+                // Below API 31: EXTRA_PICTURE is a Bitmap
+                extras.getParcelable(Notification.EXTRA_PICTURE) as? Bitmap
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    /**
+     * Extracts a large icon from the given [extraKey] (EXTRA_LARGE_ICON or EXTRA_LARGE_ICON_BIG).
+     * API 23+: stored as [Icon]; older: stored as [Bitmap].
+     */
+    @Suppress("DEPRECATION")
+    private fun extractLargeIcon(extras: Bundle, extraKey: String): Bitmap? {
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // API 23+: large icon is an Icon
+                (extras.getParcelable(extraKey) as? Icon)
+                    ?.loadDrawable(applicationContext)?.toBitmapOrNull()
+            } else {
+                // Below API 23: large icon is a Bitmap
+                extras.getParcelable(extraKey) as? Bitmap
+            }
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    /**
+     * Converts an [android.graphics.drawable.Drawable] to a [Bitmap].
+     * Returns null if the conversion fails or the drawable has no intrinsic size.
+     */
+    private fun android.graphics.drawable.Drawable.toBitmapOrNull(): Bitmap? {
+        if (this is BitmapDrawable) return this.bitmap
+        val w = intrinsicWidth.takeIf { it > 0 } ?: return null
+        val h = intrinsicHeight.takeIf { it > 0 } ?: return null
+        return try {
+            val bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bmp)
+            setBounds(0, 0, canvas.width, canvas.height)
+            draw(canvas)
+            bmp
+        } catch (e: Exception) {
+            null
+        }
     }
 }

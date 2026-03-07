@@ -1,11 +1,16 @@
 package id.onyet.app.notifylog.data.repository
 
+import android.content.Context
 import id.onyet.app.notifylog.data.local.AppInfo
 import id.onyet.app.notifylog.data.local.NotificationDao
 import id.onyet.app.notifylog.data.local.NotificationLog
+import id.onyet.app.notifylog.util.NotificationImageManager
 import kotlinx.coroutines.flow.Flow
 
-class NotificationRepository(private val notificationDao: NotificationDao) {
+class NotificationRepository(
+    private val notificationDao: NotificationDao,
+    private val context: Context
+) {
     
     val allNotifications: Flow<List<NotificationLog>> = notificationDao.getAll()
     
@@ -78,15 +83,36 @@ class NotificationRepository(private val notificationDao: NotificationDao) {
     }
     
     suspend fun delete(id: Long) {
+        // Clean up image file before removing the record
+        val imagePath = notificationDao.getImagePathById(id)
+        NotificationImageManager.deleteImage(imagePath)
         notificationDao.deleteById(id)
     }
     
     suspend fun deleteAll() {
+        // Remove all saved image files, then clear the table
+        NotificationImageManager.deleteAllImages(context)
         notificationDao.deleteAll()
     }
     
     suspend fun deleteOlderThan(days: Int) {
         val timestamp = System.currentTimeMillis() - (days * 24 * 60 * 60 * 1000L)
+        // Collect image paths of records that will be deleted, then clean up files
+        val imagePaths = notificationDao.getImagePathsOlderThan(timestamp)
+        NotificationImageManager.deleteImages(imagePaths)
         notificationDao.deleteOlderThan(timestamp)
     }
+
+    /**
+     * Deletes all saved image files and nullifies image_path in every log record.
+     * Notification text logs are preserved — only the images are removed.
+     * Use this for "free up storage" without clearing history.
+     */
+    suspend fun clearAllImages() {
+        NotificationImageManager.deleteAllImages(context)
+        notificationDao.clearAllImagePaths()
+    }
+
+    /** Returns total bytes used by saved notification images on disk. */
+    fun getImageStorageBytes(): Long = NotificationImageManager.getTotalStorageBytes(context)
 }

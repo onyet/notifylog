@@ -42,6 +42,7 @@ import java.util.Locale
 import java.io.File
 import java.io.FileOutputStream
 import android.app.DownloadManager
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -105,12 +106,15 @@ fun SettingsScreen(
 
     val isLoggingEnabled by viewModel.isLoggingEnabled.collectAsState()
     val ignoreSystemApps by viewModel.ignoreSystemApps.collectAsState()
+    val saveNotificationImages by viewModel.saveNotificationImages.collectAsState()
+    val imageStorageBytes by viewModel.imageStorageBytes.collectAsState()
     val autoDeleteDays by viewModel.autoDeleteDays.collectAsState()
     val notificationCount by viewModel.notificationCount.collectAsState()
     val languageCode by app.userPreferences.languageCode.collectAsState(initial = "en")
     val isLoaded by viewModel.isLoaded.collectAsState(initial = false)
 
     var showClearDialog by remember { mutableStateOf(false) }
+    var showClearImagesDialog by remember { mutableStateOf(false) }
     var isLanguageSheetVisible by remember { mutableStateOf(false) }
     var showDeveloperDialog by remember { mutableStateOf(false) }
     var showPrivacyConfirmDialog by remember { mutableStateOf(false) }
@@ -266,6 +270,19 @@ fun SettingsScreen(
                     showDivider = true
                 )
 
+                // Save notification image previews
+                SettingsToggleItem(
+                    icon = Icons.Default.Image,
+                    title = "Save image previews",
+                    subtitle = if (imageStorageBytes > 0)
+                        "Capture pictures from notifications like WhatsApp images · ${formatBytes(imageStorageBytes)} used"
+                    else
+                        "Capture pictures from notifications like WhatsApp images",
+                    checked = saveNotificationImages,
+                    onCheckedChange = viewModel::setSaveNotificationImages,
+                    showDivider = true
+                )
+
                 // Dark mode toggle
                 val isDarkMode by viewModel.isDarkMode.collectAsState()
                 SettingsToggleItem(
@@ -397,6 +414,48 @@ fun SettingsScreen(
                     },
                     showDivider = true
                 )
+
+                // Clear saved images only (keep notification logs)
+                if (imageStorageBytes > 0) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .height(1.dp)
+                            .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { showClearImagesDialog = true }
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "Clear saved images",
+                                color = MaterialTheme.colorScheme.error,
+                                fontWeight = FontWeight.Medium
+                            )
+                            Text(
+                                text = "Free ${formatBytes(imageStorageBytes)} · notification logs are kept",
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        Button(
+                            onClick = { showClearImagesDialog = true },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
+                                contentColor = MaterialTheme.colorScheme.error
+                            ),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text("Clear", fontWeight = FontWeight.Bold)
+                        }
+                    }
+                }
             }
             
             Spacer(modifier = Modifier.height(24.dp))
@@ -518,6 +577,33 @@ fun SettingsScreen(
         }
     }
     
+    // Clear images-only confirmation dialog
+    if (showClearImagesDialog) {
+        AlertDialog(
+            onDismissRequest = { showClearImagesDialog = false },
+            title = { Text("Clear saved images") },
+            text = { Text("This will delete all ${formatBytes(imageStorageBytes)} of saved image previews. Notification logs (text) will not be affected.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.clearSavedImages()
+                        showClearImagesDialog = false
+                    },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text("Clear images")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showClearImagesDialog = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
+    }
+
     // Clear history confirmation dialog
     if (showClearDialog) {
         AlertDialog(
@@ -824,4 +910,11 @@ fun SettingsScreen(
     }
   }
 }
-
+/** Formats a byte count into a human-readable string, e.g. "1.2 MB", "840 KB". */
+private fun formatBytes(bytes: Long): String {
+    return when {
+        bytes >= 1_048_576L -> "%.1f MB".format(bytes / 1_048_576.0)
+        bytes >= 1_024L     -> "%.0f KB".format(bytes / 1_024.0)
+        else                -> "$bytes B"
+    }
+}

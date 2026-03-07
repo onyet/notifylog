@@ -22,6 +22,7 @@ class UserPreferences(private val context: Context) {
         private val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
         private val DARK_MODE = booleanPreferencesKey("dark_mode")
         private val LANGUAGE_CODE = stringPreferencesKey("language_code")
+        private val SAVE_NOTIFICATION_IMAGES = booleanPreferencesKey("save_notification_images")
     }
     
     val isLoggingEnabled: Flow<Boolean> = context.dataStore.data.map { preferences ->
@@ -46,6 +47,11 @@ class UserPreferences(private val context: Context) {
     
     val languageCode: Flow<String> = context.dataStore.data.map { preferences ->
         preferences[LANGUAGE_CODE] ?: "en"
+    }
+
+    /** Whether to capture and save image previews from notifications. Default true. */
+    val saveNotificationImages: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[SAVE_NOTIFICATION_IMAGES] ?: true
     }
 
     suspend fun setLoggingEnabled(enabled: Boolean) {
@@ -75,6 +81,12 @@ class UserPreferences(private val context: Context) {
     suspend fun setDarkMode(darkMode: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[DARK_MODE] = darkMode
+        }
+    }
+
+    suspend fun setSaveNotificationImages(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[SAVE_NOTIFICATION_IMAGES] = enabled
         }
     }
 

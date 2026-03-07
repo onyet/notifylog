@@ -5,12 +5,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import id.onyet.app.notifylog.data.preferences.UserPreferences
 import id.onyet.app.notifylog.data.repository.NotificationRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SettingsViewModel(
     private val userPreferences: UserPreferences,
@@ -35,7 +38,33 @@ class SettingsViewModel(
 
     val isDarkMode: StateFlow<Boolean> = userPreferences.isDarkMode
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
-    
+
+    val saveNotificationImages: StateFlow<Boolean> = userPreferences.saveNotificationImages
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
+
+    fun setSaveNotificationImages(enabled: Boolean) {
+        viewModelScope.launch {
+            userPreferences.setSaveNotificationImages(enabled)
+        }
+    }
+
+    // Image storage usage in bytes — refreshed after init and after clearing images
+    private val _imageStorageBytes = MutableStateFlow(0L)
+    val imageStorageBytes: StateFlow<Long> = _imageStorageBytes.asStateFlow()
+
+    private fun refreshImageStorage() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _imageStorageBytes.value = repository.getImageStorageBytes()
+        }
+    }
+
+    fun clearSavedImages() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) { repository.clearAllImages() }
+            refreshImageStorage()
+        }
+    }
+
     fun setLoggingEnabled(enabled: Boolean) {
         viewModelScope.launch {
             userPreferences.setLoggingEnabled(enabled)
@@ -53,6 +82,7 @@ class SettingsViewModel(
                 .first()
             _isLoaded.value = true
         }
+        refreshImageStorage()
     }
     
     fun setIgnoreSystemApps(ignore: Boolean) {
@@ -75,7 +105,8 @@ class SettingsViewModel(
     
     fun clearAllHistory() {
         viewModelScope.launch {
-            repository.deleteAll()
+            withContext(Dispatchers.IO) { repository.deleteAll() }
+            refreshImageStorage()
         }
     }
 

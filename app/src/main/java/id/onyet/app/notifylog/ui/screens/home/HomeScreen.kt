@@ -66,9 +66,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import android.graphics.BitmapFactory
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -731,6 +733,24 @@ private fun NotificationItem(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     lineHeight = 20.sp
                 )
+            }
+
+            // Notification image thumbnail (e.g. WhatsApp image preview)
+            if (notification.imagePath != null) {
+                val thumbnail = remember(notification.imagePath) {
+                    runCatching { BitmapFactory.decodeFile(notification.imagePath) }.getOrNull()
+                }
+                if (thumbnail != null) {
+                    Image(
+                        bitmap = thumbnail.asImageBitmap(),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .align(Alignment.CenterVertically)
+                    )
+                }
             }
         }
     }

@@ -36,5 +36,13 @@ data class NotificationLog(
     val receivedTime: Long,
     
     @ColumnInfo(name = "is_cleared")
-    val isCleared: Int = 0
+    val isCleared: Int = 0,
+
+    /**
+     * Absolute path to the saved image file on internal storage.
+     * Null if the notification had no image preview (EXTRA_PICTURE / EXTRA_LARGE_ICON).
+     * Files are stored in: filesDir/notification_images/<id>.jpg
+     */
+    @ColumnInfo(name = "image_path")
+    val imagePath: String? = null
 )

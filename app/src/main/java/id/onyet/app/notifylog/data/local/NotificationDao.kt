@@ -134,6 +134,18 @@ interface NotificationDao {
     """)
     fun getDistinctApps(): Flow<List<AppInfo>>
     
+    /** Returns the image_path of a single log — used to delete the file before the record. */
+    @Query("SELECT image_path FROM notification_logs WHERE id = :id")
+    suspend fun getImagePathById(id: Long): String?
+
+    /** Returns all non-null image paths for logs older than [timestamp] — used for bulk file cleanup. */
+    @Query("SELECT image_path FROM notification_logs WHERE received_time < :timestamp AND image_path IS NOT NULL")
+    suspend fun getImagePathsOlderThan(timestamp: Long): List<String>
+
+    /** Nullifies image_path on all rows — used after "Clear saved images" to keep logs but remove file references. */
+    @Query("UPDATE notification_logs SET image_path = NULL WHERE image_path IS NOT NULL")
+    suspend fun clearAllImagePaths()
+
     @Query("DELETE FROM notification_logs WHERE id = :id")
     suspend fun deleteById(id: Long)
     
