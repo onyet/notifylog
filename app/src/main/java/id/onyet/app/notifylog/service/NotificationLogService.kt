@@ -103,6 +103,10 @@ class NotificationLogService : NotificationListenerService() {
                 val ignoreSystemApps = app.userPreferences.ignoreSystemApps.first()
                 if (ignoreSystemApps && isSystemApp(sbn.packageName)) return@launch
                 
+                // Check if this app is in the custom ignored list
+                val ignoredCustomApps = app.userPreferences.ignoredCustomApps.first()
+                if (ignoredCustomApps.contains(sbn.packageName)) return@launch
+                
                 // Skip our own notifications
                 if (sbn.packageName == packageName) return@launch
                 

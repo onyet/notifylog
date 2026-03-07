@@ -61,6 +61,13 @@
     <string name="enable_notification_logging">Aktifkan Pencatatan Notifikasi</string>
     <string name="logs_stored_securely">Log disimpan dengan aman di perangkat ini</string>
     <string name="ignore_system_apps">Abaikan Aplikasi Sistem</string>
+    <string name="ignore_custom_apps">Abaikan Aplikasi Kustom</string>
+    <string name="ignore_custom_apps_subtitle">%d aplikasi diabaikan</string>
+    <string name="ignore_custom_apps_subtitle_none">Pilih aplikasi yang tidak ingin dicatat</string>
+    <string name="ignored_apps">Aplikasi Diabaikan</string>
+    <string name="search_apps">Cari aplikasi</string>
+    <string name="no_apps_recorded">Belum ada aplikasi tercatat</string>
+    <string name="no_apps_recorded_subtitle">Aplikasi akan muncul di sini setelah notifikasi diterima</string>
     <string name="storage_and_data">Penyimpanan &amp; Data</string>
     <string name="auto_delete_logs">Hapus log otomatis</string>
     <string name="after_days">Setelah %d hari</string>

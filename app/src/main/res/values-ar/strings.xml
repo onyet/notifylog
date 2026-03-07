@@ -61,6 +61,13 @@
     <string name="enable_notification_logging">تفعيل تسجيل الإشعارات</string>
     <string name="logs_stored_securely">يتم تخزين السجلات بشكل آمن على هذا الجهاز</string>
     <string name="ignore_system_apps">تجاهل تطبيقات النظام</string>
+    <string name="ignore_custom_apps">تجاهل تطبيقات مخصصة</string>
+    <string name="ignore_custom_apps_subtitle">%d تطبيقات متجاهلة</string>
+    <string name="ignore_custom_apps_subtitle_none">اختر التطبيقات لإيقاف تسجيلها</string>
+    <string name="ignored_apps">التطبيقات المتجاهلة</string>
+    <string name="search_apps">البحث عن التطبيقات</string>
+    <string name="no_apps_recorded">لم يتم تسجيل أي تطبيقات بعد</string>
+    <string name="no_apps_recorded_subtitle">ستظهر التطبيقات هنا بعد استلام الإشعارات</string>
     <string name="storage_and_data">التخزين والبيانات</string>
     <string name="auto_delete_logs">حذف السجلات تلقائيًا</string>
     <string name="after_days">بعد %d أيام</string>

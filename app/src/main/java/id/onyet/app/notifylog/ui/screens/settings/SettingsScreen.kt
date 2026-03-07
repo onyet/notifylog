@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.PhonelinkErase
 import androidx.compose.material.icons.filled.Policy
 import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.Notifications
@@ -106,6 +108,8 @@ fun SettingsScreen(
 
     val isLoggingEnabled by viewModel.isLoggingEnabled.collectAsState()
     val ignoreSystemApps by viewModel.ignoreSystemApps.collectAsState()
+    val ignoredCustomApps by viewModel.ignoredCustomApps.collectAsState()
+    val distinctApps by viewModel.distinctApps.collectAsState()
     val saveNotificationImages by viewModel.saveNotificationImages.collectAsState()
     val imageStorageBytes by viewModel.imageStorageBytes.collectAsState()
     val autoDeleteDays by viewModel.autoDeleteDays.collectAsState()
@@ -120,6 +124,7 @@ fun SettingsScreen(
     var showPrivacyConfirmDialog by remember { mutableStateOf(false) }
     var showExportConfirmDialog by remember { mutableStateOf(false) }
     var isExporting by remember { mutableStateOf(false) }
+    var isIgnoredAppsSheetVisible by remember { mutableStateOf(false) }
     // For permission flow on pre-Android Q
     var pendingExportAction by remember { mutableStateOf(false) }
 
@@ -267,6 +272,18 @@ fun SettingsScreen(
                     title = stringResource(R.string.ignore_system_apps),
                     checked = ignoreSystemApps,
                     onCheckedChange = viewModel::setIgnoreSystemApps,
+                    showDivider = true
+                )
+
+                // Ignore custom apps
+                SettingsClickableItem(
+                    icon = Icons.Default.PhonelinkErase,
+                    title = stringResource(R.string.ignore_custom_apps),
+                    subtitle = if (ignoredCustomApps.isEmpty())
+                        stringResource(R.string.ignore_custom_apps_subtitle_none)
+                    else
+                        stringResource(R.string.ignore_custom_apps_subtitle, ignoredCustomApps.size),
+                    onClick = { isIgnoredAppsSheetVisible = true },
                     showDivider = true
                 )
 
@@ -832,6 +849,16 @@ fun SettingsScreen(
         }
     }
 
+    // Ignored Custom Apps Bottom Sheet
+    if (isIgnoredAppsSheetVisible) {
+        IgnoredAppsBottomSheet(
+            apps = distinctApps,
+            ignoredApps = ignoredCustomApps,
+            onToggleApp = viewModel::toggleIgnoredApp,
+            onDismiss = { isIgnoredAppsSheetVisible = false }
+        )
+    }
+
     // Developer Info Dialog
     if (showDeveloperDialog) {
         AlertDialog(
@@ -916,5 +943,135 @@ private fun formatBytes(bytes: Long): String {
         bytes >= 1_048_576L -> "%.1f MB".format(bytes / 1_048_576.0)
         bytes >= 1_024L     -> "%.0f KB".format(bytes / 1_024.0)
         else                -> "$bytes B"
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun IgnoredAppsBottomSheet(
+    apps: List<id.onyet.app.notifylog.data.local.AppInfo>,
+    ignoredApps: Set<String>,
+    onToggleApp: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var searchQuery by remember { mutableStateOf("") }
+
+    val filteredApps = remember(apps, searchQuery) {
+        if (searchQuery.isBlank()) apps
+        else apps.filter { appInfo ->
+            (appInfo.appName ?: appInfo.packageName).contains(searchQuery, ignoreCase = true) ||
+                appInfo.packageName.contains(searchQuery, ignoreCase = true)
+        }
+    }
+
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        containerColor = MaterialTheme.colorScheme.surface
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 32.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.ignored_apps),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+
+            // Search field
+            androidx.compose.material3.OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                placeholder = { Text(stringResource(R.string.search_apps)) },
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
+                shape = RoundedCornerShape(12.dp)
+            )
+
+            if (apps.isEmpty()) {
+                // No apps recorded yet
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Block,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                        modifier = Modifier.size(48.dp)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(R.string.no_apps_recorded),
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = stringResource(R.string.no_apps_recorded_subtitle),
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    )
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(400.dp)
+                ) {
+                    items(filteredApps.size) { index ->
+                        val appInfo = filteredApps[index]
+                        val isIgnored = ignoredApps.contains(appInfo.packageName)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onToggleApp(appInfo.packageName) }
+                                .padding(vertical = 10.dp, horizontal = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = appInfo.appName ?: appInfo.packageName,
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 14.sp
+                                )
+                                Text(
+                                    text = appInfo.packageName,
+                                    fontSize = 11.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Switch(
+                                checked = isIgnored,
+                                onCheckedChange = { onToggleApp(appInfo.packageName) },
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = Color.White,
+                                    checkedTrackColor = MaterialTheme.colorScheme.error,
+                                    uncheckedThumbColor = Color.White,
+                                    uncheckedTrackColor = MaterialTheme.colorScheme.outline
+                                )
+                            )
+                        }
+                        if (index < filteredApps.size - 1) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }

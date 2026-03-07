@@ -61,6 +61,13 @@
     <string name="enable_notification_logging">启用通知记录</string>
     <string name="logs_stored_securely">日志安全存储在此设备上</string>
     <string name="ignore_system_apps">忽略系统应用</string>
+    <string name="ignore_custom_apps">忽略自定义应用</string>
+    <string name="ignore_custom_apps_subtitle">已忽略 %d 个应用</string>
+    <string name="ignore_custom_apps_subtitle_none">选择要停止记录的应用</string>
+    <string name="ignored_apps">已忽略的应用</string>
+    <string name="search_apps">搜索应用</string>
+    <string name="no_apps_recorded">尚未记录任何应用</string>
+    <string name="no_apps_recorded_subtitle">收到通知后应用将显示在此处</string>
     <string name="storage_and_data">存储和数据</string>
     <string name="auto_delete_logs">自动删除日志</string>
     <string name="after_days">%d 天后</string>

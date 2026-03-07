@@ -3,6 +3,7 @@ package id.onyet.app.notifylog.ui.screens.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import id.onyet.app.notifylog.data.local.AppInfo
 import id.onyet.app.notifylog.data.preferences.UserPreferences
 import id.onyet.app.notifylog.data.repository.NotificationRepository
 import kotlinx.coroutines.Dispatchers
@@ -42,9 +43,27 @@ class SettingsViewModel(
     val saveNotificationImages: StateFlow<Boolean> = userPreferences.saveNotificationImages
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
 
+    val ignoredCustomApps: StateFlow<Set<String>> = userPreferences.ignoredCustomApps
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptySet())
+
+    val distinctApps: StateFlow<List<AppInfo>> = repository.distinctApps
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
     fun setSaveNotificationImages(enabled: Boolean) {
         viewModelScope.launch {
             userPreferences.setSaveNotificationImages(enabled)
+        }
+    }
+
+    fun toggleIgnoredApp(packageName: String) {
+        viewModelScope.launch {
+            val current = ignoredCustomApps.value.toMutableSet()
+            if (current.contains(packageName)) {
+                current.remove(packageName)
+            } else {
+                current.add(packageName)
+            }
+            userPreferences.setIgnoredCustomApps(current)
         }
     }
 

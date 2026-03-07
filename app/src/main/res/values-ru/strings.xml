@@ -61,6 +61,13 @@
     <string name="enable_notification_logging">Включить журналирование уведомлений</string>
     <string name="logs_stored_securely">Журналы надёжно хранятся на этом устройстве</string>
     <string name="ignore_system_apps">Игнорировать системные приложения</string>
+    <string name="ignore_custom_apps">Игнорировать пользовательские приложения</string>
+    <string name="ignore_custom_apps_subtitle">Игнорируемых приложений: %d</string>
+    <string name="ignore_custom_apps_subtitle_none">Выберите приложения для прекращения записи</string>
+    <string name="ignored_apps">Игнорируемые приложения</string>
+    <string name="search_apps">Поиск приложений</string>
+    <string name="no_apps_recorded">Приложения ещё не записаны</string>
+    <string name="no_apps_recorded_subtitle">Приложения появятся здесь после получения уведомлений</string>
     <string name="storage_and_data">Хранилище и данные</string>
     <string name="auto_delete_logs">Автоудаление журналов</string>
     <string name="after_days">Через %d дней</string>

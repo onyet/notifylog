@@ -61,6 +61,13 @@
     <string name="enable_notification_logging">Benachrichtigungsprotokollierung aktivieren</string>
     <string name="logs_stored_securely">Protokolle werden sicher auf diesem Gerät gespeichert</string>
     <string name="ignore_system_apps">System-Apps ignorieren</string>
+    <string name="ignore_custom_apps">Benutzerdefinierte Apps ignorieren</string>
+    <string name="ignore_custom_apps_subtitle">%d Apps ignoriert</string>
+    <string name="ignore_custom_apps_subtitle_none">Apps auswählen, die nicht protokolliert werden</string>
+    <string name="ignored_apps">Ignorierte Apps</string>
+    <string name="search_apps">Apps suchen</string>
+    <string name="no_apps_recorded">Noch keine Apps erfasst</string>
+    <string name="no_apps_recorded_subtitle">Apps erscheinen hier, nachdem Benachrichtigungen empfangen wurden</string>
     <string name="storage_and_data">Speicher &amp; Daten</string>
     <string name="auto_delete_logs">Protokolle automatisch löschen</string>
     <string name="after_days">Nach %d Tagen</string>

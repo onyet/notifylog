@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -23,6 +24,7 @@ class UserPreferences(private val context: Context) {
         private val DARK_MODE = booleanPreferencesKey("dark_mode")
         private val LANGUAGE_CODE = stringPreferencesKey("language_code")
         private val SAVE_NOTIFICATION_IMAGES = booleanPreferencesKey("save_notification_images")
+        private val IGNORED_CUSTOM_APPS = stringSetPreferencesKey("ignored_custom_apps")
     }
     
     val isLoggingEnabled: Flow<Boolean> = context.dataStore.data.map { preferences ->
@@ -52,6 +54,11 @@ class UserPreferences(private val context: Context) {
     /** Whether to capture and save image previews from notifications. Default true. */
     val saveNotificationImages: Flow<Boolean> = context.dataStore.data.map { preferences ->
         preferences[SAVE_NOTIFICATION_IMAGES] ?: true
+    }
+
+    /** Set of package names the user chose to ignore. Default empty. */
+    val ignoredCustomApps: Flow<Set<String>> = context.dataStore.data.map { preferences ->
+        preferences[IGNORED_CUSTOM_APPS] ?: emptySet()
     }
 
     suspend fun setLoggingEnabled(enabled: Boolean) {
@@ -87,6 +94,12 @@ class UserPreferences(private val context: Context) {
     suspend fun setSaveNotificationImages(enabled: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[SAVE_NOTIFICATION_IMAGES] = enabled
+        }
+    }
+
+    suspend fun setIgnoredCustomApps(packageNames: Set<String>) {
+        context.dataStore.edit { preferences ->
+            preferences[IGNORED_CUSTOM_APPS] = packageNames
         }
     }
 

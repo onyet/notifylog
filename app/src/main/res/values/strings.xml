@@ -60,6 +60,13 @@
     <string name="enable_notification_logging">Enable Notification Logging</string>
     <string name="logs_stored_securely">Logs are stored securely on this device</string>
     <string name="ignore_system_apps">Ignore System Apps</string>
+    <string name="ignore_custom_apps">Ignore Custom Apps</string>
+    <string name="ignore_custom_apps_subtitle">%d apps ignored</string>
+    <string name="ignore_custom_apps_subtitle_none">Choose apps to stop logging</string>
+    <string name="ignored_apps">Ignored Apps</string>
+    <string name="search_apps">Search apps</string>
+    <string name="no_apps_recorded">No apps recorded yet</string>
+    <string name="no_apps_recorded_subtitle">Apps will appear here after notifications are received</string>
     <string name="storage_and_data">Storage &amp; Data</string>
     <string name="auto_delete_logs">Auto-delete logs</string>
     <string name="after_days">After %d days</string>
